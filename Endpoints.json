@@ -1,0 +1,2102 @@
+{
+	"info": {
+		"_postman_id": "4aed2dc0-d56f-464d-a21f-ed160debd90b",
+		"name": "Rose Academy API Collection",
+		"description": "مجموعة كاملة من APIs لنظام أكاديمية روز",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40345777"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "ar"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "أحمد محمد",
+									"description": "اسم المستخدم",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "abdu.ewian@gmail.com",
+									"description": "البريد الإلكتروني",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "password123",
+									"description": "كلمة المرور (8 أحرف على الأقل)",
+									"type": "text"
+								},
+								{
+									"key": "password_confirmation",
+									"value": "password123",
+									"description": "تأكيد كلمة المرور",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "01234567891",
+									"description": "رقم الهاتف",
+									"type": "text"
+								},
+								{
+									"key": "gender",
+									"value": "male",
+									"description": "الجنس (male/female)",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.status === 'OK') {",
+									"    const response = pm.response.json();",
+									"    if (response.data && response.data.token) {",
+									"        pm.collectionVariables.set('auth_token', response.data.token);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"rose@academy.com\",\n  \"password\": \"1\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth/profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data"
+							},
+							{
+								"key": "Accept",
+								"value": "multipart/form-data"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "_method",
+									"value": "PUT",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "أحمد محمد المحدث",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "01234567891",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/D:/Picturs/artwork.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/update",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"current_password\": \"1\",\n  \"new_password\": \"Newpassword123\",\n  \"new_password_confirmation\": \"Newpassword123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/password",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"ahmed@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/forgot-password",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"forgot-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Email",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth/verify-email?token=verification_token_here",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"verify-email"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "verification_token_here"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Force Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth/force-logout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"force-logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth/logout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Courses",
+			"item": [
+				{
+					"name": "Get All Courses",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/courses?search=&level=&language=ar&grade=الاول&min_price=&max_price=&sort_by=created_at&sort_order=desc&per_page=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"courses"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "",
+									"description": "البحث في العنوان والوصف واسم المدرس"
+								},
+								{
+									"key": "level",
+									"value": "",
+									"description": "المستوى (beginner/intermediate/advanced)"
+								},
+								{
+									"key": "language",
+									"value": "ar",
+									"description": "اللغة"
+								},
+								{
+									"key": "grade",
+									"value": "الاول",
+									"description": "الصف (الاول/الثاني/الثالث)"
+								},
+								{
+									"key": "min_price",
+									"value": "",
+									"description": "أقل سعر"
+								},
+								{
+									"key": "max_price",
+									"value": "",
+									"description": "أعلى سعر"
+								},
+								{
+									"key": "sort_by",
+									"value": "created_at",
+									"description": "ترتيب حسب (title/price/created_at/duration_hours)"
+								},
+								{
+									"key": "sort_order",
+									"value": "desc",
+									"description": "ترتيب (asc/desc)"
+								},
+								{
+									"key": "per_page",
+									"value": "10",
+									"description": "عدد العناصر في الصفحة"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Course Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/courses/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"courses",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Course (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "كورس جـديد في الرياضيات",
+									"description": "عنوان الكورس",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "وصف مفصل للكورس",
+									"description": "وصف الكورس",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "100",
+									"description": "سعر الكورس",
+									"type": "text"
+								},
+								{
+									"key": "level",
+									"value": "beginner",
+									"description": "المستوى (beginner/intermediate/advanced)",
+									"type": "text"
+								},
+								{
+									"key": "duration_hours",
+									"value": "20",
+									"description": "مدة الكورس بالساعات",
+									"type": "text"
+								},
+								{
+									"key": "requirements",
+									"value": "لا يوجد متطلبات مسبقة",
+									"description": "متطلبات الكورس",
+									"type": "text"
+								},
+								{
+									"key": "instructor_name",
+									"value": "أ.روز",
+									"description": "اسم المدرس",
+									"type": "text"
+								},
+								{
+									"key": "language",
+									"value": "ar",
+									"description": "لغة الكورس",
+									"type": "text"
+								},
+								{
+									"key": "grade",
+									"value": "الاول",
+									"description": "الصف (الاول/الثاني/الثالث)",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"description": "صورة الكورس",
+									"type": "file",
+									"src": "/D:/Picturs/Menna.jpg"
+								},
+								{
+									"key": "is_active",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/courses",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"courses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Course (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "كورس محدث في الرياضيات",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "وصف محدث للكورس",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "120",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"description": "صورة جديدة للكورس (اختياري)",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "_method",
+									"value": "PUT",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/courses/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"courses",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Course (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/courses/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"courses",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Course Ratings",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/courses/1/ratings",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"courses",
+								"1",
+								"ratings"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Lessons",
+			"item": [
+				{
+					"name": "Get All Lessons (Public)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/lessons?search=&course_id=1&per_page=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"lessons"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "",
+									"description": "البحث في العنوان والوصف"
+								},
+								{
+									"key": "course_id",
+									"value": "1",
+									"description": "معرف الكورس"
+								},
+								{
+									"key": "per_page",
+									"value": "10",
+									"description": "عدد العناصر في الصفحة"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Course Lessons",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/courses/1/lessons",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"courses",
+								"1",
+								"lessons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Lesson Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/lessons/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"lessons",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Lesson (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"course_id\": 1,\n  \"title\": \"الدرس الأول\",\n  \"description\": \"مقدمة في الموضوع\",\n  \"content\": \"محتوى الدرس المفصل\",\n  \"order\": 1,\n  \"duration_minutes\": 30,\n  \"is_free\": false,\n  \"target_gender\": \"both\",\n  \"is_video_protected\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/lessons",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"lessons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Lesson (Admin)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"الدرس الأول المحدث\",\n  \"description\": \"وصف محدث\",\n  \"content\": \"محتوى محدث\",\n  \"order\": 1,\n  \"duration_minutes\": 35,\n  \"is_free\": true,\n  \"target_gender\": \"both\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/lessons/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"lessons",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Lesson (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/lessons/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"lessons",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Video (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "video",
+									"description": "ملف الفيديو (mp4, mov, avi, wmv, webm - حد أقصى 2GB)",
+									"type": "file",
+									"src": "/C:/Users/abdue/Downloads/Video/10 Second Timer.mp4"
+								},
+								{
+									"key": "is_protected",
+									"value": "true",
+									"description": "هل الفيديو محمي (true/false)",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/video/1/upload",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"video",
+								"1",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Video (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/video/1/delete",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"video",
+								"1",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Video Info",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/video/1/info",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"video",
+								"1",
+								"info"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Subscriptions",
+			"item": [
+				{
+					"name": "Get All Subscriptions (Public)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/subscriptions?search=&status=&per_page=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"subscriptions"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "",
+									"description": "البحث في اسم الكورس أو المستخدم"
+								},
+								{
+									"key": "status",
+									"value": "",
+									"description": "حالة الاشتراك (pending/approved/rejected)"
+								},
+								{
+									"key": "per_page",
+									"value": "10",
+									"description": "عدد العناصر في الصفحة"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Subscribe to Course",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "course_id",
+									"value": "1",
+									"description": "معرف الكورس",
+									"type": "text"
+								},
+								{
+									"key": "vodafone_number",
+									"value": "01234567890",
+									"description": "رقم فودافون كاش",
+									"type": "text"
+								},
+								{
+									"key": "parent_phone",
+									"value": "01234567891",
+									"description": "رقم هاتف ولي الأمر",
+									"type": "text"
+								},
+								{
+									"key": "student_info",
+									"value": "معلومات إضافية عن الطالب",
+									"description": "معلومات الطالب (اختياري)",
+									"type": "text"
+								},
+								{
+									"key": "payment_proof",
+									"description": "إثبات الدفع (صورة سكرين شوت)",
+									"type": "file",
+									"src": "/D:/Picturs/Menna.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/subscribe",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"subscribe"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Subscriptions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/my-subscriptions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"my-subscriptions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel Subscription",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/subscriptions/1/cancel",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"subscriptions",
+								"1",
+								"cancel"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Renew Subscription",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"subscription_id\": 1,\n  \"duration_days\": 30\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/subscriptions/renew",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"subscriptions",
+								"renew"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Expired Subscriptions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/expired-subscriptions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"expired-subscriptions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Subscription Status",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/subscriptions/status/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"subscriptions",
+								"status",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Subscriptions (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/subscriptions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"subscriptions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pending Subscriptions (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/subscriptions/pending?per_page=15",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"subscriptions",
+								"pending"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "15",
+									"description": "عدد العناصر في الصفحة"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Approve Subscription (Admin)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"admin_notes\": \"تم قبول الطلب بعد التحقق من الدفع\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/subscriptions/1/approve",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"subscriptions",
+								"1",
+								"approve"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reject Subscription (Admin)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"admin_notes\": \"تم رفض الطلب - لم يتم التحقق من الدفع\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/subscriptions/1/reject",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"subscriptions",
+								"1",
+								"reject"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comments",
+			"item": [
+				{
+					"name": "Add Comment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"lesson_id\": 1,\n  \"content\": \"هذا تعليق على الدرس\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/comments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Lesson Comments",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/lessons/1/comments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"lessons",
+								"1",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Comments",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/my-comments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"my-comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Comment",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/comments/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"comments",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pending Comments (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/comments/pending?per_page=15",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"comments",
+								"pending"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "15",
+									"description": "عدد العناصر في الصفحة"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Approve Comment (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/comments/1/approve",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"comments",
+								"1",
+								"approve"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Favorites",
+			"item": [
+				{
+					"name": "Add to Favorites",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/favorite/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"favorite",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove from Favorites",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/favorite/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"favorite",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ratings",
+			"item": [
+				{
+					"name": "Rate Course",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"course_id\": 1,\n  \"rating\": 5,\n  \"review\": \"كورس ممتاز وشرح واضح\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/ratings",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"ratings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Course Ratings",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/courses/1/ratings",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"courses",
+								"1",
+								"ratings"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "Get Notifications",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/notifications?type=&unread_only=false&per_page=15",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"notifications"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "",
+									"description": "نوع الإشعار (general/course/subscription/system)"
+								},
+								{
+									"key": "unread_only",
+									"value": "false",
+									"description": "الإشعارات غير المقروءة فقط (true/false)"
+								},
+								{
+									"key": "per_page",
+									"value": "15",
+									"description": "عدد العناصر في الصفحة"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Unread Count",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/notifications/unread-count",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"notifications",
+								"unread-count"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Notification Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/notifications/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"notifications",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark as Read",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/notifications/1/read",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"notifications",
+								"1",
+								"read"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark All as Read",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/notifications/mark-all-read",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"notifications",
+								"mark-all-read"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Notification",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/notifications/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"notifications",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send Notification (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"إشعار جديد\",\n  \"message\": \"رسالة الإشعار\",\n  \"type\": \"general\",\n  \"user_ids\": [1, 2, 3],\n  \"course_id\": null,\n  \"send_to_all\": false,\n  \"gender\": \"both\",\n  \"data\": {\"additional\": \"info\"}\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/notifications/send",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"notifications",
+								"send"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Statistics (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/notifications/statistics",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"notifications",
+								"statistics"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "User Management",
+					"item": []
+				},
+				{
+					"name": "Notifications Management",
+					"item": [
+						{
+							"name": "Send Notification (Admin)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{auth_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"title\": \"إشعار جديد\",\n  \"message\": \"رسالة الإشعار\",\n  \"type\": \"general\",\n  \"user_ids\": [1, 2, 3],\n  \"course_id\": null,\n  \"send_to_all\": false,\n  \"gender\": \"both\",\n  \"data\": {\"additional\": \"info\"}\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/admin/notifications/send",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"admin",
+										"notifications",
+										"send"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Statistics (Admin)",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{auth_token}}"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/admin/notifications/statistics",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"admin",
+										"notifications",
+										"statistics"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Comments Managment",
+					"item": [
+						{
+							"name": "Get Pending Comments (Admin)",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{auth_token}}"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/admin/comments/pending?per_page=15",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"admin",
+										"comments",
+										"pending"
+									],
+									"query": [
+										{
+											"key": "per_page",
+											"value": "15",
+											"description": "عدد العناصر في الصفحة"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Approve Comment (Admin)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{auth_token}}"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/admin/comments/1/approve",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"admin",
+										"comments",
+										"1",
+										"approve"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Course Management",
+					"item": []
+				},
+				{
+					"name": "Dashboard",
+					"item": []
+				},
+				{
+					"name": "Subscriptions Admin",
+					"item": []
+				},
+				{
+					"name": "Lessons Managment",
+					"item": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{auth_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000/api",
+			"type": "string"
+		},
+		{
+			"key": "auth_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
