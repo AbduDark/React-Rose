@@ -51,21 +51,23 @@ const LessonsManager = () => {
   }, [page, selectedCourse]);
 
   useEffect(() => {
-    const filtered = lessons.filter((lesson) => {
+    // Ensure lessons is an array before filtering
+    const lessonsArray = Array.isArray(lessons) ? lessons : lessons?.data || [];
+    const filtered = lessonsArray.filter((lesson) => {
       const matchesSearch =
         !searchTerm ||
         lesson.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         lesson.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         lesson.content?.toLowerCase().includes(searchTerm.toLowerCase());
-        
+
       const matchesFilter =
         selectedFilter === "all" ||
         lesson.is_free === (selectedFilter === "free");
-        
+
       const matchesCourse =
         selectedCourse === "all" ||
         lesson.course_id === parseInt(selectedCourse);
-        
+
       return matchesSearch && matchesFilter && matchesCourse;
     });
     setFilteredLessons(filtered);
@@ -75,21 +77,21 @@ const LessonsManager = () => {
     try {
       setIsLoading(true);
       setError("");
-      
+
       const params = { 
         page: pageNum,
         per_page: 12,
         search: searchTerm
       };
-      
+
       if (selectedCourse !== "all") {
         params.course_id = selectedCourse;
       }
-      
+
       console.log("Fetching lessons with params:", params);
-      
+
       const response = await getAllLessons(params, token);
-      
+
       // Handle different response formats
       if (response.data) {
         setLessons(response.data.data || response.data || []);
@@ -100,7 +102,7 @@ const LessonsManager = () => {
         setMeta(null);
         setPage(pageNum);
       }
-      
+
     } catch (err) {
       console.error("Failed to fetch lessons:", err);
       setError(
@@ -126,7 +128,7 @@ const LessonsManager = () => {
     // Refresh the entire list to get updated data
     fetchLessons(page);
     setIsCreateModalOpen(false);
-    
+
     // Show success message
     const successMessage = t("adminDashboard.lessonsManager.createSuccess");
     console.log(successMessage);
@@ -141,10 +143,10 @@ const LessonsManager = () => {
     );
     setIsEditModalOpen(false);
     setCurrentLesson(null);
-    
+
     // Refresh data to ensure consistency
     setTimeout(() => fetchLessons(page), 500);
-    
+
     // Show success message
     const successMessage = t("adminDashboard.lessonsManager.updateSuccess");
     console.log(successMessage);
@@ -155,10 +157,10 @@ const LessonsManager = () => {
     setLessons((prev) => prev.filter((lesson) => lesson.id !== lessonId));
     setIsDeleteModalOpen(false);
     setLessonToDelete(null);
-    
+
     // Refresh to ensure consistency
     setTimeout(() => fetchLessons(page), 500);
-    
+
     // Show success message
     const successMessage = t("adminDashboard.lessonsManager.deleteSuccess");
     console.log(successMessage);
