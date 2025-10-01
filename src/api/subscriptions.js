@@ -25,14 +25,17 @@ export const getMySubscriptions = async (token) => {
 
 export const subscribeToCourse = async (token, subscriptionData) => {
   try {
-    // Create FormData if payment proof is included
     let body;
     let headers = {
       Authorization: `Bearer ${token}`,
       Accept: "application/json",
     };
 
-    if (subscriptionData.payment_proof instanceof File) {
+    // إذا كانت البيانات تحتوي على FormData أو ملف
+    if (subscriptionData instanceof FormData) {
+      body = subscriptionData;
+      // لا نضع Content-Type للـ FormData
+    } else if (subscriptionData.payment_proof instanceof File) {
       body = new FormData();
       Object.keys(subscriptionData).forEach(key => {
         body.append(key, subscriptionData[key]);
@@ -50,7 +53,7 @@ export const subscribeToCourse = async (token, subscriptionData) => {
 
     if (!res.ok) {
       const errorData = await res.json();
-      throw errorData;
+      throw new Error(errorData.message || `HTTP error! status: ${res.status}`);
     }
 
     return await res.json();

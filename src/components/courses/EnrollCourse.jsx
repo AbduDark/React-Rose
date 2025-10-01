@@ -61,23 +61,21 @@ function EnrollCourse() {
       return;
     }
 
+    // التحقق من وجود البيانات المطلوبة
+    if (!subscriptionData.vodafone_number || !subscriptionData.parent_phone || !subscriptionData.payment_proof) {
+      setEnrollError("يرجى ملء جميع البيانات المطلوبة وإرفاق إثبات الدفع");
+      return;
+    }
+
     setEnrolling(true);
     setEnrollError(null);
     setEnrollSuccess(false);
 
     try {
-      const subscriptionPayload = {
-        course_id: parseInt(courseId),
-        vodafone_number: subscriptionData.vodafone_number,
-        amount: parseFloat(subscriptionData.amount),
-        parent_phone: subscriptionData.parent_phone,
-        student_info: subscriptionData.student_info,
-      };
-
       const formData = new FormData();
       formData.append("course_id", parseInt(courseId));
       formData.append("vodafone_number", subscriptionData.vodafone_number);
-      formData.append("amount", parseFloat(subscriptionData.amount));
+      formData.append("amount", parseFloat(course.price || subscriptionData.amount));
       formData.append("parent_phone", subscriptionData.parent_phone);
       formData.append("student_info", subscriptionData.student_info);
       if (subscriptionData.payment_proof) {
@@ -87,7 +85,17 @@ function EnrollCourse() {
       await subscribeToCourse(token, formData);
       setEnrollSuccess(true);
       setShowSubscriptionForm(false);
+      
+      // إعادة تعيين البيانات
+      setSubscriptionData({
+        vodafone_number: "",
+        amount: "",
+        parent_phone: "",
+        student_info: "",
+        payment_proof: null,
+      });
 
+      // تحديث حالة الاشتراك
       try {
         const statusRes = await getSubscriptionStatus(token, courseId);
         setSubscriptionStatus(statusRes.data);
@@ -95,8 +103,9 @@ function EnrollCourse() {
         console.log("Error refreshing subscription status");
       }
     } catch (error) {
+      console.error("Subscription error:", error);
       setEnrollError(
-        error.message || "Failed to enroll in course. Please try again."
+        error.response?.data?.message || error.message || "فشل في الاشتراك. يرجى المحاولة مرة أخرى."
       );
     } finally {
       setEnrolling(false);
@@ -155,6 +164,20 @@ function EnrollCourse() {
             </div>
           )} */}
 
+          {/* Payment Instructions */}
+          {showSubscriptionForm && (
+            <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <h4 className="font-semibold text-blue-800 mb-3">
+                تعليمات الدفع
+              </h4>
+              <div className="text-blue-700 text-sm space-y-2">
+                <p>يرجى تحويل مبلغ <strong>{course.price} جنيه</strong> إلى الرقم التالي:</p>
+                <p className="font-bold text-lg">01008187344</p>
+                <p>بعد التحويل، خذ لقطة شاشة للدفع واملأ الفورم التالي:</p>
+              </div>
+            </div>
+          )}
+
           {/* Subscription Form */}
           {showSubscriptionForm && (
             <div className="mb-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
@@ -183,10 +206,11 @@ function EnrollCourse() {
                   <input
                     type="text"
                     name="amount"
-                    value={subscriptionData.amount}
+                    value={course.price || subscriptionData.amount}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 bg-gray-100"
                     placeholder={t("enrollCourse.amountPlaceholder")}
+                    readOnly
                     required
                   />
                 </div>
@@ -264,7 +288,7 @@ function EnrollCourse() {
               />
               {showSubscriptionForm
                 ? t("enrollCourse.cancel")
-                : t("enrollCourse.enrollNow")}
+                : "اشترك الآن"}
             </button>
           ) : null}
         </div>
