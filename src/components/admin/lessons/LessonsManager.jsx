@@ -98,11 +98,21 @@ const LessonsManager = () => {
       const response = await getAllLessons(params, token);
       console.log("Lessons API response:", response);
 
+      if (!response) {
+        // Token was invalid and user was redirected
+        return;
+      }
+
+      // Check if response indicates failure
+      if (response.success === false) {
+        throw new Error(response.message?.en || response.message || "Failed to fetch lessons");
+      }
+
       // Handle different response formats
       let lessonsData = [];
       let metaData = null;
 
-      if (response) {
+      if (response && response.success !== false) {
         // Check for Laravel pagination format
         if (response.data && Array.isArray(response.data)) {
           lessonsData = response.data;

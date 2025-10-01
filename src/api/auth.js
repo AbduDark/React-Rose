@@ -224,23 +224,31 @@ export const getDashboardStats = async () => {
       throw new Error("No authentication token found");
     }
 
+    console.log("Making dashboard stats request with token:", token.substring(0, 20) + "...");
+
     const response = await fetch(`${API_BASE}/admin/dashboard/stats`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Accept": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
 
-    if (!response.ok) {
-      if (response.status === 401) {
-        throw new Error("Unauthorized - Please login again");
-      }
-      throw new Error(`Failed to fetch dashboard stats: ${response.status}`);
-    }
-
     const data = await response.json();
     console.log("Dashboard stats response:", data);
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        console.error("Unauthorized error - clearing token and redirecting to login");
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        window.location.href = "/auth";
+        return null;
+      }
+      throw new Error(data.message?.en || data.message || `Failed to fetch dashboard stats: ${response.status}`);
+    }
+
     return data;
   } catch (error) {
     console.error("Error fetching dashboard stats:", error);

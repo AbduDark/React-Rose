@@ -44,21 +44,32 @@ const ChartComponent = ({ data, title, type = "bar" }) => {
               {data.map((item, index) => {
                 const percentage = (item.value / total) * 100;
                 const strokeDasharray = (percentage / 100) * circumference;
-                const strokeDashoffset = circumference - strokeDasharray;
+                const offset = circumference - strokeDasharray;
 
                 return (
-                  <circle
-                    key={index}
-                    cx="75"
-                    cy="75"
-                    r={radius}
-                    fill="none"
-                    stroke={item.color || "#3B82F6"}
-                    strokeWidth="12"
-                    strokeDasharray={circumference}
-                    strokeDashoffset={strokeDashoffset}
-                    className="transition-all duration-500"
-                  />
+                  <>
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="45"
+                      fill="none"
+                      stroke="#374151"
+                      strokeWidth="10"
+                    />
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="45"
+                      fill="none"
+                      stroke={item.color || "#3B82F6"}
+                      strokeWidth="10"
+                      strokeDasharray={circumference}
+                      strokeDashoffset={isNaN(offset) ? circumference : offset}
+                      strokeLinecap="round"
+                      transform="rotate(-90 50 50)"
+                      className="transition-all duration-1000 ease-out"
+                    />
+                  </>
                 );
               })}
             </svg>

@@ -28,8 +28,21 @@ const DashboardOverview = () => {
   const fetchDashboardStats = async () => {
     try {
       setIsLoading(true);
+      setError("");
+      
       const response = await getDashboardStats();
+      
+      if (!response) {
+        // Token was invalid and user was redirected
+        return;
+      }
+      
       console.log("Dashboard stats API response:", response);
+      
+      // Check if response indicates success
+      if (response.success === false) {
+        throw new Error(response.message?.en || response.message || "Failed to fetch stats");
+      }
       
       // Handle different response formats
       let statsData = null;
@@ -38,14 +51,14 @@ const DashboardOverview = () => {
         // Check for direct data
         if (response.data) {
           statsData = response.data;
-        } else {
+        } else if (response.success !== false) {
           statsData = response;
         }
       }
       
       console.log("Processed stats data:", statsData);
       
-      if (statsData) {
+      if (statsData && typeof statsData === 'object') {
         // Create normalized structure from API response
         const normalizedStats = {
           general_stats: {
@@ -66,9 +79,8 @@ const DashboardOverview = () => {
         
         console.log("Normalized stats:", normalizedStats);
         setStats(normalizedStats);
-        setError("");
       } else {
-        throw new Error("No stats data received from API");
+        throw new Error("Invalid stats data received from API");
       }
     } catch (err) {
       console.error("Dashboard stats error:", err);

@@ -22,10 +22,20 @@ const NotificationsManager = () => {
       const statsResponse = await getNotificationsStatistics();
       console.log("Notifications stats API response:", statsResponse);
       
+      if (!statsResponse) {
+        // Token was invalid and user was redirected
+        return;
+      }
+
+      // Check if response indicates failure
+      if (statsResponse.success === false) {
+        throw new Error(statsResponse.message?.en || statsResponse.message || "Failed to fetch notifications statistics");
+      }
+      
       // Handle different response formats
       let statsData = null;
       
-      if (statsResponse) {
+      if (statsResponse && statsResponse.success !== false) {
         if (statsResponse.data) {
           statsData = statsResponse.data;
         } else {
@@ -35,7 +45,7 @@ const NotificationsManager = () => {
       
       console.log("Processed notifications stats:", statsData);
       
-      if (statsData) {
+      if (statsData && typeof statsData === 'object') {
         // Ensure all required fields exist with default values
         const normalizedStats = {
           total_notifications: statsData.total_notifications || 0,

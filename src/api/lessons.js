@@ -38,12 +38,17 @@ const fetchJson = async (url, options = {}) => {
 
 export const getAllLessons = async (params = {}, token) => {
   try {
+    const authToken = token || localStorage.getItem("token");
+    if (!authToken) {
+      throw new Error("No authentication token found");
+    }
+
     const { course_id, page = 1, per_page = 15, search = "" } = params;
     const headers = {
       "Content-Type": "application/json",
-      Accept: "application/json",
+      "Accept": "application/json",
+      Authorization: `Bearer ${authToken}`,
     };
-    if (token) headers.Authorization = `Bearer ${token}`;
 
     const queryParams = new URLSearchParams();
     if (course_id && course_id !== "all") queryParams.append("course_id", course_id);
@@ -54,11 +59,27 @@ export const getAllLessons = async (params = {}, token) => {
     const url = `${API_BASE}/admin/lessons${queryParams.toString() ? `?${queryParams.toString()}` : ""}`;
     
     console.log("Fetching lessons from:", url);
+    console.log("Using token:", authToken.substring(0, 20) + "...");
     
-    return await fetchJson(url, {
+    const response = await fetch(url, {
       method: "GET",
       headers,
     });
+
+    const data = await response.json();
+    
+    if (!response.ok) {
+      if (response.status === 401) {
+        console.error("Unauthorized error in lessons - clearing token");
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        window.location.href = "/auth";
+        return { data: [], meta: null };
+      }
+      throw new Error(data.message?.en || data.message || `Failed to fetch lessons: ${response.status}`);
+    }
+
+    return data;
   } catch (error) {
     console.error("Error fetching lessons:", error);
     throw error;

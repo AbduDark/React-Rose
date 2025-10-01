@@ -157,24 +157,30 @@ export const getNotificationsStatistics = async () => {
       throw new Error("No authentication token found");
     }
 
+    console.log("Making notifications stats request with token:", token.substring(0, 20) + "...");
+
     const response = await fetch(`${API_BASE}/admin/notifications/statistics`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Accept": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
 
+    const data = await response.json();
+
     if (!response.ok) {
       if (response.status === 401) {
-        throw new Error("Unauthorized - Please login again");
+        console.error("Unauthorized error in notifications - clearing token");
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        window.location.href = "/auth";
+        return null;
       }
-      throw new Error(
-        `Failed to fetch notifications statistics: ${response.status}`
-      );
+      throw new Error(data.message?.en || data.message || `Failed to fetch notifications statistics: ${response.status}`);
     }
 
-    const data = await response.json();
     return data;
   } catch (error) {
     console.error("Error fetching notifications statistics:", error);
