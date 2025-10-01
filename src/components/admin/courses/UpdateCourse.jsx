@@ -104,7 +104,13 @@ function UpdateCourse({ course, onCourseUpdated, isOpen, onClose }) {
       // Show success message
       const successMessage = response.successMessage || 
                            t("adminDashboard.coursesManager.updateSuccess");
-      alert(successMessage);
+      
+      // Use a more user-friendly notification instead of alert
+      if (window.showToast) {
+        window.showToast(successMessage, 'success');
+      } else {
+        alert(successMessage);
+      }
 
       onClose();
       if (onCourseUpdated) {

@@ -9,14 +9,16 @@ const getMessage = (data, lang = "en") => {
   
   // Handle localized message objects
   if (typeof data.message === "object" && data.message !== null) {
-    return data.message[lang] || data.message.ar || data.message.en || Object.values(data.message)[0];
+    const message = data.message[lang] || data.message.ar || data.message.en || Object.values(data.message)[0];
+    return typeof message === "string" ? message : JSON.stringify(message);
   }
   
   // Handle error messages
   if (data.error) {
     if (typeof data.error === "string") return data.error;
     if (typeof data.error === "object" && data.error !== null) {
-      return data.error[lang] || data.error.ar || data.error.en || Object.values(data.error)[0];
+      const error = data.error[lang] || data.error.ar || data.error.en || Object.values(data.error)[0];
+      return typeof error === "string" ? error : JSON.stringify(error);
     }
   }
   
@@ -26,7 +28,7 @@ const getMessage = (data, lang = "en") => {
     if (Array.isArray(firstError)) {
       return firstError[0];
     }
-    return firstError;
+    return typeof firstError === "string" ? firstError : JSON.stringify(firstError);
   }
   
   return null;
@@ -49,7 +51,14 @@ const getSuccessMessage = (data, lang = "en") => {
 
 // Fetch wrapper with i18n error handling
 const fetchJson = async (url, options = {}, lang = "en") => {
-  const res = await fetch(url, options);
+  // Add language header to request
+  const headers = {
+    'Accept-Language': lang,
+    'Content-Type': 'application/json',
+    ...options.headers
+  };
+
+  const res = await fetch(url, { ...options, headers });
   const contentType = res.headers.get("content-type") || "";
   let data;
 
@@ -102,22 +111,34 @@ export const createAdminCourse = async (courseData, token, lang = "en") => {
   if (courseData.is_active != null)
     formData.append("is_active", String(toIsActiveInt(courseData.is_active)));
 
-  const response = await fetchJson(
-    `${API_BASE}/admin/courses`,
-    {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
+  const res = await fetch(`${API_BASE}/admin/courses`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Accept-Language": lang,
+      Authorization: `Bearer ${token}`,
     },
-    lang
-  );
+    body: formData,
+  });
+
+  const contentType = res.headers.get("content-type") || "";
+  let data;
+
+  if (contentType.includes("application/json")) {
+    data = await res.json();
+  } else {
+    const text = await res.text();
+    throw new Error(`Server error (${res.status}): ${text.substring(0, 200)}`);
+  }
+
+  if (!res.ok) {
+    const message = getMessage(data, lang) || `Request failed (${res.status})`;
+    throw new Error(message);
+  }
   
   return {
-    ...response,
-    successMessage: getSuccessMessage(response, lang)
+    ...data,
+    successMessage: getSuccessMessage(data, lang)
   };
 };
 
@@ -147,22 +168,34 @@ export const updateAdminCourse = async (id, courseData, token, lang = "en") => {
   if (courseData.is_active != null)
     formData.append("is_active", String(toIsActiveInt(courseData.is_active)));
 
-  const response = await fetchJson(
-    `${API_BASE}/admin/courses/${id}`,
-    {
-      method: "PUT",
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
+  const res = await fetch(`${API_BASE}/admin/courses/${id}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Accept-Language": lang,
+      Authorization: `Bearer ${token}`,
     },
-    lang
-  );
+    body: formData,
+  });
+
+  const contentType = res.headers.get("content-type") || "";
+  let data;
+
+  if (contentType.includes("application/json")) {
+    data = await res.json();
+  } else {
+    const text = await res.text();
+    throw new Error(`Server error (${res.status}): ${text.substring(0, 200)}`);
+  }
+
+  if (!res.ok) {
+    const message = getMessage(data, lang) || `Request failed (${res.status})`;
+    throw new Error(message);
+  }
   
   return {
-    ...response,
-    successMessage: getSuccessMessage(response, lang)
+    ...data,
+    successMessage: getSuccessMessage(data, lang)
   };
 };
 
