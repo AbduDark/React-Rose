@@ -216,6 +216,7 @@ export const changePassword = async (
   }
 };
 
+// Dashboard statistics
 export const getDashboardStats = async () => {
   try {
     const token = localStorage.getItem("token");
@@ -239,9 +240,29 @@ export const getDashboardStats = async () => {
     }
 
     const data = await response.json();
+    console.log("Dashboard stats response:", data);
     return data;
   } catch (error) {
     console.error("Error fetching dashboard stats:", error);
+    throw error;
+  }
+};
+
+// Admin authentication
+export const adminLogin = async (credentials) => {
+  try {
+    const response = await fetch(`${API_BASE}/auth/admin-login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(credentials),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message.ar || "Admin login failed.");
+    }
+    return data;
+  } catch (error) {
+    console.error("Admin login error:", error);
     throw error;
   }
 };

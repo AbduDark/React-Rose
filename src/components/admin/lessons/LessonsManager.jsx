@@ -96,12 +96,38 @@ const LessonsManager = () => {
       console.log("Fetching lessons with params:", params);
 
       const response = await getAllLessons(params, token);
+      console.log("Lessons API response:", response);
 
       // Handle different response formats
-      const lessonsData = response?.data?.data || response?.data || response || [];
-      const metaData = response?.data || response?.meta || null;
+      let lessonsData = [];
+      let metaData = null;
+
+      if (response) {
+        // Check for Laravel pagination format
+        if (response.data && Array.isArray(response.data)) {
+          lessonsData = response.data;
+          metaData = response.meta || response;
+        }
+        // Check for direct array
+        else if (Array.isArray(response)) {
+          lessonsData = response;
+        }
+        // Check for nested data
+        else if (response.data && response.data.data && Array.isArray(response.data.data)) {
+          lessonsData = response.data.data;
+          metaData = response.data;
+        }
+        // Check for simple data object
+        else if (response.data && Array.isArray(response.data)) {
+          lessonsData = response.data;
+          metaData = response;
+        }
+      }
       
-      setLessons(Array.isArray(lessonsData) ? lessonsData : []);
+      console.log("Processed lessons data:", lessonsData);
+      console.log("Meta data:", metaData);
+      
+      setLessons(lessonsData);
       setMeta(metaData);
       setPage(metaData?.current_page || pageNum);
 

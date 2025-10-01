@@ -20,13 +20,38 @@ const NotificationsManager = () => {
     try {
       setIsLoading(true);
       const statsResponse = await getNotificationsStatistics();
-      const statsData = statsResponse?.data || statsResponse;
+      console.log("Notifications stats API response:", statsResponse);
+      
+      // Handle different response formats
+      let statsData = null;
+      
+      if (statsResponse) {
+        if (statsResponse.data) {
+          statsData = statsResponse.data;
+        } else {
+          statsData = statsResponse;
+        }
+      }
+      
+      console.log("Processed notifications stats:", statsData);
       
       if (statsData) {
-        setStatistics(statsData);
+        // Ensure all required fields exist with default values
+        const normalizedStats = {
+          total_notifications: statsData.total_notifications || 0,
+          today_notifications: statsData.today_notifications || 0,
+          read_notifications: statsData.read_notifications || 0,
+          unread_notifications: statsData.unread_notifications || 0,
+          this_week_notifications: statsData.this_week_notifications || 0,
+          this_month_notifications: statsData.this_month_notifications || 0,
+          read_percentage: statsData.read_percentage || 0
+        };
+        
+        console.log("Normalized notifications stats:", normalizedStats);
+        setStatistics(normalizedStats);
         setError("");
       } else {
-        throw new Error("No statistics data received");
+        throw new Error("No statistics data received from API");
       }
     } catch (err) {
       console.error("Notifications stats error:", err);
@@ -35,6 +60,17 @@ const NotificationsManager = () => {
           ": " +
           err.message
       );
+      
+      // Set default stats to prevent crashes
+      setStatistics({
+        total_notifications: 0,
+        today_notifications: 0,
+        read_notifications: 0,
+        unread_notifications: 0,
+        this_week_notifications: 0,
+        this_month_notifications: 0,
+        read_percentage: 0
+      });
     } finally {
       setIsLoading(false);
     }

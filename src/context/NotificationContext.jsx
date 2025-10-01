@@ -19,18 +19,16 @@ export const NotificationProvider = ({ children }) => {
 
   const fetchUnreadCount = useCallback(async () => {
     if (!token || !user || isLoading) {
+      setUnreadCount(0);
       return;
     }
 
     try {
-      setIsLoading(true);
       const count = await getUnreadCount(token);
       setUnreadCount(count);
     } catch (error) {
-      console.error("Failed to fetch unread count:", error);
+      console.error("Error fetching unread count:", error);
       setUnreadCount(0);
-    } finally {
-      setIsLoading(false);
     }
   }, [token, user, isLoading]);
 

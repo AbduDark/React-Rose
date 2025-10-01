@@ -32,7 +32,8 @@ export const getAllNotifications = async (page = 1) => {
 
 export const getUnreadCount = async (token) => {
   try {
-    if (!token) {
+    const authToken = token || localStorage.getItem("token");
+    if (!authToken) {
       return 0;
     }
 
@@ -40,7 +41,7 @@ export const getUnreadCount = async (token) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${authToken}`,
       },
     });
 

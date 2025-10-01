@@ -29,34 +29,46 @@ const DashboardOverview = () => {
     try {
       setIsLoading(true);
       const response = await getDashboardStats();
-      console.log("Dashboard stats response:", response);
+      console.log("Dashboard stats API response:", response);
       
-      const statsData = response?.data || response;
+      // Handle different response formats
+      let statsData = null;
       
-      // More flexible validation
+      if (response) {
+        // Check for direct data
+        if (response.data) {
+          statsData = response.data;
+        } else {
+          statsData = response;
+        }
+      }
+      
+      console.log("Processed stats data:", statsData);
+      
       if (statsData) {
-        // If the data structure is different, create a default structure
+        // Create normalized structure from API response
         const normalizedStats = {
-          general_stats: statsData.general_stats || {
-            total_users: statsData.total_users || 0,
-            total_courses: statsData.total_courses || 0,
-            total_subscriptions: statsData.total_subscriptions || 0,
-            active_subscriptions: statsData.active_subscriptions || 0,
-            active_courses: statsData.active_courses || 0,
-            approved_subscriptions: statsData.approved_subscriptions || 0,
-            pending_subscriptions: statsData.pending_subscriptions || 0,
-            total_students: statsData.total_students || 0
+          general_stats: {
+            total_users: statsData.total_users || statsData.general_stats?.total_users || 0,
+            total_courses: statsData.total_courses || statsData.general_stats?.total_courses || 0,
+            total_subscriptions: statsData.total_subscriptions || statsData.general_stats?.total_subscriptions || 0,
+            active_subscriptions: statsData.active_subscriptions || statsData.general_stats?.active_subscriptions || 0,
+            active_courses: statsData.active_courses || statsData.general_stats?.active_courses || 0,
+            approved_subscriptions: statsData.approved_subscriptions || statsData.general_stats?.approved_subscriptions || 0,
+            pending_subscriptions: statsData.pending_subscriptions || statsData.general_stats?.pending_subscriptions || 0,
+            total_students: statsData.total_students || statsData.general_stats?.total_students || 0
           },
-          monthly_stats: statsData.monthly_stats || {
-            new_users_this_month: statsData.new_users_this_month || 0,
-            new_subscriptions_this_month: statsData.new_subscriptions_this_month || 0
+          monthly_stats: {
+            new_users_this_month: statsData.new_users_this_month || statsData.monthly_stats?.new_users_this_month || 0,
+            new_subscriptions_this_month: statsData.new_subscriptions_this_month || statsData.monthly_stats?.new_subscriptions_this_month || 0
           }
         };
         
+        console.log("Normalized stats:", normalizedStats);
         setStats(normalizedStats);
         setError("");
       } else {
-        throw new Error("No stats data received");
+        throw new Error("No stats data received from API");
       }
     } catch (err) {
       console.error("Dashboard stats error:", err);
