@@ -233,15 +233,42 @@ function CardSubscriptions({ subscription, onApprove, onReject }) {
               <FiImage className="w-4 h-4 text-gray-400" />
               <button
                 onClick={() => {
-                  const paymentProofUrl = subscription.payment_proof_image || 
-                    `${import.meta.env.VITE_API_BASE}/auth/payment-proofs/${subscription.payment_proof}`;
-                  window.open(paymentProofUrl, '_blank');
+                  let paymentProofUrl;
+                  
+                  // Try different URL formats based on what's available
+                  if (subscription.payment_proof_image) {
+                    paymentProofUrl = subscription.payment_proof_image;
+                  } else if (subscription.payment_proof) {
+                    // Try authenticated endpoint first
+                    paymentProofUrl = `${import.meta.env.VITE_API_BASE}/auth/payment-proofs/${subscription.payment_proof}`;
+                  }
+                  
+                  if (paymentProofUrl) {
+                    window.open(paymentProofUrl, '_blank');
+                  } else {
+                    alert(t("adminDashboard.cardSubscription.noPaymentProof") || "لا يوجد إثبات دفع متاح");
+                  }
                 }}
-                className="text-blue-400 hover:text-blue-300 text-sm flex items-center gap-1"
+                className="text-blue-400 hover:text-blue-300 text-sm flex items-center gap-1 hover:bg-blue-400/10 px-2 py-1 rounded transition-colors"
               >
                 <FiEye className="w-3 h-3" />
                 {t("adminDashboard.cardSubscription.viewPaymentProof")}
               </button>
+              
+              {/* Alternative direct access button */}
+              {subscription.payment_proof && (
+                <button
+                  onClick={() => {
+                    const directUrl = `${import.meta.env.VITE_API_BASE.replace('/api', '')}/uploads/payment_proofs/${subscription.payment_proof}`;
+                    window.open(directUrl, '_blank');
+                  }}
+                  className="text-green-400 hover:text-green-300 text-xs flex items-center gap-1 hover:bg-green-400/10 px-2 py-1 rounded transition-colors"
+                  title="عرض مباشر"
+                >
+                  <FiImage className="w-3 h-3" />
+                  مباشر
+                </button>
+              )}
             </div>
           </div>
         )}

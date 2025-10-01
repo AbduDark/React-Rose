@@ -109,6 +109,12 @@ const SubscriptionsManager = () => {
 
   // Handle subscription approval
   const handleApproveSubscription = async (subscriptionId) => {
+    const adminNotes = prompt(
+      t("adminDashboard.subscriptionsManager.approveNotes") || 
+      "ملاحظات الموافقة (اختياري):"
+    );
+    
+    // Allow approval even if notes are empty
     try {
       await approveSubscription(localStorage.getItem("token"), subscriptionId);
       // Refresh the list
@@ -124,8 +130,18 @@ const SubscriptionsManager = () => {
 
   // Handle subscription rejection
   const handleRejectSubscription = async (subscriptionId) => {
+    const adminNotes = prompt(
+      t("adminDashboard.subscriptionsManager.rejectNotes") || 
+      "سبب الرفض (مطلوب):"
+    );
+    
+    if (!adminNotes) {
+      alert(t("adminDashboard.subscriptionsManager.rejectNotesRequired") || "يجب إدخال سبب الرفض");
+      return;
+    }
+    
     try {
-      await rejectSubscription(localStorage.getItem("token"), subscriptionId);
+      await rejectSubscription(localStorage.getItem("token"), subscriptionId, adminNotes);
       // Refresh the list
       fetchSubscriptions();
     } catch (err) {

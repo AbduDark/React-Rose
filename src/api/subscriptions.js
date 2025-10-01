@@ -266,17 +266,20 @@ export const approveSubscription = async (token, subscriptionId) => {
   }
 };
 
-export const rejectSubscription = async (token, subscriptionId) => {
+export const rejectSubscription = async (token, subscriptionId, adminNotes) => {
   try {
     const res = await fetch(
       `${API_BASE}/admin/subscriptions/${subscriptionId}/reject`,
       {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
         },
+        body: JSON.stringify({
+          admin_notes: adminNotes
+        })
       }
     );
 
@@ -288,6 +291,162 @@ export const rejectSubscription = async (token, subscriptionId) => {
     return await res.json();
   } catch (error) {
     console.error("Error rejecting subscription:", error);
+    throw error;
+  }
+};
+
+// Admin subscription functions with admin_notes
+export const approveSubscriptionWithNotes = async (token, subscriptionId, adminNotes = '') => {
+  try {
+    const res = await fetch(
+      `${API_BASE}/admin/subscriptions/${subscriptionId}/approve`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          admin_notes: adminNotes
+        })
+      }
+    );
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw errorData;
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("Error approving subscription:", error);
+    throw error;
+  }
+};
+
+// Alternative endpoints (POST methods)
+export const approveSubscriptionAlt = async (token, subscriptionId, adminNotes = '') => {
+  try {
+    const res = await fetch(
+      `${API_BASE}/subscriptions/${subscriptionId}/approve`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          admin_notes: adminNotes
+        })
+      }
+    );
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw errorData;
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("Error approving subscription (alt):", error);
+    throw error;
+  }
+};
+
+export const rejectSubscriptionAlt = async (token, subscriptionId, adminNotes) => {
+  try {
+    const res = await fetch(
+      `${API_BASE}/subscriptions/${subscriptionId}/reject`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          admin_notes: adminNotes
+        })
+      }
+    );
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw errorData;
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("Error rejecting subscription (alt):", error);
+    throw error;
+  }
+};
+
+// Get all subscriptions with search and filters (alternative endpoint)
+export const getAllSubscriptionsWithFilters = async (token, search = '', status = '') => {
+  try {
+    let url = `${API_BASE}/subscriptions`;
+    const params = new URLSearchParams();
+    
+    if (search) params.append('search', search);
+    if (status) params.append('status', status);
+    
+    if (params.toString()) {
+      url += `?${params.toString()}`;
+    }
+
+    const res = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw errorData;
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("Error fetching filtered subscriptions:", error);
+    throw error;
+  }
+};
+
+// View payment proof directly (for admins)
+export const viewPaymentProofDirect = async (filename) => {
+  try {
+    const url = `${API_BASE.replace('/api', '')}/uploads/payment_proofs/${filename}`;
+    return url;
+  } catch (error) {
+    console.error("Error constructing payment proof URL:", error);
+    throw error;
+  }
+};
+
+// Enhanced payment proof access with authentication
+export const getPaymentProofWithAuth = async (token, filename) => {
+  try {
+    const res = await fetch(`${API_BASE}/auth/payment-proofs/${filename}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "image/*",
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error("Payment proof not found");
+    }
+
+    return res.blob();
+  } catch (error) {
+    console.error("Error fetching authenticated payment proof:", error);
     throw error;
   }
 };
