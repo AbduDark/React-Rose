@@ -1,0 +1,49 @@
+react-dom_client.js?v=3b8dd22b:17995 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+i18next.js?v=3b8dd22b:207 i18next::backendConnector: loaded namespace common for language ar Object
+i18next.js?v=3b8dd22b:207 i18next::backendConnector: loading namespace translation for language ar failed failed parsing /locales/ar/translation.json to json
+output @ i18next.js?v=3b8dd22b:207
+warn @ i18next.js?v=3b8dd22b:201
+forward @ i18next.js?v=3b8dd22b:235
+warn @ i18next.js?v=3b8dd22b:224
+(anonymous) @ i18next.js?v=3b8dd22b:1545
+resolver @ i18next.js?v=3b8dd22b:1498
+(anonymous) @ i18next-http-backend.js?v=3b8dd22b:404
+(anonymous) @ i18next-http-backend.js?v=3b8dd22b:124
+i18next.js?v=3b8dd22b:207 i18next: languageChanged ar
+i18next.js?v=3b8dd22b:207 i18next: initialized Object
+courses.js:110 Error fetching courses: Error: Server error (200): 
+{"data":[{"id":7,"title":"\u0633","description":"\u0633","price":"22.00","duration_hours":0,"level":"beginner","language":"ar","instructor_name":"\u0623.\u0631\u0648\u0632","image_url":"http:\/\/127.
+    at fetchJson (courses.js:69:11)
+    at async getCourses (courses.js:83:22)
+    at async fetchCourses (CourseContext.jsx:19:24)
+getCourses @ courses.js:110
+courses.js:110 Error fetching courses: Error: Server error (200): 
+{"data":[{"id":7,"title":"\u0633","description":"\u0633","price":"22.00","duration_hours":0,"level":"beginner","language":"ar","instructor_name":"\u0623.\u0631\u0648\u0632","image_url":"http:\/\/127.
+    at fetchJson (courses.js:69:11)
+    at async getCourses (courses.js:83:22)
+    at async fetchCourses (CourseContext.jsx:19:24)
+getCourses @ courses.js:110
+courses.js:110 Error fetching courses: Error: Server error (200): 
+{"data":[{"id":7,"title":"\u0633","description":"\u0633","price":"22.00","duration_hours":0,"level":"beginner","language":"ar","instructor_name":"\u0623.\u0631\u0648\u0632","image_url":"http:\/\/127.
+    at fetchJson (courses.js:69:11)
+    at async getCourses (courses.js:83:22)
+    at async fetchCourses (CoursesManager.jsx:57:24)
+getCourses @ courses.js:110
+CoursesManager.jsx:86 Failed to fetch courses: Error: Server error (200): 
+{"data":[{"id":7,"title":"\u0633","description":"\u0633","price":"22.00","duration_hours":0,"level":"beginner","language":"ar","instructor_name":"\u0623.\u0631\u0648\u0632","image_url":"http:\/\/127.
+    at fetchJson (courses.js:69:11)
+    at async getCourses (courses.js:83:22)
+    at async fetchCourses (CoursesManager.jsx:57:24)
+fetchCourses @ CoursesManager.jsx:86
+courses.js:110 Error fetching courses: Error: Server error (200): 
+{"data":[{"id":7,"title":"\u0633","description":"\u0633","price":"22.00","duration_hours":0,"level":"beginner","language":"ar","instructor_name":"\u0623.\u0631\u0648\u0632","image_url":"http:\/\/127.
+    at fetchJson (courses.js:69:11)
+    at async getCourses (courses.js:83:22)
+    at async fetchCourses (CoursesManager.jsx:57:24)
+getCourses @ courses.js:110
+CoursesManager.jsx:86 Failed to fetch courses: Error: Server error (200): 
+{"data":[{"id":7,"title":"\u0633","description":"\u0633","price":"22.00","duration_hours":0,"level":"beginner","language":"ar","instructor_name":"\u0623.\u0631\u0648\u0632","image_url":"http:\/\/127.
+    at fetchJson (courses.js:69:11)
+    at async getCourses (courses.js:83:22)
+    at async fetchCourses (CoursesManager.jsx:57:24)
+fetchCourses @ CoursesManager.jsx:86
