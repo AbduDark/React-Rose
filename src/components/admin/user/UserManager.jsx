@@ -185,6 +185,8 @@ const UserManager = () => {
               page={page}
               setPage={setPage}
               pageCount={meta.last_page}
+              totalItems={meta.total}
+              itemsPerPage={meta.per_page || 10}
             />
           )}
         </>

@@ -262,8 +262,10 @@
   "pagination": {
     "previous": "السابق",
     "next": "التالي",
-    "page": "الصفحة",
-    "of": "من"
+    "page": "صفحة",
+    "of": "من",
+    "showing": "عرض",
+    "results": "نتيجة"
   },
   "auth": {
     "login": {
