@@ -56,13 +56,21 @@ const CoursesManager = () => {
       setError("");
       const response = await getCourses(pageNum, 6, i18n.language);
       
+      console.log("Courses response:", response); // للتشخيص
+      
       // Handle Laravel pagination response structure
       if (response && typeof response === 'object') {
         // If response has data property (Laravel pagination)
         if (response.data !== undefined) {
-          setCourses(Array.isArray(response.data) ? response.data : []);
+          const coursesData = Array.isArray(response.data) ? response.data : [];
+          setCourses(coursesData);
           setMeta(response.meta || null);
           setPage(response.meta?.current_page || pageNum);
+          
+          // Don't show error if data is empty but request was successful
+          if (coursesData.length === 0) {
+            console.log("No courses found, but request was successful");
+          }
         } else {
           // If response is direct array
           setCourses(Array.isArray(response) ? response : []);
@@ -76,11 +84,14 @@ const CoursesManager = () => {
       }
     } catch (err) {
       console.error("Failed to fetch courses:", err);
-      setError(
-        t("adminDashboard.coursesManager.failedToFetch", { 
-          error: err.message || t("common.error")
-        })
-      );
+      // Only show error for actual failures, not empty data
+      if (!err.message.includes('"data":[]')) {
+        setError(
+          t("adminDashboard.coursesManager.failedToFetch", { 
+            error: err.message || t("common.error")
+          })
+        );
+      }
       setCourses([]);
       setMeta(null);
     } finally {
