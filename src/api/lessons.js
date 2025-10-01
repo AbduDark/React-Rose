@@ -1,460 +1,507 @@
+
 const API_BASE = import.meta.env.VITE_API_BASE;
+
+// Helper function for handling API responses
+const fetchJson = async (url, options = {}) => {
+  const response = await fetch(url, options);
+  const contentType = response.headers.get("content-type") || "";
+  
+  let data;
+  try {
+    data = contentType.includes("application/json") 
+      ? await response.json() 
+      : await response.text();
+  } catch (parseError) {
+    throw new Error(`Failed to parse response: ${parseError.message}`);
+  }
+
+  if (!response.ok) {
+    // Handle different error response formats
+    let errorMessage = `Server error (${response.status})`;
+    
+    if (typeof data === "object" && data?.message) {
+      errorMessage = data.message;
+    } else if (typeof data === "string") {
+      errorMessage = `${errorMessage}: ${data.substring(0, 200)}`;
+    }
+    
+    const error = new Error(errorMessage);
+    error.status = response.status;
+    error.data = data;
+    throw error;
+  }
+
+  return data;
+};
 
 // Admin Lesson Management APIs
 
 export const getAllLessons = async (params = {}, token) => {
-  const { course_id, page = 1 } = params;
-  const headers = {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  };
-  if (token) headers.Authorization = `Bearer ${token}`;
+  try {
+    const { course_id, page = 1, per_page = 15, search = "" } = params;
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    if (token) headers.Authorization = `Bearer ${token}`;
 
-  const queryParams = new URLSearchParams();
-  if (course_id) queryParams.append("course_id", course_id);
-  if (page) queryParams.append("page", page);
+    const queryParams = new URLSearchParams();
+    if (course_id && course_id !== "all") queryParams.append("course_id", course_id);
+    if (page) queryParams.append("page", page);
+    if (per_page) queryParams.append("per_page", per_page);
+    if (search) queryParams.append("search", search);
 
-  const res = await fetch(
-    `${API_BASE}/admin/lessons?${queryParams.toString()}`,
-    {
+    const url = `${API_BASE}/admin/lessons${queryParams.toString() ? `?${queryParams.toString()}` : ""}`;
+    
+    console.log("Fetching lessons from:", url);
+    
+    return await fetchJson(url, {
       method: "GET",
       headers,
-    }
-  );
-
-  const contentType = res.headers.get("content-type") || "";
-  const payload = contentType.includes("application/json")
-    ? await res.json()
-    : await res.text();
-
-  if (!res.ok) {
-    const message =
-      (typeof payload === "object" && payload?.message) ||
-      (typeof payload === "string"
-        ? `Server error (${res.status}): Received non-JSON response. ${payload
-            .substring(0, 180)
-            .replace(/\n/g, " ")}`
-        : "Failed to fetch lessons.");
-    throw new Error(message);
+    });
+  } catch (error) {
+    console.error("Error fetching lessons:", error);
+    throw error;
   }
-  return payload;
 };
 
 export const createLesson = async (lessonData, token) => {
-  if (!lessonData.course_id || !lessonData.title) {
-    throw new Error("course_id and title are required");
+  try {
+    if (!lessonData.course_id || !lessonData.title) {
+      throw new Error("course_id and title are required");
+    }
+    
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    if (token) headers.Authorization = `Bearer ${token}`;
+
+    // Clean and validate lesson data
+    const cleanData = {
+      course_id: parseInt(lessonData.course_id),
+      title: lessonData.title.trim(),
+      description: lessonData.description?.trim() || "",
+      content: lessonData.content?.trim() || "",
+      order: parseInt(lessonData.order) || 1,
+      duration: lessonData.duration?.trim() || null,
+      target_gender: lessonData.target_gender || "both",
+      is_free: Boolean(lessonData.is_free),
+    };
+
+    console.log("Creating lesson with data:", cleanData);
+
+    return await fetchJson(`${API_BASE}/admin/lessons`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(cleanData),
+    });
+  } catch (error) {
+    console.error("Error creating lesson:", error);
+    throw error;
   }
-  const headers = {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  };
-  if (token) headers.Authorization = `Bearer ${token}`;
-
-  const res = await fetch(`${API_BASE}/admin/lessons`, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(lessonData),
-  });
-
-  const contentType = res.headers.get("content-type") || "";
-  const data = contentType.includes("application/json")
-    ? await res.json()
-    : await res.text();
-
-  if (!res.ok) {
-    throw new Error(
-      (typeof data === "object" && data?.message) ||
-        (typeof data === "string"
-          ? `Server error (${res.status}): ${data}`
-          : `Failed to create lesson (Status: ${res.status})`)
-    );
-  }
-  return data;
 };
 
 export const updateLesson = async (lessonId, lessonData, token) => {
-  if (!lessonId) {
-    throw new Error("lessonId is required");
+  try {
+    if (!lessonId) {
+      throw new Error("lessonId is required");
+    }
+    
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    if (token) headers.Authorization = `Bearer ${token}`;
+
+    // Clean and validate lesson data
+    const cleanData = {
+      title: lessonData.title?.trim(),
+      description: lessonData.description?.trim() || "",
+      content: lessonData.content?.trim() || "",
+      order: parseInt(lessonData.order) || 1,
+      duration: lessonData.duration?.trim() || null,
+      target_gender: lessonData.target_gender || "both",
+      is_free: Boolean(lessonData.is_free),
+    };
+
+    // Remove undefined values
+    Object.keys(cleanData).forEach(key => {
+      if (cleanData[key] === undefined) {
+        delete cleanData[key];
+      }
+    });
+
+    console.log("Updating lesson with data:", cleanData);
+
+    return await fetchJson(`${API_BASE}/admin/lessons/${lessonId}`, {
+      method: "PUT",
+      headers,
+      body: JSON.stringify(cleanData),
+    });
+  } catch (error) {
+    console.error("Error updating lesson:", error);
+    throw error;
   }
-  const headers = {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  };
-  if (token) headers.Authorization = `Bearer ${token}`;
-
-  const res = await fetch(`${API_BASE}/admin/lessons/${lessonId}`, {
-    method: "PUT",
-    headers,
-    body: JSON.stringify(lessonData),
-  });
-
-  const contentType = res.headers.get("content-type") || "";
-  const data = contentType.includes("application/json")
-    ? await res.json()
-    : await res.text();
-
-  if (!res.ok) {
-    throw new Error(
-      (typeof data === "object" && data?.message) ||
-        (typeof data === "string"
-          ? `Server error (${res.status}): ${data}`
-          : `Failed to update lesson (Status: ${res.status})`)
-    );
-  }
-  return data;
 };
 
 export const deleteLesson = async (lessonId, token) => {
-  if (!lessonId) {
-    throw new Error("lessonId is required");
+  try {
+    if (!lessonId) {
+      throw new Error("lessonId is required");
+    }
+
+    const headers = {
+      Accept: "application/json",
+    };
+    if (token) headers.Authorization = `Bearer ${token}`;
+
+    console.log("Deleting lesson:", lessonId);
+
+    return await fetchJson(`${API_BASE}/admin/lessons/${lessonId}`, {
+      method: "DELETE",
+      headers,
+    });
+  } catch (error) {
+    console.error("Error deleting lesson:", error);
+    throw error;
   }
-
-  const headers = {
-    Accept: "application/json",
-  };
-  if (token) headers.Authorization = `Bearer ${token}`;
-
-  const res = await fetch(`${API_BASE}/admin/lessons/${lessonId}`, {
-    method: "DELETE",
-    headers,
-  });
-
-  const contentType = res.headers.get("content-type") || "";
-  const data = contentType.includes("application/json")
-    ? await res.json()
-    : await res.text();
-
-  if (!res.ok) {
-    throw new Error(
-      (typeof data === "object" && data?.message) ||
-        (typeof data === "string"
-          ? `Server error (${res.status}): ${data}`
-          : `Failed to delete lesson (Status: ${res.status})`)
-    );
-  }
-
-  return data;
 };
 
-export const uploadLessonVideo = async (lessonId, videoFile, token) => {
-  if (!lessonId || !videoFile) {
-    throw new Error("lessonId and videoFile are required");
+export const uploadLessonVideo = async (lessonId, videoFile, token, onProgress = null) => {
+  try {
+    if (!lessonId || !videoFile) {
+      throw new Error("lessonId and videoFile are required");
+    }
+
+    // Validate video file
+    if (!videoFile.type.startsWith("video/")) {
+      throw new Error("Please select a valid video file");
+    }
+
+    // Check file size (max 500MB)
+    const maxSize = 500 * 1024 * 1024; // 500MB
+    if (videoFile.size > maxSize) {
+      throw new Error("Video file size must be less than 500MB");
+    }
+
+    const formData = new FormData();
+    formData.append("video", videoFile);
+
+    const headers = {};
+    if (token) headers.Authorization = `Bearer ${token}`;
+
+    console.log("Uploading video for lesson:", lessonId, "File size:", videoFile.size);
+
+    // Use XMLHttpRequest for progress tracking if callback provided
+    if (onProgress && typeof onProgress === "function") {
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        
+        xhr.upload.addEventListener("progress", (event) => {
+          if (event.lengthComputable) {
+            const percentComplete = (event.loaded / event.total) * 100;
+            onProgress(percentComplete);
+          }
+        });
+        
+        xhr.addEventListener("load", async () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            try {
+              const data = JSON.parse(xhr.responseText);
+              resolve(data);
+            } catch (parseError) {
+              resolve({ success: true, response: xhr.responseText });
+            }
+          } else {
+            try {
+              const errorData = JSON.parse(xhr.responseText);
+              reject(new Error(errorData.message || `Upload failed (${xhr.status})`));
+            } catch (parseError) {
+              reject(new Error(`Upload failed (${xhr.status}): ${xhr.responseText}`));
+            }
+          }
+        });
+        
+        xhr.addEventListener("error", () => {
+          reject(new Error("Network error during upload"));
+        });
+        
+        xhr.open("POST", `${API_BASE}/admin/video/${lessonId}/upload`);
+        Object.entries(headers).forEach(([key, value]) => {
+          xhr.setRequestHeader(key, value);
+        });
+        xhr.send(formData);
+      });
+    }
+
+    // Fallback to fetch if no progress callback
+    return await fetchJson(`${API_BASE}/admin/video/${lessonId}/upload`, {
+      method: "POST",
+      headers,
+      body: formData,
+    });
+  } catch (error) {
+    console.error("Error uploading video:", error);
+    throw error;
   }
-
-  const formData = new FormData();
-  formData.append("video", videoFile);
-
-  const headers = {};
-  if (token) headers.Authorization = `Bearer ${token}`;
-
-  const res = await fetch(`${API_BASE}/admin/video/${lessonId}/upload`, {
-    method: "POST",
-    headers,
-    body: formData,
-  });
-
-  const contentType = res.headers.get("content-type") || "";
-  const data = contentType.includes("application/json")
-    ? await res.json()
-    : await res.text();
-
-  if (!res.ok) {
-    throw new Error(
-      (typeof data === "object" && data?.message) ||
-        (typeof data === "string"
-          ? `Server error (${res.status}): ${data}`
-          : `Failed to upload video (Status: ${res.status})`)
-    );
-  }
-  return data;
 };
 
 export const deleteLessonVideo = async (lessonId, token) => {
-  if (!lessonId) {
-    throw new Error("lessonId is required");
+  try {
+    if (!lessonId) {
+      throw new Error("lessonId is required");
+    }
+
+    const headers = {
+      Accept: "application/json",
+    };
+    if (token) headers.Authorization = `Bearer ${token}`;
+
+    console.log("Deleting video for lesson:", lessonId);
+
+    return await fetchJson(`${API_BASE}/admin/video/${lessonId}/delete`, {
+      method: "DELETE",
+      headers,
+    });
+  } catch (error) {
+    console.error("Error deleting video:", error);
+    throw error;
   }
-
-  const headers = {
-    Accept: "application/json",
-  };
-  if (token) headers.Authorization = `Bearer ${token}`;
-
-  const res = await fetch(`${API_BASE}/admin/video/${lessonId}/delete`, {
-    method: "DELETE",
-    headers,
-  });
-
-  const contentType = res.headers.get("content-type") || "";
-  const data = contentType.includes("application/json")
-    ? await res.json()
-    : await res.text();
-
-  if (!res.ok) {
-    throw new Error(
-      (typeof data === "object" && data?.message) ||
-        (typeof data === "string"
-          ? `Server error (${res.status}): ${data}`
-          : `Failed to delete video (Status: ${res.status})`)
-    );
-  }
-
-  return data;
 };
 
 // Student Lesson APIs
 
 export const getLessonsByCourse = async (courseId, token) => {
-  if (!courseId) throw new Error("courseId is required");
-  const headers = {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  };
-  if (token) headers.Authorization = `Bearer ${token}`;
+  try {
+    if (!courseId) throw new Error("courseId is required");
+    
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    if (token) headers.Authorization = `Bearer ${token}`;
 
-  const res = await fetch(`${API_BASE}/courses/${courseId}/lessons`, {
-    method: "GET",
-    headers,
-  });
+    console.log("Fetching lessons for course:", courseId);
 
-  const contentType = res.headers.get("content-type") || "";
-  const payload = contentType.includes("application/json")
-    ? await res.json()
-    : await res.text();
-
-  if (!res.ok) {
-    const message =
-      (typeof payload === "object" && payload?.message) ||
-      (typeof payload === "string"
-        ? `Server error (${res.status}): Received non-JSON response. ${payload
-            .substring(0, 180)
-            .replace(/\n/g, " ")}`
-        : "Failed to fetch lessons.");
-    throw new Error(message);
+    return await fetchJson(`${API_BASE}/courses/${courseId}/lessons`, {
+      method: "GET",
+      headers,
+    });
+  } catch (error) {
+    console.error("Error fetching course lessons:", error);
+    throw error;
   }
-  return payload;
+};
+
+export const getLessonDetails = async (lessonId, token) => {
+  try {
+    if (!lessonId) {
+      throw new Error("lessonId is required");
+    }
+
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    if (token) headers.Authorization = `Bearer ${token}`;
+
+    console.log("Fetching lesson details:", lessonId);
+
+    return await fetchJson(`${API_BASE}/lessons/${lessonId}`, {
+      method: "GET",
+      headers,
+    });
+  } catch (error) {
+    console.error("Error fetching lesson details:", error);
+    throw error;
+  }
 };
 
 export const getLessonComments = async (lessonId, token) => {
-  if (!lessonId) throw new Error("lessonId is required");
-  const headers = {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  };
-  if (token) headers.Authorization = `Bearer ${token}`;
+  try {
+    if (!lessonId) throw new Error("lessonId is required");
+    
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    if (token) headers.Authorization = `Bearer ${token}`;
 
-  const res = await fetch(`${API_BASE}/lessons/${lessonId}/comments`, {
-    method: "GET",
-    headers,
-  });
+    console.log("Fetching comments for lesson:", lessonId);
 
-  const contentType = res.headers.get("content-type") || "";
-  const payload = contentType.includes("application/json")
-    ? await res.json()
-    : await res.text();
+    const response = await fetchJson(`${API_BASE}/lessons/${lessonId}/comments`, {
+      method: "GET",
+      headers,
+    });
 
-  if (!res.ok) {
-    const message =
-      (typeof payload === "object" && payload?.message) ||
-      (typeof payload === "string"
-        ? `Server error (${res.status}): ${payload
-            .substring(0, 180)
-            .replace(/\n/g, " ")}`
-        : `Failed to fetch comments (Status: ${res.status})`);
-    throw new Error(message);
+    // Extract comments from response
+    return response.data?.comments || response.comments || [];
+  } catch (error) {
+    console.error("Error fetching lesson comments:", error);
+    throw error;
   }
-
-  // Extract comments from payload.data.comments
-  return payload.data?.comments || [];
 };
 
 export const createComment = async ({ lesson_id, content }, token) => {
-  if (!lesson_id || !content) {
-    throw new Error("lesson_id and content are required");
+  try {
+    if (!lesson_id || !content) {
+      throw new Error("lesson_id and content are required");
+    }
+    
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    if (token) headers.Authorization = `Bearer ${token}`;
+
+    const commentData = {
+      lesson_id: parseInt(lesson_id),
+      content: content.trim(),
+    };
+
+    console.log("Creating comment:", commentData);
+
+    const response = await fetchJson(`${API_BASE}/comments`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(commentData),
+    });
+
+    return response.data?.comment || response;
+  } catch (error) {
+    console.error("Error creating comment:", error);
+    throw error;
   }
-  const headers = {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  };
-  if (token) headers.Authorization = `Bearer ${token}`;
-
-  const res = await fetch(`${API_BASE}/comments`, {
-    method: "POST",
-    headers,
-    body: JSON.stringify({ lesson_id, content }),
-  });
-
-  const contentType = res.headers.get("content-type") || "";
-  const data = contentType.includes("application/json")
-    ? await res.json()
-    : await res.text();
-
-  if (!res.ok) {
-    throw new Error(
-      (typeof data === "object" && data?.message) ||
-        (typeof data === "string"
-          ? `Server error (${res.status}): ${data}`
-          : `Failed to create comment (Status: ${res.status})`)
-    );
-  }
-  return data.data?.comment || data;
 };
 
 export const deleteComment = async (commentId, token) => {
-  if (!commentId) {
-    throw new Error("commentId is required");
-  }
-
-  const headers = {
-    Accept: "application/json",
-  };
-  if (token) headers.Authorization = `Bearer ${token}`;
-
-  const res = await fetch(`${API_BASE}/comments/${commentId}`, {
-    method: "DELETE",
-    headers,
-  });
-
-  const contentType = res.headers.get("content-type") || "";
-  const data = contentType.includes("application/json")
-    ? await res.json()
-    : await res.text();
-
-  if (!res.ok) {
-    throw new Error(
-      (typeof data === "object" && data?.message) ||
-        (typeof data === "string"
-          ? `Server error (${res.status}): ${data}`
-          : `Failed to delete comment (Status: ${res.status})`)
-    );
-  }
-
-  return data;
-};
-
-// Get Lesson Details API
-export const getLessonDetails = async (lessonId, token) => {
-  if (!lessonId) {
-    throw new Error("lessonId is required");
-  }
-
-  const headers = {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  };
-  if (token) headers.Authorization = `Bearer ${token}`;
-
-  const res = await fetch(`${API_BASE}/lessons/${lessonId}`, {
-    method: "GET",
-    headers,
-  });
-
-  const contentType = res.headers.get("content-type") || "";
-  const data = contentType.includes("application/json")
-    ? await res.json()
-    : await res.text();
-
-  if (!res.ok) {
-    const message =
-      (typeof data === "object" && data?.message) ||
-      (typeof data === "string"
-        ? `Server error (${res.status}): ${data
-            .substring(0, 180)
-            .replace(/\n/g, " ")}`
-        : `Failed to fetch lesson details (Status: ${res.status})`);
-    throw new Error(message);
-  }
-
-  return data;
-};
-
-// Get Secure Video URL API - Frontend Only Implementation
-export const getSecureVideoUrl = async (lessonId, token) => {
-  if (!lessonId) {
-    throw new Error("lessonId is required");
-  }
-
-  // استخدام خدمة الأمان المحلية لإنشاء URL آمن
-  const videoSecurityService = (
-    await import("../services/VideoSecurityService")
-  ).default;
-
-  // الحصول على تفاصيل الدرس أولاً
-  const lessonDetails = await getLessonDetails(lessonId, token);
-  const lessonData = lessonDetails.data || lessonDetails;
-
-  if (!lessonData.has_video || !lessonData.video_url) {
-    throw new Error("No video available for this lesson");
-  }
-
-  // إنشاء URL آمن محلياً
-  const secureUrl = videoSecurityService.createSecureVideoUrl(
-    lessonData.video_url,
-    lessonId,
-    lessonData.user_id || "anonymous"
-  );
-
-  // إنشاء رمز جلسة محلي
-  const sessionToken = videoSecurityService.generateVideoToken(
-    lessonId,
-    lessonData.user_id || "anonymous",
-    Date.now().toString()
-  );
-
-  return {
-    data: {
-      secure_url: secureUrl,
-      session_token: sessionToken,
-      expires_at: Date.now() + 30 * 60 * 1000, // 30 دقيقة
-      original_url: lessonData.video_url,
-    },
-  };
-};
-
-// Validate Video Access API - Frontend Only Implementation
-export const validateVideoAccess = async (lessonId, token, sessionToken) => {
-  if (!lessonId || !sessionToken) {
-    throw new Error("lessonId and sessionToken are required");
-  }
-
-  // استخدام خدمة الأمان المحلية للتحقق
-  const videoSecurityService = (
-    await import("../services/VideoSecurityService")
-  ).default;
-
-  // الحصول على معلومات المستخدم من الـ token
-  const userInfo = await getUserInfoFromToken(token);
-
-  // التحقق من صحة الرمز محلياً
-  const validation = videoSecurityService.validateVideoToken(
-    sessionToken,
-    lessonId,
-    userInfo.id || "anonymous"
-  );
-
-  return {
-    data: {
-      valid: validation.valid,
-      error: validation.error,
-      remaining_views: validation.valid
-        ? 3 - (validation.tokenData?.viewCount || 0)
-        : 0,
-      expires_at: validation.tokenData?.expiry || Date.now(),
-    },
-  };
-};
-
-// دالة مساعدة للحصول على معلومات المستخدم من الـ token
-const getUserInfoFromToken = async (token) => {
   try {
-    // محاولة فك تشفير الـ JWT token (إذا كان JWT)
-    const payload = JSON.parse(atob(token.split(".")[1]));
+    if (!commentId) {
+      throw new Error("commentId is required");
+    }
+
+    const headers = {
+      Accept: "application/json",
+    };
+    if (token) headers.Authorization = `Bearer ${token}`;
+
+    console.log("Deleting comment:", commentId);
+
+    return await fetchJson(`${API_BASE}/comments/${commentId}`, {
+      method: "DELETE",
+      headers,
+    });
+  } catch (error) {
+    console.error("Error deleting comment:", error);
+    throw error;
+  }
+};
+
+// Video Security APIs (Enhanced)
+
+export const getSecureVideoUrl = async (lessonId, token) => {
+  try {
+    if (!lessonId) {
+      throw new Error("lessonId is required");
+    }
+
+    // Get lesson details first
+    const lessonDetails = await getLessonDetails(lessonId, token);
+    const lessonData = lessonDetails.data || lessonDetails;
+
+    if (!lessonData.has_video || !lessonData.video_url) {
+      throw new Error("No video available for this lesson");
+    }
+
+    // Use local video security service
+    const videoSecurityService = (
+      await import("../services/VideoSecurityService")
+    ).default;
+
+    const userInfo = await getUserInfoFromToken(token);
+    
+    const secureUrl = videoSecurityService.createSecureVideoUrl(
+      lessonData.video_url,
+      lessonId,
+      userInfo.id
+    );
+
+    const sessionToken = videoSecurityService.generateVideoToken(
+      lessonId,
+      userInfo.id,
+      Date.now().toString()
+    );
+
     return {
-      id: payload.user_id || payload.sub || "anonymous",
-      email: payload.email || "unknown@example.com",
-      name: payload.name || "Anonymous User",
+      data: {
+        secure_url: secureUrl,
+        session_token: sessionToken,
+        expires_at: Date.now() + 30 * 60 * 1000, // 30 minutes
+        original_url: lessonData.video_url,
+        lesson_title: lessonData.title,
+      },
     };
   } catch (error) {
-    // إذا فشل فك التشفير، إرجاع معلومات افتراضية
+    console.error("Error getting secure video URL:", error);
+    throw error;
+  }
+};
+
+export const validateVideoAccess = async (lessonId, token, sessionToken) => {
+  try {
+    if (!lessonId || !sessionToken) {
+      throw new Error("lessonId and sessionToken are required");
+    }
+
+    const videoSecurityService = (
+      await import("../services/VideoSecurityService")
+    ).default;
+
+    const userInfo = await getUserInfoFromToken(token);
+    
+    const validation = videoSecurityService.validateVideoToken(
+      sessionToken,
+      lessonId,
+      userInfo.id
+    );
+
+    return {
+      data: {
+        valid: validation.valid,
+        error: validation.error,
+        remaining_views: validation.valid
+          ? Math.max(0, 5 - (validation.tokenData?.viewCount || 0))
+          : 0,
+        expires_at: validation.tokenData?.expiry || Date.now(),
+      },
+    };
+  } catch (error) {
+    console.error("Error validating video access:", error);
+    throw error;
+  }
+};
+
+// Helper function to extract user info from JWT token
+const getUserInfoFromToken = async (token) => {
+  try {
+    if (!token) {
+      return {
+        id: "anonymous",
+        email: "unknown@example.com",
+        name: "Anonymous User",
+      };
+    }
+
+    // Decode JWT token
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return {
+      id: payload.user_id || payload.sub || payload.id || "anonymous",
+      email: payload.email || "unknown@example.com",
+      name: payload.name || payload.username || "Anonymous User",
+    };
+  } catch (error) {
+    console.warn("Failed to decode token:", error);
     return {
       id: "anonymous",
       email: "unknown@example.com",
@@ -463,107 +510,203 @@ const getUserInfoFromToken = async (token) => {
   }
 };
 
-// Report Suspicious Activity API - Frontend Only Implementation
+// Security logging and reporting
 export const reportSuspiciousActivity = async (
   lessonId,
   activityType,
   details,
   token
 ) => {
-  if (!lessonId || !activityType) {
-    throw new Error("lessonId and activityType are required");
-  }
-
-  // تسجيل النشاط المشبوه محلياً
-  const securityLog = {
-    lessonId,
-    activityType,
-    details,
-    timestamp: Date.now(),
-    userAgent: navigator.userAgent,
-    url: window.location.href,
-    token: token ? "present" : "missing",
-  };
-
-  // حفظ في localStorage للتحليل لاحقاً
   try {
-    const existingLogs = JSON.parse(
-      localStorage.getItem("security_logs") || "[]"
-    );
-    existingLogs.push(securityLog);
-
-    // الاحتفاظ بآخر 100 سجل فقط
-    if (existingLogs.length > 100) {
-      existingLogs.splice(0, existingLogs.length - 100);
+    if (!lessonId || !activityType) {
+      throw new Error("lessonId and activityType are required");
     }
 
-    localStorage.setItem("security_logs", JSON.stringify(existingLogs));
+    const userInfo = await getUserInfoFromToken(token);
+    
+    const securityLog = {
+      lessonId,
+      activityType,
+      details,
+      userId: userInfo.id,
+      timestamp: Date.now(),
+      userAgent: navigator.userAgent,
+      url: window.location.href,
+      sessionInfo: {
+        language: navigator.language,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        screen: `${screen.width}x${screen.height}`,
+      },
+    };
 
-    // طباعة تحذير في وحدة التحكم
-    console.warn("🚨 Security Violation Detected:", {
-      type: activityType,
-      lesson: lessonId,
-      details: details,
-      timestamp: new Date().toISOString(),
-    });
+    // Store locally for analysis
+    try {
+      const existingLogs = JSON.parse(
+        localStorage.getItem("security_logs") || "[]"
+      );
+      existingLogs.push(securityLog);
 
-    // إرسال إشعار للمستخدم إذا كان النشاط خطير
-    if (
-      [
-        "script_injection",
-        "dev_tools_opened",
-        "download_link_injection",
-      ].includes(activityType)
-    ) {
-      showSecurityAlert(activityType, lessonId);
+      // Keep only last 50 logs
+      if (existingLogs.length > 50) {
+        existingLogs.splice(0, existingLogs.length - 50);
+      }
+
+      localStorage.setItem("security_logs", JSON.stringify(existingLogs));
+
+      // Console warning for development
+      console.warn("🚨 Security Violation:", {
+        type: activityType,
+        lesson: lessonId,
+        user: userInfo.id,
+        details: details,
+        timestamp: new Date().toISOString(),
+      });
+
+      // Show user notification for serious violations
+      if (
+        [
+          "script_injection",
+          "dev_tools_opened",
+          "download_attempt",
+          "suspicious_request",
+        ].includes(activityType)
+      ) {
+        showSecurityNotification(activityType);
+      }
+    } catch (storageError) {
+      console.error("Failed to log security event:", storageError);
     }
+
+    return { success: true, logged: true, timestamp: securityLog.timestamp };
   } catch (error) {
-    console.error("Failed to log security violation:", error);
+    console.error("Error reporting suspicious activity:", error);
+    return { success: false, error: error.message };
   }
-
-  return { success: true, logged: true };
 };
 
-// دالة لإظهار تنبيه أمني للمستخدم
-const showSecurityAlert = (activityType, lessonId) => {
-  const alertMessages = {
+// Enhanced security notification
+const showSecurityNotification = (activityType) => {
+  const messages = {
     script_injection: "تم اكتشاف محاولة حقن سكريبت مشبوهة",
     dev_tools_opened: "تم اكتشاف فتح أدوات المطور",
-    download_link_injection: "تم اكتشاف محاولة حقن رابط تحميل",
+    download_attempt: "تم اكتشاف محاولة تحميل غير مصرح بها",
+    suspicious_request: "تم اكتشاف طلب مشبوه",
   };
 
-  const message = alertMessages[activityType] || "تم اكتشاف نشاط مشبوه";
+  const message = messages[activityType] || "تم اكتشاف نشاط مشبوه";
 
-  // إظهار تنبيه بصري
-  const alertDiv = document.createElement("div");
-  alertDiv.style.cssText = `
+  // Create notification element
+  const notification = document.createElement("div");
+  notification.style.cssText = `
     position: fixed;
     top: 20px;
     right: 20px;
-    background: #ff4444;
+    background: linear-gradient(135deg, #ff4444, #cc0000);
     color: white;
-    padding: 15px 20px;
-    border-radius: 8px;
-    z-index: 10000;
-    font-family: Arial, sans-serif;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    max-width: 300px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    z-index: 10001;
+    font-family: 'Arial', sans-serif;
+    box-shadow: 0 8px 32px rgba(255, 68, 68, 0.3);
+    max-width: 350px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
   `;
 
-  alertDiv.innerHTML = `
-    <div style="font-weight: bold; margin-bottom: 5px;">⚠️ تحذير أمني</div>
-    <div>${message}</div>
-    <div style="font-size: 12px; margin-top: 5px; opacity: 0.8;">
-      الدرس: ${lessonId} | ${new Date().toLocaleTimeString("ar-SA")}
+  notification.innerHTML = `
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+      <span style="font-size: 20px;">🛡️</span>
+      <span style="font-weight: bold; font-size: 14px;">تحذير أمني</span>
+    </div>
+    <div style="font-size: 13px; line-height: 1.4; margin-bottom: 8px;">
+      ${message}
+    </div>
+    <div style="font-size: 11px; opacity: 0.8; color: #ffcccc;">
+      ${new Date().toLocaleString("ar-SA")}
     </div>
   `;
 
-  document.body.appendChild(alertDiv);
+  document.body.appendChild(notification);
 
-  // إزالة التنبيه بعد 5 ثوان
+  // Animate in
+  notification.style.transform = "translateX(100%)";
+  notification.style.transition = "transform 0.3s ease-out";
   setTimeout(() => {
-    if (alertDiv.parentNode) {
-      alertDiv.parentNode.removeChild(alertDiv);
+    notification.style.transform = "translateX(0)";
+  }, 10);
+
+  // Auto remove after 6 seconds
+  setTimeout(() => {
+    notification.style.transform = "translateX(100%)";
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
+      }
+    }, 300);
+  }, 6000);
+};
+
+// Batch operations for admin efficiency
+export const batchUpdateLessons = async (updates, token) => {
+  try {
+    if (!Array.isArray(updates) || updates.length === 0) {
+      throw new Error("Updates array is required");
     }
-  }, 5000);
+
+    const results = [];
+    const errors = [];
+
+    for (const update of updates) {
+      try {
+        const result = await updateLesson(update.id, update.data, token);
+        results.push({ id: update.id, success: true, data: result });
+      } catch (error) {
+        errors.push({ id: update.id, error: error.message });
+      }
+    }
+
+    return {
+      success: errors.length === 0,
+      results,
+      errors,
+      total: updates.length,
+      successful: results.length,
+      failed: errors.length,
+    };
+  } catch (error) {
+    console.error("Error in batch update:", error);
+    throw error;
+  }
+};
+
+export const batchDeleteLessons = async (lessonIds, token) => {
+  try {
+    if (!Array.isArray(lessonIds) || lessonIds.length === 0) {
+      throw new Error("Lesson IDs array is required");
+    }
+
+    const results = [];
+    const errors = [];
+
+    for (const lessonId of lessonIds) {
+      try {
+        await deleteLesson(lessonId, token);
+        results.push({ id: lessonId, success: true });
+      } catch (error) {
+        errors.push({ id: lessonId, error: error.message });
+      }
+    }
+
+    return {
+      success: errors.length === 0,
+      results,
+      errors,
+      total: lessonIds.length,
+      successful: results.length,
+      failed: errors.length,
+    };
+  } catch (error) {
+    console.error("Error in batch delete:", error);
+    throw error;
+  }
 };

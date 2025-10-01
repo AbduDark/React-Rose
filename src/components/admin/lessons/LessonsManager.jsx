@@ -33,6 +33,18 @@ const LessonsManager = () => {
   const [page, setPage] = useState(1);
   const [meta, setMeta] = useState(null);
 
+  // Debounced search effect
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (searchTerm !== "") {
+        setPage(1); // Reset to first page when searching
+      }
+      fetchLessons(searchTerm !== "" ? 1 : page);
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchTerm]);
+
   useEffect(() => {
     fetchLessons(page);
     fetchCoursesList();
@@ -41,14 +53,19 @@ const LessonsManager = () => {
   useEffect(() => {
     const filtered = lessons.filter((lesson) => {
       const matchesSearch =
-        lesson.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        lesson.description.toLowerCase().includes(searchTerm.toLowerCase());
+        !searchTerm ||
+        lesson.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        lesson.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        lesson.content?.toLowerCase().includes(searchTerm.toLowerCase());
+        
       const matchesFilter =
         selectedFilter === "all" ||
         lesson.is_free === (selectedFilter === "free");
+        
       const matchesCourse =
         selectedCourse === "all" ||
         lesson.course_id === parseInt(selectedCourse);
+        
       return matchesSearch && matchesFilter && matchesCourse;
     });
     setFilteredLessons(filtered);
@@ -57,19 +74,40 @@ const LessonsManager = () => {
   const fetchLessons = async (pageNum = 1) => {
     try {
       setIsLoading(true);
-      const params = { page: pageNum };
+      setError("");
+      
+      const params = { 
+        page: pageNum,
+        per_page: 12,
+        search: searchTerm
+      };
+      
       if (selectedCourse !== "all") {
         params.course_id = selectedCourse;
       }
+      
+      console.log("Fetching lessons with params:", params);
+      
       const response = await getAllLessons(params, token);
-      setLessons(response.data?.data || []);
-      setMeta(response.data || null);
-      setPage(response.data?.current_page || 1);
-      setError("");
+      
+      // Handle different response formats
+      if (response.data) {
+        setLessons(response.data.data || response.data || []);
+        setMeta(response.data);
+        setPage(response.data.current_page || pageNum);
+      } else {
+        setLessons(response || []);
+        setMeta(null);
+        setPage(pageNum);
+      }
+      
     } catch (err) {
+      console.error("Failed to fetch lessons:", err);
       setError(
-        t("adminDashboard.lessonsManager.failedToFetch", { error: err.message })
+        err.message || t("adminDashboard.lessonsManager.failedToFetch")
       );
+      setLessons([]);
+      setMeta(null);
     } finally {
       setIsLoading(false);
     }
@@ -85,25 +123,45 @@ const LessonsManager = () => {
   };
 
   const handleLessonCreated = (newLesson) => {
-    setLessons((prev) => [...prev, newLesson]);
+    // Refresh the entire list to get updated data
+    fetchLessons(page);
     setIsCreateModalOpen(false);
+    
+    // Show success message
+    const successMessage = t("adminDashboard.lessonsManager.createSuccess");
+    console.log(successMessage);
   };
 
   const handleLessonUpdated = (updatedLesson) => {
+    // Update local state immediately for better UX
     setLessons((prev) =>
       prev.map((lesson) =>
-        lesson.id === updatedLesson.id ? updatedLesson : lesson
+        lesson.id === updatedLesson.id ? { ...lesson, ...updatedLesson } : lesson
       )
     );
     setIsEditModalOpen(false);
     setCurrentLesson(null);
+    
+    // Refresh data to ensure consistency
+    setTimeout(() => fetchLessons(page), 500);
+    
+    // Show success message
+    const successMessage = t("adminDashboard.lessonsManager.updateSuccess");
+    console.log(successMessage);
   };
 
-  // Handle lesson deletion
   const handleLessonDeleted = (lessonId) => {
+    // Remove from local state immediately
     setLessons((prev) => prev.filter((lesson) => lesson.id !== lessonId));
     setIsDeleteModalOpen(false);
     setLessonToDelete(null);
+    
+    // Refresh to ensure consistency
+    setTimeout(() => fetchLessons(page), 500);
+    
+    // Show success message
+    const successMessage = t("adminDashboard.lessonsManager.deleteSuccess");
+    console.log(successMessage);
   };
 
   const handleEditLesson = (lesson) => {

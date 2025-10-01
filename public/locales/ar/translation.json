@@ -1,4 +1,31 @@
-
 {
-  "welcome": "مرحباً"
+  "welcome": "مرحباً",
+  "deleteLesson": {
+    "title": "حذف الدرس",
+    "confirmMessage": "هل أنت متأكد أنك تريد حذف الدرس \"{{title}}\"؟",
+    "cancel": "إلغاء",
+    "confirm": "حذف",
+    "deleting": "جاري الحذف...",
+    "success": "تم حذف الدرس بنجاح",
+    "error": "فشل في حذف الدرس"
+  },
+  "videoUpload": {
+    "title": "إدارة فيديو الدرس",
+    "lessonId": "رقم الدرس",
+    "hasVideo": "يحتوي على فيديو",
+    "noVideo": "لا يحتوي على فيديو",
+    "selectVideo": "اختيار ملف الفيديو",
+    "supportedFormats": "الصيغ المدعومة",
+    "uploading": "جاري الرفع",
+    "uploadVideo": "رفع الفيديو",
+    "uploadSuccess": "تم رفع الفيديو بنجاح",
+    "deleteCurrentVideo": "حذف الفيديو الحالي",
+    "deleteVideo": "حذف الفيديو",
+    "deleteWarning": "سيتم حذف الفيديو نهائياً",
+    "deleteSuccess": "تم حذف الفيديو بنجاح",
+    "deleting": "جاري الحذف",
+    "close": "إغلاق",
+    "invalidFileType": "يرجى اختيار ملف فيديو صالح",
+    "fileTooLarge": "حجم الملف كبير جداً (الحد الأقصى 500 ميجابايت)"
+  }
 }

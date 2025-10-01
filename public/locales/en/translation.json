@@ -1,4 +1,31 @@
-
 {
-  "welcome": "Welcome"
+  "welcome": "Welcome",
+  "deleteLesson": {
+    "title": "Delete Lesson",
+    "confirmMessage": "Are you sure you want to delete the lesson \"{{title}}\"?",
+    "cancel": "Cancel",
+    "confirm": "Delete",
+    "deleting": "Deleting...",
+    "success": "Lesson deleted successfully",
+    "error": "Failed to delete lesson"
+  },
+  "videoUpload": {
+    "title": "Manage Lesson Video",
+    "lessonId": "Lesson ID",
+    "hasVideo": "Has Video",
+    "noVideo": "No Video",
+    "selectVideo": "Select Video File",
+    "supportedFormats": "Supported Formats",
+    "uploading": "Uploading",
+    "uploadVideo": "Upload Video",
+    "uploadSuccess": "Video uploaded successfully",
+    "deleteCurrentVideo": "Delete Current Video",
+    "deleteVideo": "Delete Video",
+    "deleteWarning": "This will permanently delete the video",
+    "deleteSuccess": "Video deleted successfully",
+    "deleting": "Deleting",
+    "close": "Close",
+    "invalidFileType": "Please select a valid video file",
+    "fileTooLarge": "File size too large (max 500MB)"
+  }
 }
