@@ -1,0 +1,30 @@
+react-dom_client.js?v=3b8dd22b:17995 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+i18next.js?v=3b8dd22b:207 i18next::backendConnector: loaded namespace common for language ar Object
+i18next.js?v=3b8dd22b:207 i18next::backendConnector: loaded namespace translation for language ar Object
+i18next.js?v=3b8dd22b:207 i18next: languageChanged ar
+i18next.js?v=3b8dd22b:207 i18next: initialized Object
+react-dom_client.js?v=3b8dd22b:2395 Received NaN for the `strokeDashoffset` attribute. If this is expected, cast the value to a string.
+validateProperty @ react-dom_client.js?v=3b8dd22b:2395
+CoursesManager.jsx:59 Courses response: Object
+CoursesManager.jsx:59 Courses response: Object
+LessonsManager.jsx:89 Fetching lessons with params: Object
+lessons.js:56 Fetching lessons from: /api/admin/lessons?page=1&per_page=12
+LessonsManager.jsx:89 Fetching lessons with params: Object
+lessons.js:56 Fetching lessons from: /api/admin/lessons?page=1&per_page=12
+LessonsManager.jsx:54 Uncaught TypeError: lessons.filter is not a function
+    at LessonsManager.jsx:54:30
+    at Object.react_stack_bottom_frame (react-dom_client.js?v=3b8dd22b:17486:20)
+    at runWithFiberInDEV (react-dom_client.js?v=3b8dd22b:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=3b8dd22b:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=3b8dd22b:8518:60)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=3b8dd22b:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=3b8dd22b:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=3b8dd22b:9984:13)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=3b8dd22b:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=3b8dd22b:9984:13)
+react-dom_client.js?v=3b8dd22b:6229 An error occurred in the <LessonsManager> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+defaultOnUncaughtError @ react-dom_client.js?v=3b8dd22b:6229
