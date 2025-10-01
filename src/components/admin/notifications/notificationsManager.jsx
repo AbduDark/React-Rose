@@ -124,7 +124,7 @@ const NotificationsManager = () => {
                   <p className="text-2xl font-bold">
                     {statistics.read_notifications}
                     {` `}
-                    ({Math.ceil(statistics.read_percentage)}%)
+                    ({isNaN(statistics.read_percentage) ? 0 : Math.ceil(statistics.read_percentage)}%)
                   </p>
                 </div>
                 <FiUsers className="w-8 h-8 opacity-80" />

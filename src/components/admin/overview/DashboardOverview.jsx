@@ -29,19 +29,58 @@ const DashboardOverview = () => {
     try {
       setIsLoading(true);
       const response = await getDashboardStats();
+      console.log("Dashboard stats response:", response);
+      
       const statsData = response?.data || response;
       
-      if (statsData && (statsData.general_stats || statsData.monthly_stats)) {
-        setStats(statsData);
+      // More flexible validation
+      if (statsData) {
+        // If the data structure is different, create a default structure
+        const normalizedStats = {
+          general_stats: statsData.general_stats || {
+            total_users: statsData.total_users || 0,
+            total_courses: statsData.total_courses || 0,
+            total_subscriptions: statsData.total_subscriptions || 0,
+            active_subscriptions: statsData.active_subscriptions || 0,
+            active_courses: statsData.active_courses || 0,
+            approved_subscriptions: statsData.approved_subscriptions || 0,
+            pending_subscriptions: statsData.pending_subscriptions || 0,
+            total_students: statsData.total_students || 0
+          },
+          monthly_stats: statsData.monthly_stats || {
+            new_users_this_month: statsData.new_users_this_month || 0,
+            new_subscriptions_this_month: statsData.new_subscriptions_this_month || 0
+          }
+        };
+        
+        setStats(normalizedStats);
         setError("");
       } else {
-        throw new Error("Invalid stats data format");
+        throw new Error("No stats data received");
       }
     } catch (err) {
       console.error("Dashboard stats error:", err);
       setError(
         t("adminDashboard.dashboardOverview.failedToFetchStats") + ": " + err.message
       );
+      
+      // Set default empty stats to prevent crashes
+      setStats({
+        general_stats: {
+          total_users: 0,
+          total_courses: 0,
+          total_subscriptions: 0,
+          active_subscriptions: 0,
+          active_courses: 0,
+          approved_subscriptions: 0,
+          pending_subscriptions: 0,
+          total_students: 0
+        },
+        monthly_stats: {
+          new_users_this_month: 0,
+          new_subscriptions_this_month: 0
+        }
+      });
     } finally {
       setIsLoading(false);
     }
@@ -69,15 +108,16 @@ const DashboardOverview = () => {
 
   const { general_stats, monthly_stats } = stats;
 
-  // Calculate percentages for progress bars
-  const activeCoursesPercentage =
-    (general_stats.active_courses / general_stats.total_courses) * 100;
-  const activeSubscriptionsPercentage =
-    (general_stats.active_subscriptions / general_stats.total_subscriptions) *
-    100;
-  const approvedSubscriptionsPercentage =
-    (general_stats.approved_subscriptions / general_stats.total_subscriptions) *
-    100;
+  // Calculate percentages for progress bars with safe math
+  const activeCoursesPercentage = general_stats.total_courses > 0 
+    ? (general_stats.active_courses / general_stats.total_courses) * 100 
+    : 0;
+  const activeSubscriptionsPercentage = general_stats.total_subscriptions > 0
+    ? (general_stats.active_subscriptions / general_stats.total_subscriptions) * 100
+    : 0;
+  const approvedSubscriptionsPercentage = general_stats.total_subscriptions > 0
+    ? (general_stats.approved_subscriptions / general_stats.total_subscriptions) * 100
+    : 0;
 
   return (
     <div className="space-y-6 p-4">
@@ -391,11 +431,11 @@ const DashboardOverview = () => {
                 {t("adminDashboard.dashboardOverview.userGrowth")}
               </p>
               <p className="text-2xl font-bold text-white">
-                {(
+                {general_stats.total_users > 0 ? (
                   (monthly_stats.new_users_this_month /
                     general_stats.total_users) *
                   100
-                ).toFixed(1)}
+                ).toFixed(1) : 0}
                 %
               </p>
               <p className="text-xs text-gray-400">
@@ -434,11 +474,11 @@ const DashboardOverview = () => {
                 {t("adminDashboard.dashboardOverview.subscriptionRate")}
               </p>
               <p className="text-2xl font-bold text-white">
-                {(
+                {general_stats.total_users > 0 ? (
                   (general_stats.total_subscriptions /
                     general_stats.total_users) *
                   100
-                ).toFixed(1)}
+                ).toFixed(1) : 0}
                 %
               </p>
               <p className="text-xs text-gray-400">

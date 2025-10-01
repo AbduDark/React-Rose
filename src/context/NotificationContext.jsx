@@ -1,6 +1,60 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { getUnreadCount } from "../api/notifications";
 import { useAuth } from "./AuthContext";
+
+const NotificationContext = createContext();
+
+export const useNotifications = () => {
+  const context = useContext(NotificationContext);
+  if (!context) {
+    throw new Error("useNotifications must be used within a NotificationProvider");
+  }
+  return context;
+};
+
+export const NotificationProvider = ({ children }) => {
+  const { token, user } = useAuth();
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchUnreadCount = useCallback(async () => {
+    if (!token || !user || isLoading) {
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const count = await getUnreadCount(token);
+      setUnreadCount(count);
+    } catch (error) {
+      console.error("Failed to fetch unread count:", error);
+      setUnreadCount(0);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [token, user, isLoading]);
+
+  useEffect(() => {
+    if (token && user) {
+      fetchUnreadCount();
+    } else {
+      setUnreadCount(0);
+    }
+  }, [token, user, fetchUnreadCount]);
+
+  const value = {
+    unreadCount,
+    setUnreadCount,
+    fetchUnreadCount,
+    isLoading
+  };
+
+  return (
+    <NotificationContext.Provider value={value}>
+      {children}
+    </NotificationContext.Provider>
+  );
+};
 
 const NotificationContext = createContext();
 
