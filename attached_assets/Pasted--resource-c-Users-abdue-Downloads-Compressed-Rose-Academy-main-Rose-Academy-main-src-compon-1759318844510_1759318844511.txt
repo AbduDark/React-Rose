@@ -1,0 +1,248 @@
+[{
+	"resource": "/c:/Users/abdue/Downloads/Compressed/Rose-Academy-main/Rose-Academy-main/src/components/admin/subscriptions/SubscriptionsManager.jsx",
+	"owner": "eslint7",
+	"code": {
+		"value": "no-unused-vars",
+		"target": {
+			"$mid": 1,
+			"path": "/docs/latest/rules/no-unused-vars",
+			"scheme": "https",
+			"authority": "eslint.org"
+		}
+	},
+	"severity": 8,
+	"message": "'FiPlus' is defined but never used.",
+	"source": "eslint",
+	"startLineNumber": 4,
+	"startColumn": 3,
+	"endLineNumber": 4,
+	"endColumn": 9,
+	"tags": [
+		1
+	],
+	"origin": "extHost1"
+},{
+	"resource": "/c:/Users/abdue/Downloads/Compressed/Rose-Academy-main/Rose-Academy-main/src/components/admin/subscriptions/SubscriptionsManager.jsx",
+	"owner": "eslint7",
+	"code": {
+		"value": "no-unused-vars",
+		"target": {
+			"$mid": 1,
+			"path": "/docs/latest/rules/no-unused-vars",
+			"scheme": "https",
+			"authority": "eslint.org"
+		}
+	},
+	"severity": 8,
+	"message": "'FiClock' is defined but never used.",
+	"source": "eslint",
+	"startLineNumber": 6,
+	"startColumn": 3,
+	"endLineNumber": 6,
+	"endColumn": 10,
+	"tags": [
+		1
+	],
+	"origin": "extHost1"
+},{
+	"resource": "/c:/Users/abdue/Downloads/Compressed/Rose-Academy-main/Rose-Academy-main/src/components/admin/subscriptions/SubscriptionsManager.jsx",
+	"owner": "eslint7",
+	"code": {
+		"value": "no-unused-vars",
+		"target": {
+			"$mid": 1,
+			"path": "/docs/latest/rules/no-unused-vars",
+			"scheme": "https",
+			"authority": "eslint.org"
+		}
+	},
+	"severity": 8,
+	"message": "'FiCheckCircle' is defined but never used.",
+	"source": "eslint",
+	"startLineNumber": 7,
+	"startColumn": 3,
+	"endLineNumber": 7,
+	"endColumn": 16,
+	"tags": [
+		1
+	],
+	"origin": "extHost1"
+},{
+	"resource": "/c:/Users/abdue/Downloads/Compressed/Rose-Academy-main/Rose-Academy-main/src/components/admin/subscriptions/SubscriptionsManager.jsx",
+	"owner": "eslint7",
+	"code": {
+		"value": "no-unused-vars",
+		"target": {
+			"$mid": 1,
+			"path": "/docs/latest/rules/no-unused-vars",
+			"scheme": "https",
+			"authority": "eslint.org"
+		}
+	},
+	"severity": 8,
+	"message": "'FiXCircle' is defined but never used.",
+	"source": "eslint",
+	"startLineNumber": 8,
+	"startColumn": 3,
+	"endLineNumber": 8,
+	"endColumn": 12,
+	"tags": [
+		1
+	],
+	"origin": "extHost1"
+},{
+	"resource": "/c:/Users/abdue/Downloads/Compressed/Rose-Academy-main/Rose-Academy-main/src/components/admin/subscriptions/SubscriptionsManager.jsx",
+	"owner": "eslint7",
+	"code": {
+		"value": "no-unused-vars",
+		"target": {
+			"$mid": 1,
+			"path": "/docs/latest/rules/no-unused-vars",
+			"scheme": "https",
+			"authority": "eslint.org"
+		}
+	},
+	"severity": 8,
+	"message": "'adminNotes' is assigned a value but never used.",
+	"source": "eslint",
+	"startLineNumber": 112,
+	"startColumn": 11,
+	"endLineNumber": 112,
+	"endColumn": 21,
+	"tags": [
+		1
+	],
+	"origin": "extHost1"
+},{
+	"resource": "/c:/Users/abdue/Downloads/Compressed/Rose-Academy-main/Rose-Academy-main/src/components/admin/subscriptions/SubscriptionsManager.jsx",
+	"owner": "eslint7",
+	"code": {
+		"value": "no-unused-vars",
+		"target": {
+			"$mid": 1,
+			"path": "/docs/latest/rules/no-unused-vars",
+			"scheme": "https",
+			"authority": "eslint.org"
+		}
+	},
+	"severity": 8,
+	"message": "'handleEditSubscription' is assigned a value but never used.",
+	"source": "eslint",
+	"startLineNumber": 181,
+	"startColumn": 9,
+	"endLineNumber": 181,
+	"endColumn": 31,
+	"tags": [
+		1
+	],
+	"origin": "extHost1"
+},{
+	"resource": "/c:/Users/abdue/Downloads/Compressed/Rose-Academy-main/Rose-Academy-main/src/components/admin/subscriptions/SubscriptionsManager.jsx",
+	"owner": "eslint7",
+	"code": {
+		"value": "no-unused-vars",
+		"target": {
+			"$mid": 1,
+			"path": "/docs/latest/rules/no-unused-vars",
+			"scheme": "https",
+			"authority": "eslint.org"
+		}
+	},
+	"severity": 8,
+	"message": "'handleDeleteSubscription' is assigned a value but never used.",
+	"source": "eslint",
+	"startLineNumber": 187,
+	"startColumn": 9,
+	"endLineNumber": 187,
+	"endColumn": 33,
+	"tags": [
+		1
+	],
+	"origin": "extHost1"
+},{
+	"resource": "/c:/Users/abdue/Downloads/Compressed/Rose-Academy-main/Rose-Academy-main/src/components/admin/subscriptions/UpdateSubscriptions.jsx",
+	"owner": "eslint7",
+	"code": {
+		"value": "no-unused-vars",
+		"target": {
+			"$mid": 1,
+			"path": "/docs/latest/rules/no-unused-vars",
+			"scheme": "https",
+			"authority": "eslint.org"
+		}
+	},
+	"severity": 8,
+	"message": "'authUser' is assigned a value but never used.",
+	"source": "eslint",
+	"startLineNumber": 13,
+	"startColumn": 17,
+	"endLineNumber": 13,
+	"endColumn": 25,
+	"tags": [
+		1
+	],
+	"origin": "extHost1"
+},{
+	"resource": "/c:/Users/abdue/Downloads/Compressed/Rose-Academy-main/Rose-Academy-main/src/components/admin/subscriptions/SearchSubscriptions.jsx",
+	"owner": "eslint7",
+	"code": {
+		"value": "react/no-unescaped-entities",
+		"target": {
+			"$mid": 1,
+			"path": "/jsx-eslint/eslint-plugin-react/tree/master/docs/rules/no-unescaped-entities.md",
+			"scheme": "https",
+			"authority": "github.com"
+		}
+	},
+	"severity": 8,
+	"message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.",
+	"source": "eslint",
+	"startLineNumber": 125,
+	"startColumn": 70,
+	"endLineNumber": 125,
+	"endColumn": 70,
+	"origin": "extHost1"
+},{
+	"resource": "/c:/Users/abdue/Downloads/Compressed/Rose-Academy-main/Rose-Academy-main/src/components/admin/subscriptions/SearchSubscriptions.jsx",
+	"owner": "eslint7",
+	"code": {
+		"value": "react/no-unescaped-entities",
+		"target": {
+			"$mid": 1,
+			"path": "/jsx-eslint/eslint-plugin-react/tree/master/docs/rules/no-unescaped-entities.md",
+			"scheme": "https",
+			"authority": "github.com"
+		}
+	},
+	"severity": 8,
+	"message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.",
+	"source": "eslint",
+	"startLineNumber": 126,
+	"startColumn": 27,
+	"endLineNumber": 126,
+	"endColumn": 27,
+	"origin": "extHost1"
+},{
+	"resource": "/c:/Users/abdue/Downloads/Compressed/Rose-Academy-main/Rose-Academy-main/src/components/admin/subscriptions/CreateSubscriptions.jsx",
+	"owner": "eslint7",
+	"code": {
+		"value": "no-unused-vars",
+		"target": {
+			"$mid": 1,
+			"path": "/docs/latest/rules/no-unused-vars",
+			"scheme": "https",
+			"authority": "eslint.org"
+		}
+	},
+	"severity": 8,
+	"message": "'authUser' is assigned a value but never used.",
+	"source": "eslint",
+	"startLineNumber": 8,
+	"startColumn": 17,
+	"endLineNumber": 8,
+	"endColumn": 25,
+	"tags": [
+		1
+	],
+	"origin": "extHost1"
+}]
