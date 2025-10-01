@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   FiUser,
@@ -12,10 +12,22 @@ import {
   FiDollarSign,
   FiImage,
   FiEye,
+  FiDownload,
 } from "react-icons/fi";
 
+/**
+ * CardSubscriptions
+ * Props:
+ *  - subscription: object (subscription data)
+ *  - onApprove: fn
+ *  - onReject: fn
+ */
 function CardSubscriptions({ subscription, onApprove, onReject }) {
   const { t } = useTranslation();
+
+  const [showProof, setShowProof] = useState(false);
+  const [proofUrl, setProofUrl] = useState("");
+  const [directUrl, setDirectUrl] = useState("");
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -68,281 +80,429 @@ function CardSubscriptions({ subscription, onApprove, onReject }) {
 
   const formatPrice = (price) => {
     if (!price) return t("adminDashboard.cardSubscription.free");
-    return `$${parseFloat(price).toFixed(2)}`;
+    const num = parseFloat(price);
+    if (Number.isNaN(num)) return price;
+    return `$${num.toFixed(2)}`;
   };
 
+  // Build proof URLs (view and direct)
+  const buildProofUrls = () => {
+    let view = "";
+    let direct = "";
+
+    // If API base present, prepare base without /api for direct upload path
+    const apiBase = import.meta.env.VITE_API_BASE || "";
+    const baseNoApi = apiBase ? apiBase.replace(/\/api\/?$/i, "") : "";
+
+    if (subscription?.payment_proof_image) {
+      // If it's likely a full URL use it, otherwise prefix base
+      if (/^https?:\/\//i.test(subscription.payment_proof_image)) {
+        view = subscription.payment_proof_image;
+        direct = subscription.payment_proof_image;
+      } else if (baseNoApi) {
+        view = `${baseNoApi.replace(/\/$/, "")}/${subscription.payment_proof_image.replace(
+          /^\/+/,
+          ""
+        )}`;
+        direct = view;
+      } else {
+        view = subscription.payment_proof_image;
+        direct = subscription.payment_proof_image;
+      }
+    } else if (subscription?.payment_proof) {
+      // backend authenticated endpoint (may require auth token)
+      if (apiBase) {
+        view = `${apiBase.replace(/\/$/, "")}/auth/payment-proofs/${subscription.payment_proof}`;
+      }
+      // direct upload path (public)
+      if (baseNoApi) {
+        direct = `${baseNoApi.replace(
+          /\/$/,
+          ""
+        )}/uploads/payment_proofs/${subscription.payment_proof}`;
+      } else {
+        direct = `${subscription.payment_proof}`;
+      }
+    }
+
+    return { view, direct };
+  };
+
+  const handleViewProof = () => {
+    const { view, direct } = buildProofUrls();
+    const chosen = view || direct;
+    if (!chosen) {
+      alert(t("adminDashboard.cardSubscription.noPaymentProof") || "لا يوجد إثبات دفع متاح");
+      return;
+    }
+    setProofUrl(chosen);
+    setDirectUrl(direct || chosen);
+    setShowProof(true);
+  };
+
+  const isImage = (url) => /\.(jpe?g|png|gif|bmp|webp|svg)$/i.test(url);
+  const isPdf = (url) => /\.pdf$/i.test(url);
+
   return (
-    <div className="bg-gray-800 rounded-xl shadow-lg border border-gray-700 hover:shadow-xl transition-all duration-300 overflow-hidden hover:border-gray-600">
-      <div className="p-6">
-        {/* Header with Course Info */}
-        <div className="flex justify-between items-start mb-4">
-          <div className="flex items-center gap-3">
-            <div className="p-3 bg-blue-500/20 rounded-lg">
-              <FiBookOpen className="w-6 h-6 text-blue-400" />
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-white line-clamp-1">
-                {subscription.course?.title ||
-                  t("adminDashboard.cardSubscription.unknownCourse")}
-              </h3>
-              <div className="flex items-center gap-2 mt-1">
-                <span
-                  className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
-                    subscription.status
-                  )}`}
-                >
-                  {getStatusText(subscription.status)}
-                </span>
-                <span
-                  className={`px-2 py-1 text-xs font-medium rounded-full ${getLevelColor(
-                    subscription.course?.level
-                  )}`}
-                >
-                  {subscription.course?.level ||
-                    t("adminDashboard.cardSubscription.unknownLevel")}
-                </span>
+    <>
+      <div className="bg-gray-800 rounded-xl shadow-lg border border-gray-700 hover:shadow-xl transition-all duration-300 overflow-hidden hover:border-gray-600">
+        <div className="p-6">
+          {/* Header with Course Info */}
+          <div className="flex justify-between items-start mb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-3 bg-blue-500/20 rounded-lg">
+                <FiBookOpen className="w-6 h-6 text-blue-400" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-white line-clamp-1">
+                  {subscription.course?.title ||
+                    t("adminDashboard.cardSubscription.unknownCourse")}
+                </h3>
+                <div className="flex items-center gap-2 mt-1">
+                  <span
+                    className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
+                      subscription.status
+                    )}`}
+                  >
+                    {getStatusText(subscription.status)}
+                  </span>
+                  <span
+                    className={`px-2 py-1 text-xs font-medium rounded-full ${getLevelColor(
+                      subscription.course?.level
+                    )}`}
+                  >
+                    {subscription.course?.level ||
+                      t("adminDashboard.cardSubscription.unknownLevel")}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="flex items-center gap-2">
-            {subscription.status === "pending" && (
-              <>
-                <button
-                  onClick={onApprove}
-                  className="p-2 text-gray-400 hover:text-green-400 hover:bg-green-400/10 rounded-lg transition-colors"
-                  title={t(
-                    "adminDashboard.cardSubscription.approveSubscription"
-                  )}
-                >
-                  <FiCheckCircle className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={onReject}
-                  className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
-                  title={t(
-                    "adminDashboard.cardSubscription.rejectSubscription"
-                  )}
-                >
-                  <FiXCircle className="w-4 h-4" />
-                </button>
-              </>
-            )}
-            {/* <button
-              onClick={() => onEdit(subscription)}
-              className="p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-400/10 rounded-lg transition-colors"
-              title={t("adminDashboard.cardSubscription.editSubscription")}
-            >
-              <FiEdit className="w-4 h-4" />
-            </button> */}
-            {/* <button
-              onClick={() => onDelete(subscription)}
-              className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
-              title={t("adminDashboard.cardSubscription.deleteSubscription")}
-            >
-              <FiTrash2 className="w-4 h-4" />
-            </button> */}
-          </div>
-        </div>
 
-        {/* Course Details */}
-        <div className="space-y-3 mb-4">
-          <div className="flex items-center gap-2 text-gray-300">
-            <FiDollarSign className="w-4 h-4 text-gray-400" />
-            <span className="text-sm">
-              {t("adminDashboard.cardSubscription.price")}:{" "}
-              {formatPrice(subscription.course?.price)}
-            </span>
+            <div className="flex items-center gap-2">
+              {subscription.status === "pending" && (
+                <>
+                  <button
+                    onClick={onApprove}
+                    className="p-2 text-gray-400 hover:text-green-400 hover:bg-green-400/10 rounded-lg transition-colors"
+                    title={t("adminDashboard.cardSubscription.approveSubscription")}
+                    aria-label={t("adminDashboard.cardSubscription.approveSubscription")}
+                  >
+                    <FiCheckCircle className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={onReject}
+                    className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+                    title={t("adminDashboard.cardSubscription.rejectSubscription")}
+                    aria-label={t("adminDashboard.cardSubscription.rejectSubscription")}
+                  >
+                    <FiXCircle className="w-4 h-4" />
+                  </button>
+                </>
+              )}
+
+              {/* keep placeholders for edit/delete if needed later (commented) */}
+            </div>
           </div>
 
-          <div className="flex items-center gap-2 text-gray-300">
-            <FiClock className="w-4 h-4 text-gray-400" />
-            <span className="text-sm">
-              {t("adminDashboard.cardSubscription.duration")}:{" "}
-              {subscription.course?.duration_hours || 0}{" "}
-              {t("adminDashboard.cardSubscription.hours")}
-            </span>
-          </div>
+          {/* Course Details */}
+          <div className="space-y-3 mb-4">
+            <div className="flex items-center gap-2 text-gray-300">
+              <FiDollarSign className="w-4 h-4 text-gray-400" />
+              <span className="text-sm">
+                {t("adminDashboard.cardSubscription.price")}:{" "}
+                {formatPrice(subscription.course?.price)}
+              </span>
+            </div>
 
-          <div className="flex items-center gap-2 text-gray-300">
-            <FiUser className="w-4 h-4 text-gray-400" />
-            <span className="text-sm">
-              {t("adminDashboard.cardSubscription.instructor")}:{" "}
-              {subscription.course?.instructor_name ||
-                t("adminDashboard.cardSubscription.unknownInstructor")}
-            </span>
-          </div>
+            <div className="flex items-center gap-2 text-gray-300">
+              <FiClock className="w-4 h-4 text-gray-400" />
+              <span className="text-sm">
+                {t("adminDashboard.cardSubscription.duration")}:{" "}
+                {subscription.course?.duration_hours || 0}{" "}
+                {t("adminDashboard.cardSubscription.hours")}
+              </span>
+            </div>
 
-          <div className="flex items-center gap-2 text-gray-300">
-            <FiCalendar className="w-4 h-4 text-gray-400" />
-            <span className="text-sm">
-              {t("adminDashboard.cardSubscription.grade")}:{" "}
-              {subscription.course?.grade ||
-                t("adminDashboard.cardSubscription.unknownLevel")}
-            </span>
-          </div>
-        </div>
-
-        {/* User Information */}
-        <div className="border-t border-gray-700 pt-4 mb-4">
-          <h4 className="text-sm font-medium text-gray-400 mb-3">
-            {t("adminDashboard.cardSubscription.studentInformation")}
-          </h4>
-          <div className="space-y-2">
             <div className="flex items-center gap-2 text-gray-300">
               <FiUser className="w-4 h-4 text-gray-400" />
               <span className="text-sm">
-                {subscription.user?.name ||
-                  t("adminDashboard.cardSubscription.unknownStudent")}
+                {t("adminDashboard.cardSubscription.instructor")}:{" "}
+                {subscription.course?.instructor_name ||
+                  t("adminDashboard.cardSubscription.unknownInstructor")}
               </span>
             </div>
 
-            <div className="flex items-center gap-2 text-gray-300">
-              <FiMail className="w-4 h-4 text-gray-400" />
-              <span className="text-sm">
-                {subscription.user?.email ||
-                  t("adminDashboard.cardSubscription.noEmail")}
-              </span>
-            </div>
-
-            {subscription.vodafone_number && (
-              <div className="flex items-center gap-2 text-gray-300">
-                <FiPhone className="w-4 h-4 text-gray-400" />
-                <span className="text-sm">{subscription.vodafone_number}</span>
-              </div>
-            )}
-
-            {subscription.parent_phone && (
-              <div className="flex items-center gap-2 text-gray-300">
-                <FiPhone className="w-4 h-4 text-gray-400" />
-                <span className="text-sm">
-                  {t("adminDashboard.cardSubscription.parent")}:{" "}
-                  {subscription.parent_phone}
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Payment Proof */}
-        {(subscription.payment_proof || subscription.payment_proof_image) && (
-          <div className="border-t border-gray-700 pt-4 mb-4">
-            <h4 className="text-sm font-medium text-gray-400 mb-3">
-              {t("adminDashboard.cardSubscription.paymentProof")}
-            </h4>
-            <div className="flex items-center gap-2">
-              <FiImage className="w-4 h-4 text-gray-400" />
-              <button
-                onClick={() => {
-                  let paymentProofUrl;
-                  
-                  // Try different URL formats based on what's available
-                  if (subscription.payment_proof_image) {
-                    paymentProofUrl = subscription.payment_proof_image;
-                  } else if (subscription.payment_proof) {
-                    // Try authenticated endpoint first
-                    paymentProofUrl = `${import.meta.env.VITE_API_BASE}/auth/payment-proofs/${subscription.payment_proof}`;
-                  }
-                  
-                  if (paymentProofUrl) {
-                    window.open(paymentProofUrl, '_blank');
-                  } else {
-                    alert(t("adminDashboard.cardSubscription.noPaymentProof") || "لا يوجد إثبات دفع متاح");
-                  }
-                }}
-                className="text-blue-400 hover:text-blue-300 text-sm flex items-center gap-1 hover:bg-blue-400/10 px-2 py-1 rounded transition-colors"
-              >
-                <FiEye className="w-3 h-3" />
-                {t("adminDashboard.cardSubscription.viewPaymentProof")}
-              </button>
-              
-              {/* Alternative direct access button */}
-              {subscription.payment_proof && (
-                <button
-                  onClick={() => {
-                    const directUrl = `${import.meta.env.VITE_API_BASE.replace('/api', '')}/uploads/payment_proofs/${subscription.payment_proof}`;
-                    window.open(directUrl, '_blank');
-                  }}
-                  className="text-green-400 hover:text-green-300 text-xs flex items-center gap-1 hover:bg-green-400/10 px-2 py-1 rounded transition-colors"
-                  title="عرض مباشر"
-                >
-                  <FiImage className="w-3 h-3" />
-                  مباشر
-                </button>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Subscription Details */}
-        <div className="border-t border-gray-700 pt-4 mb-4">
-          <h4 className="text-sm font-medium text-gray-400 mb-3">
-            {t("adminDashboard.cardSubscription.subscriptionDetails")}
-          </h4>
-          <div className="space-y-2">
             <div className="flex items-center gap-2 text-gray-300">
               <FiCalendar className="w-4 h-4 text-gray-400" />
               <span className="text-sm">
-                {t("adminDashboard.cardSubscription.subscribed")}:{" "}
-                {formatDate(subscription.subscribed_at)}
+                {t("adminDashboard.cardSubscription.grade")}:{" "}
+                {subscription.course?.grade ||
+                  t("adminDashboard.cardSubscription.unknownLevel")}
               </span>
             </div>
+          </div>
 
-            {subscription.expires_at && (
+          {/* User Information */}
+          <div className="border-t border-gray-700 pt-4 mb-4">
+            <h4 className="text-sm font-medium text-gray-400 mb-3">
+              {t("adminDashboard.cardSubscription.studentInformation")}
+            </h4>
+            <div className="space-y-2">
               <div className="flex items-center gap-2 text-gray-300">
-                <FiClock className="w-4 h-4 text-gray-400" />
+                <FiUser className="w-4 h-4 text-gray-400" />
                 <span className="text-sm">
-                  {t("adminDashboard.cardSubscription.expires")}:{" "}
-                  {formatDate(subscription.expires_at)}
+                  {subscription.user?.name ||
+                    t("adminDashboard.cardSubscription.unknownStudent")}
                 </span>
               </div>
-            )}
 
-            {subscription.student_info && (
-              <div className="text-sm text-gray-300">
-                <span className="text-gray-400">
-                  {t("adminDashboard.cardSubscription.notes")}:{" "}
+              <div className="flex items-center gap-2 text-gray-300">
+                <FiMail className="w-4 h-4 text-gray-400" />
+                <span className="text-sm">
+                  {subscription.user?.email ||
+                    t("adminDashboard.cardSubscription.noEmail")}
                 </span>
-                {subscription.student_info}
               </div>
-            )}
 
-            {subscription.admin_notes && (
-              <div className="text-sm text-gray-300">
-                <span className="text-gray-400">
-                  {t("adminDashboard.cardSubscription.adminNotes")}:{" "}
-                </span>
-                {subscription.admin_notes}
-              </div>
-            )}
-          </div>
-        </div>
+              {subscription.vodafone_number && (
+                <div className="flex items-center gap-2 text-gray-300">
+                  <FiPhone className="w-4 h-4 text-gray-400" />
+                  <span className="text-sm">{subscription.vodafone_number}</span>
+                </div>
+              )}
 
-        {/* Footer */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-700">
-          <div className="flex items-center gap-2">
-            {subscription.is_active ? (
-              <div className="flex items-center gap-1 text-green-400">
-                <FiCheckCircle className="w-4 h-4" />
-                <span className="text-xs">
-                  {t("adminDashboard.cardSubscription.active")}
-                </span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-1 text-red-400">
-                <FiXCircle className="w-4 h-4" />
-                <span className="text-xs">
-                  {t("adminDashboard.cardSubscription.inactive")}
-                </span>
-              </div>
-            )}
+              {subscription.parent_phone && (
+                <div className="flex items-center gap-2 text-gray-300">
+                  <FiPhone className="w-4 h-4 text-gray-400" />
+                  <span className="text-sm">
+                    {t("adminDashboard.cardSubscription.parent")}:{" "}
+                    {subscription.parent_phone}
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
 
-          <div className="text-xs text-gray-400">
-            {t("adminDashboard.cardSubscription.id")}: {subscription.id}
+          {/* Payment Proof */}
+          {(subscription.payment_proof || subscription.payment_proof_image) && (
+            <div className="border-t border-gray-700 pt-4 mb-4">
+              <h4 className="text-sm font-medium text-gray-400 mb-3">
+                {t("adminDashboard.cardSubscription.paymentProof")}
+              </h4>
+              <div className="flex items-center gap-2">
+                <FiImage className="w-4 h-4 text-gray-400" />
+                <button
+                  onClick={handleViewProof}
+                  className="text-blue-400 hover:text-blue-300 text-sm flex items-center gap-1 hover:bg-blue-400/10 px-2 py-1 rounded transition-colors"
+                  aria-label={t("adminDashboard.cardSubscription.viewPaymentProof")}
+                >
+                  <FiEye className="w-3 h-3" />
+                  {t("adminDashboard.cardSubscription.viewPaymentProof")}
+                </button>
+
+                {/* direct open (public upload path) */}
+                {subscription.payment_proof && (
+                  <button
+                    onClick={() => {
+                      const { direct } = buildProofUrls();
+                      const openUrl = direct || `${direct}`;
+                      if (openUrl) window.open(openUrl, "_blank", "noopener");
+                      else
+                        alert(
+                          t("adminDashboard.cardSubscription.noPaymentProof") ||
+                            "لا يوجد إثبات دفع متاح"
+                        );
+                    }}
+                    className="text-green-400 hover:text-green-300 text-xs flex items-center gap-1 hover:bg-green-400/10 px-2 py-1 rounded transition-colors"
+                    title="عرض مباشر"
+                  >
+                    <FiImage className="w-3 h-3" />
+                    مباشر
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Subscription Details */}
+          <div className="border-t border-gray-700 pt-4 mb-4">
+            <h4 className="text-sm font-medium text-gray-400 mb-3">
+              {t("adminDashboard.cardSubscription.subscriptionDetails")}
+            </h4>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-gray-300">
+                <FiCalendar className="w-4 h-4 text-gray-400" />
+                <span className="text-sm">
+                  {t("adminDashboard.cardSubscription.subscribed")}:{" "}
+                  {formatDate(subscription.subscribed_at)}
+                </span>
+              </div>
+
+              {subscription.expires_at && (
+                <div className="flex items-center gap-2 text-gray-300">
+                  <FiClock className="w-4 h-4 text-gray-400" />
+                  <span className="text-sm">
+                    {t("adminDashboard.cardSubscription.expires")}:{" "}
+                    {formatDate(subscription.expires_at)}
+                  </span>
+                </div>
+              )}
+
+              {subscription.student_info && (
+                <div className="text-sm text-gray-300">
+                  <span className="text-gray-400">
+                    {t("adminDashboard.cardSubscription.notes")}:{" "}
+                  </span>
+                  {subscription.student_info}
+                </div>
+              )}
+
+              {subscription.admin_notes && (
+                <div className="text-sm text-gray-300">
+                  <span className="text-gray-400">
+                    {t("adminDashboard.cardSubscription.adminNotes")}:{" "}
+                  </span>
+                  {subscription.admin_notes}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="flex items-center justify-between pt-4 border-t border-gray-700">
+            <div className="flex items-center gap-2">
+              {subscription.is_active ? (
+                <div className="flex items-center gap-1 text-green-400">
+                  <FiCheckCircle className="w-4 h-4" />
+                  <span className="text-xs">
+                    {t("adminDashboard.cardSubscription.active")}
+                  </span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-1 text-red-400">
+                  <FiXCircle className="w-4 h-4" />
+                  <span className="text-xs">
+                    {t("adminDashboard.cardSubscription.inactive")}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            <div className="text-xs text-gray-400">
+              {t("adminDashboard.cardSubscription.id")}: {subscription.id}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      {/* Modal for viewing proof */}
+      {showProof && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4"
+          onClick={() => setShowProof(false)}
+        >
+          <div
+            className="bg-gray-900 rounded-xl shadow-lg max-w-4xl w-full p-4 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowProof(false)}
+              className="absolute top-3 right-3 text-gray-400 hover:text-white p-1 rounded"
+              aria-label={t("adminDashboard.cardSubscription.close")}
+            >
+              <FiXCircle className="w-5 h-5" />
+            </button>
+
+            {/* content */}
+            {proofUrl ? (
+              <>
+                {isImage(proofUrl) ? (
+                  <div className="flex flex-col items-center gap-3">
+                    <img
+                      src={proofUrl}
+                      alt={t("adminDashboard.cardSubscription.paymentProof")}
+                      className="max-h-[70vh] rounded"
+                    />
+                    <div className="flex items-center gap-2">
+                      <a
+                        href={proofUrl}
+                        download
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 px-3 py-2 bg-blue-600/20 text-blue-300 rounded hover:bg-blue-600/30 transition"
+                      >
+                        <FiDownload className="w-4 h-4" />
+                        {t("adminDashboard.cardSubscription.download")}
+                      </a>
+
+                      <a
+                        href={directUrl || proofUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 px-3 py-2 bg-blue-500/10 text-blue-300 rounded hover:bg-blue-500/20 transition"
+                      >
+                        {t("adminDashboard.cardSubscription.openInNewTab")}
+                      </a>
+                    </div>
+                  </div>
+                ) : isPdf(proofUrl) ? (
+                  <div className="flex flex-col gap-3">
+                    <iframe
+                      src={proofUrl}
+                      title="payment-proof"
+                      className="w-full h-[70vh] bg-white rounded"
+                    />
+                    <div className="flex items-center gap-2 justify-center">
+                      <a
+                        href={proofUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 px-3 py-2 bg-blue-600/20 text-blue-300 rounded hover:bg-blue-600/30 transition"
+                      >
+                        <FiDownload className="w-4 h-4" />
+                        {t("adminDashboard.cardSubscription.openInNewTab")}
+                      </a>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center text-gray-300">
+                    <p className="mb-3">{t("adminDashboard.cardSubscription.fileNotPreviewable")}</p>
+                    <div className="flex items-center gap-2 justify-center">
+                      <a
+                        href={proofUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 px-3 py-2 bg-blue-600/20 text-blue-300 rounded hover:bg-blue-600/30 transition"
+                      >
+                        <FiEye className="w-4 h-4" />
+                        {t("adminDashboard.cardSubscription.openInNewTab")}
+                      </a>
+                      <a
+                        href={directUrl || proofUrl}
+                        download
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 px-3 py-2 bg-green-600/20 text-green-300 rounded hover:bg-green-600/30 transition"
+                      >
+                        <FiDownload className="w-4 h-4" />
+                        {t("adminDashboard.cardSubscription.download")}
+                      </a>
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="text-center text-gray-300">
+                {t("adminDashboard.cardSubscription.noPaymentProof") ||
+                  "لا يوجد إثبات دفع متاح"}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

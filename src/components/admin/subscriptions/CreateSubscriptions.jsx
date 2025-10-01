@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { FiX } from "react-icons/fi";
-import { useAuth } from "../../../context/AuthContext";
+// import { useAuth } from "../../../context/AuthContext";
 
 function CreateSubscriptions({ onSubscriptionCreated, isOpen, onClose }) {
   const { t } = useTranslation();
