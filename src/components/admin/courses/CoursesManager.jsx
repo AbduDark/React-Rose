@@ -8,6 +8,7 @@ import DeleteCourse from "./DeleteCourse";
 import SearchCourse from "./SearchCourse";
 import CardCourse from "./CardCourse";
 import Pagination from "../../common/Pagination";
+import i18n from "../../../i18n";
 
 const CoursesManager = () => {
   const { t } = useTranslation();
@@ -32,13 +33,18 @@ const CoursesManager = () => {
 
   useEffect(() => {
     const filtered = courses.filter((course) => {
-      const matchesSearch =
-        course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.instructor_name.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesFilter =
-        selectedFilter === "all" || course.level === selectedFilter;
-      const matchesCategory =
-        selectedCategory === "all" || course.language === selectedCategory;
+      // Enhanced search that handles Arabic and English text
+      const searchLower = searchTerm.toLowerCase();
+      const titleMatch = course.title?.toLowerCase().includes(searchLower) || false;
+      const instructorMatch = course.instructor_name?.toLowerCase().includes(searchLower) || false;
+      const descriptionMatch = course.description?.toLowerCase().includes(searchLower) || false;
+      const gradeMatch = course.grade?.toLowerCase().includes(searchLower) || false;
+      
+      const matchesSearch = searchTerm === "" || titleMatch || instructorMatch || descriptionMatch || gradeMatch;
+      
+      const matchesFilter = selectedFilter === "all" || course.level === selectedFilter;
+      const matchesCategory = selectedCategory === "all" || course.language === selectedCategory;
+      
       return matchesSearch && matchesFilter && matchesCategory;
     });
     setFilteredCourses(filtered);
@@ -47,14 +53,17 @@ const CoursesManager = () => {
   const fetchCourses = async (pageNum = 1) => {
     try {
       setIsLoading(true);
-      const response = await getCourses(pageNum);
+      setError("");
+      const response = await getCourses(pageNum, 6, i18n.language);
       setCourses(response.data || []);
       setMeta(response.meta || null);
       setPage(response.meta?.current_page || 1);
-      setError("");
     } catch (err) {
+      console.error("Failed to fetch courses:", err);
       setError(
-        t("adminDashboard.coursesManager.failedToFetch", { error: err.message })
+        t("adminDashboard.coursesManager.failedToFetch", { 
+          error: err.message || t("common.error")
+        })
       );
     } finally {
       setIsLoading(false);

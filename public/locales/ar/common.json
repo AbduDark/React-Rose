@@ -104,7 +104,9 @@
     "close": "إغلاق",
     "open": "فتح",
     "yes": "نعم",
-    "no": "لا"
+    "no": "لا",
+    "free": "مجاني",
+    "unknown": "غير معروف"
   },
   "aboutPage": {
     "title": "من نحن",
@@ -865,7 +867,14 @@
       "cancel": "إلغاء",
       "createCourse": "إنشاء الدورة",
       "creating": "جاري الإنشاء...",
-      "unauthenticated": "غير مصادق. يرجى تسجيل الدخول كمدير."
+      "createError": "فشل في إنشاء الدورة",
+      "unauthenticated": "غير مصادق. يرجى تسجيل الدخول كمدير.",
+      "validation": {
+        "titleRequired": "عنوان الدورة مطلوب",
+        "descriptionRequired": "وصف الدورة مطلوب",
+        "priceRequired": "سعر صحيح مطلوب",
+        "gradeRequired": "اختيار الصف مطلوب"
+      }
     },
     "updateCourse": {
       "title": "تعديل الدورة",
@@ -889,7 +898,14 @@
       "cancel": "إلغاء",
       "updateCourse": "تحديث الدورة",
       "updating": "جاري التحديث...",
-      "unauthenticated": "غير مصادق. يرجى تسجيل الدخول كمدير."
+      "updateError": "فشل في تحديث الدورة",
+      "unauthenticated": "غير مصادق. يرجى تسجيل الدخول كمدير.",
+      "validation": {
+        "titleRequired": "عنوان الدورة مطلوب",
+        "descriptionRequired": "وصف الدورة مطلوب",
+        "priceRequired": "سعر صحيح مطلوب",
+        "gradeRequired": "اختيار الصف مطلوب"
+      }
     },
     "deleteCourse": {
       "title": "حذف الدورة",

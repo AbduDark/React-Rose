@@ -6,15 +6,18 @@ function CardCourse({ course, onEdit, onDelete }) {
   const { t } = useTranslation();
 
   const getLevelColor = (level) => {
-    switch (level) {
+    switch (level?.toLowerCase()) {
       case "beginner":
-        return "bg-blue-100 text-blue-800";
+      case "مبتدئ":
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300";
       case "intermediate":
-        return "bg-orange-100 text-orange-800";
+      case "متوسط":
+        return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300";
       case "advanced":
-        return "bg-red-100 text-red-800";
+      case "متقدم":
+        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300";
     }
   };
 
@@ -82,27 +85,29 @@ function CardCourse({ course, onEdit, onDelete }) {
           {course.description}
         </p>
 
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-4 text-sm">
           <div className="flex items-center gap-2 text-gray-400">
             <FiClock className="w-4 h-4" />
-            <span className="text-sm">
-              {course.duration_hours} {t("adminDashboard.cardCourse.hours")}
+            <span>
+              {course.duration_hours || 0} {t("adminDashboard.cardCourse.hours")}
             </span>
           </div>
           <div className="flex items-center gap-2 text-gray-400">
             <FiBook className="w-4 h-4" />
-            <span className="text-sm">
-              {course.lessons_count} {t("adminDashboard.cardCourse.lessons")}
+            <span>
+              {course.lessons_count || 0} {t("adminDashboard.cardCourse.lessons")}
             </span>
           </div>
         </div>
 
         <div className="flex items-center justify-between mb-4">
           <div className="text-gray-300">
-            <span className="text-lg font-semibold">${course.price}</span>
+            <span className="text-lg font-semibold">
+              {course.price ? `$${parseFloat(course.price).toFixed(2)}` : t("common.free")}
+            </span>
           </div>
-          <div className="text-sm text-gray-400">
-            {t("adminDashboard.cardCourse.by")} {course.instructor_name}
+          <div className="text-sm text-gray-400 truncate max-w-[50%]">
+            {t("adminDashboard.cardCourse.by")} {course.instructor_name || t("common.unknown")}
           </div>
         </div>
 

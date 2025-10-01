@@ -1,18 +1,34 @@
 const API_BASE = import.meta.env.VITE_API_BASE;
 
-// Helper: pick localized message
+// Helper: pick localized message with better fallback support
 const getMessage = (data, lang = "en") => {
   if (!data) return null;
+  
+  // Handle direct string messages
   if (typeof data.message === "string") return data.message;
-  if (typeof data.message === "object") {
-    return data.message[lang] || data.message.en || data.message.ar;
+  
+  // Handle localized message objects
+  if (typeof data.message === "object" && data.message !== null) {
+    return data.message[lang] || data.message.en || data.message.ar || Object.values(data.message)[0];
   }
+  
+  // Handle error messages
   if (data.error) {
     if (typeof data.error === "string") return data.error;
-    if (typeof data.error === "object") {
-      return data.error[lang] || data.error.en || data.error.ar;
+    if (typeof data.error === "object" && data.error !== null) {
+      return data.error[lang] || data.error.en || data.error.ar || Object.values(data.error)[0];
     }
   }
+  
+  // Handle validation errors
+  if (data.errors && typeof data.errors === "object") {
+    const firstError = Object.values(data.errors)[0];
+    if (Array.isArray(firstError)) {
+      return firstError[0];
+    }
+    return firstError;
+  }
+  
   return null;
 };
 

@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { FiX } from "react-icons/fi";
 import { updateAdminCourse } from "../../../api/courses";
 import { useAuth } from "../../../context/AuthContext";
+import i18n from "../../../i18n";
 
 function UpdateCourse({ course, onCourseUpdated, isOpen, onClose }) {
   const { t } = useTranslation();
@@ -47,6 +48,28 @@ function UpdateCourse({ course, onCourseUpdated, isOpen, onClose }) {
     }
   };
 
+  const validateForm = () => {
+    const errors = [];
+    
+    if (!formData.title.trim()) {
+      errors.push(t("adminDashboard.updateCourse.validation.titleRequired"));
+    }
+    
+    if (!formData.description.trim()) {
+      errors.push(t("adminDashboard.updateCourse.validation.descriptionRequired"));
+    }
+    
+    if (!formData.price || parseFloat(formData.price) < 0) {
+      errors.push(t("adminDashboard.updateCourse.validation.priceRequired"));
+    }
+    
+    if (!formData.grade) {
+      errors.push(t("adminDashboard.updateCourse.validation.gradeRequired"));
+    }
+    
+    return errors;
+  };
+
   const handleUpdateCourse = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -58,24 +81,33 @@ function UpdateCourse({ course, onCourseUpdated, isOpen, onClose }) {
       return;
     }
 
+    // Validate form
+    const validationErrors = validateForm();
+    if (validationErrors.length > 0) {
+      setError(validationErrors.join(", "));
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const courseData = {
-        title: formData.title,
-        description: formData.description,
-        price: formData.price,
+        title: formData.title.trim(),
+        description: formData.description.trim(),
+        price: parseFloat(formData.price),
         grade: formData.grade,
         image: formData.image,
         is_active: formData.is_active === "true" ? 1 : 0,
       };
 
-      const response = await updateAdminCourse(course.id, courseData, token);
+      const response = await updateAdminCourse(course.id, courseData, token, i18n.language);
 
       onClose();
       if (onCourseUpdated) {
         onCourseUpdated(response.data);
       }
     } catch (err) {
-      setError(err.message);
+      console.error("Course update error:", err);
+      setError(err.message || t("adminDashboard.updateCourse.updateError"));
     } finally {
       setIsLoading(false);
     }

@@ -104,7 +104,9 @@
     "close": "Close",
     "open": "Open",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "free": "Free",
+    "unknown": "Unknown"
   },
   "aboutPage": {
     "title": "About Us",
@@ -865,7 +867,14 @@
       "cancel": "Cancel",
       "createCourse": "Create Course",
       "creating": "Creating...",
-      "unauthenticated": "Unauthenticated. Please log in as admin."
+      "createError": "Failed to create course",
+      "unauthenticated": "Unauthenticated. Please log in as admin.",
+      "validation": {
+        "titleRequired": "Course title is required",
+        "descriptionRequired": "Course description is required",
+        "priceRequired": "Valid price is required",
+        "gradeRequired": "Grade selection is required"
+      }
     },
     "updateCourse": {
       "title": "Edit Course",
@@ -889,7 +898,14 @@
       "cancel": "Cancel",
       "updateCourse": "Update Course",
       "updating": "Updating...",
-      "unauthenticated": "Unauthenticated. Please log in as admin."
+      "updateError": "Failed to update course",
+      "unauthenticated": "Unauthenticated. Please log in as admin.",
+      "validation": {
+        "titleRequired": "Course title is required",
+        "descriptionRequired": "Course description is required",
+        "priceRequired": "Valid price is required",
+        "gradeRequired": "Grade selection is required"
+      }
     },
     "deleteCourse": {
       "title": "Delete Course",
