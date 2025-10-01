@@ -190,6 +190,8 @@
     "parentPhonePlaceholder": "أدخل رقم هاتف الوالد",
     "studentInfo": "معلومات الطالب",
     "studentInfoPlaceholder": "أدخل معلومات الطالب",
+    "paymentProof": "إثبات الدفع",
+    "paymentProofHint": "يرجى رفع صورة إيصال الدفع أو لقطة شاشة من عملية التحويل",
     "cancel": "إلغاء",
     "enrollNow": "انضم الآن",
     "processing": "جاري المعالجة...",
@@ -547,12 +549,12 @@
       }
     },
     "cardSubscription": {
+      "approved": "مقبول",
+      "pending": "قيد المراجعة",
+      "rejected": "مرفوض",
       "unknownCourse": "دورة غير معروفة",
       "unknownLevel": "غير معروف",
       "unknownInstructor": "غير معروف",
-      "notSet": "غير محدد",
-      "free": "مجاني",
-      "studentInformation": "معلومات الطالب",
       "unknownStudent": "غير معروف",
       "noEmail": "لا يوجد بريد إلكتروني",
       "parent": "ولي الأمر",
@@ -569,13 +571,12 @@
       "hours": "ساعات",
       "instructor": "المدرب",
       "grade": "الصف الدراسي",
-      "pending": "معلق",
-      "approved": "موافق عليه",
-      "rejected": "مرفوض",
+      "notSet": "غير محدد",
+      "free": "مجاني",
       "approveSubscription": "الموافقة على الاشتراك",
       "rejectSubscription": "رفض الاشتراك",
-      "editSubscription": "تعديل الاشتراك",
-      "deleteSubscription": "حذف الاشتراك"
+      "paymentProof": "إثبات الدفع",
+      "viewPaymentProof": "عرض إثبات الدفع"
     },
     "createSubscription": {
       "title": "إنشاء اشتراك جديد",

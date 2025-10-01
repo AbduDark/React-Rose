@@ -25,14 +25,27 @@ export const getMySubscriptions = async (token) => {
 
 export const subscribeToCourse = async (token, subscriptionData) => {
   try {
+    // Create FormData if payment proof is included
+    let body;
+    let headers = {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/json",
+    };
+
+    if (subscriptionData.payment_proof instanceof File) {
+      body = new FormData();
+      Object.keys(subscriptionData).forEach(key => {
+        body.append(key, subscriptionData[key]);
+      });
+    } else {
+      headers["Content-Type"] = "application/json";
+      body = JSON.stringify(subscriptionData);
+    }
+
     const res = await fetch(`${API_BASE}/subscribe`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-      body: JSON.stringify(subscriptionData),
+      headers,
+      body,
     });
 
     if (!res.ok) {
@@ -75,14 +88,27 @@ export const cancelSubscription = async (token, subscriptionId) => {
 
 export const renewSubscription = async (token, renewalData) => {
   try {
+    // Create FormData if payment proof is included
+    let body;
+    let headers = {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/json",
+    };
+
+    if (renewalData.payment_proof instanceof File) {
+      body = new FormData();
+      Object.keys(renewalData).forEach(key => {
+        body.append(key, renewalData[key]);
+      });
+    } else {
+      headers["Content-Type"] = "application/json";
+      body = JSON.stringify(renewalData);
+    }
+
     const res = await fetch(`${API_BASE}/subscriptions/renew`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-      body: JSON.stringify(renewalData),
+      headers,
+      body,
     });
 
     if (!res.ok) {
@@ -93,6 +119,27 @@ export const renewSubscription = async (token, renewalData) => {
     return await res.json();
   } catch (error) {
     console.error("Error renewing subscription:", error);
+    throw error;
+  }
+};
+
+// Get payment proof image
+export const getPaymentProof = async (filename) => {
+  try {
+    const res = await fetch(`${API_BASE}/auth/payment-proofs/${filename}`, {
+      method: "GET",
+      headers: {
+        Accept: "image/*",
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error("Payment proof not found");
+    }
+
+    return res.blob();
+  } catch (error) {
+    console.error("Error fetching payment proof:", error);
     throw error;
   }
 };

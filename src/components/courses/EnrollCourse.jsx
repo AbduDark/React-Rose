@@ -24,6 +24,7 @@ function EnrollCourse() {
     amount: "",
     parent_phone: "",
     student_info: "",
+    payment_proof: null,
   });
   const { courseId } = useParams();
   const { token } = useAuth();
@@ -73,7 +74,17 @@ function EnrollCourse() {
         student_info: subscriptionData.student_info,
       };
 
-      await subscribeToCourse(token, subscriptionPayload);
+      const formData = new FormData();
+      formData.append("course_id", parseInt(courseId));
+      formData.append("vodafone_number", subscriptionData.vodafone_number);
+      formData.append("amount", parseFloat(subscriptionData.amount));
+      formData.append("parent_phone", subscriptionData.parent_phone);
+      formData.append("student_info", subscriptionData.student_info);
+      if (subscriptionData.payment_proof) {
+        formData.append("payment_proof", subscriptionData.payment_proof);
+      }
+
+      await subscribeToCourse(token, formData);
       setEnrollSuccess(true);
       setShowSubscriptionForm(false);
 
@@ -93,9 +104,10 @@ function EnrollCourse() {
   };
 
   const handleInputChange = (e) => {
+    const { name, value, files } = e.target;
     setSubscriptionData({
       ...subscriptionData,
-      [e.target.name]: e.target.value,
+      [name]: files ? files[0] : value,
     });
   };
   if (loading) {
@@ -200,10 +212,28 @@ function EnrollCourse() {
                     name="student_info"
                     value={subscriptionData.student_info}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900"
                     placeholder={t("enrollCourse.studentInfoPlaceholder")}
                     rows="3"
                   />
+                </div>
+
+                {/* Payment Proof Upload */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {t("enrollCourse.paymentProof")} *
+                  </label>
+                  <input
+                    type="file"
+                    name="payment_proof"
+                    onChange={handleInputChange}
+                    accept="image/*"
+                    required
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    {t("enrollCourse.paymentProofHint")}
+                  </p>
                 </div>
               </div>
             </div>

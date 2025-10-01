@@ -21,6 +21,7 @@ const MySubscriptions = () => {
   const [renewData, setRenewData] = useState({
     vodafone_number: "",
     parent_phone: "",
+    payment_proof: null,
   });
   useEffect(() => {
     if (!token) {
@@ -84,7 +85,7 @@ const MySubscriptions = () => {
 
       await renewSubscription(token, renewalPayload);
       setShowRenewForm(null);
-      setRenewData({ vodafone_number: "", parent_phone: "" });
+      setRenewData({ vodafone_number: "", parent_phone: "", payment_proof: null });
 
       const data = await getMySubscriptions(token);
       setSubscriptions(data?.data?.subscriptions || []);
@@ -96,9 +97,10 @@ const MySubscriptions = () => {
   };
 
   const handleRenewInputChange = (e) => {
+    const { name, value, files } = e.target;
     setRenewData({
       ...renewData,
-      [e.target.name]: e.target.value,
+      [name]: files ? files[0] : value,
     });
   };
 
@@ -297,6 +299,14 @@ const MySubscriptions = () => {
                           className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
                           placeholder={t("enrollCourse.parentPhonePlaceholder")}
                           required
+                        />
+                        <input
+                          type="file"
+                          name="payment_proof"
+                          onChange={handleRenewInputChange}
+                          accept="image/*"
+                          required
+                          className="w-full px-2 py-1 border border-gray-300 rounded text-sm file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700"
                         />
                         <div
                           className={`flex space-x-2 ${
