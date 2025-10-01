@@ -232,7 +232,7 @@ function CardSubscriptions({ subscription, onApprove, onReject }) {
             <div className="flex items-center gap-2">
               <FiImage className="w-4 h-4 text-gray-400" />
               <button
-                onClick={() => window.open(`${import.meta.env.VITE_API_BASE}/payment-proofs/${subscription.payment_proof}`, '_blank')}
+                onClick={() => window.open(`${import.meta.env.VITE_API_BASE}/auth/payment-proofs/${subscription.payment_proof}`, '_blank')}
                 className="text-blue-400 hover:text-blue-300 text-sm flex items-center gap-1"
               >
                 <FiEye className="w-3 h-3" />
