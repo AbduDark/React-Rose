@@ -78,8 +78,39 @@ const fetchJson = async (url, options = {}, lang = "en") => {
 };
 
 // Courses
-export const getCourses = (page = 1, perPage = 6, lang = "en") =>
-  fetchJson(`${API_BASE}/courses?page=${page}&per_page=${perPage}`, {}, lang);
+export const getCourses = async (page = 1, perPage = 6, lang = "en") => {
+  try {
+    const response = await fetchJson(`${API_BASE}/courses?page=${page}&per_page=${perPage}`, {}, lang);
+    
+    // Handle Laravel pagination response
+    if (response && typeof response === 'object') {
+      // If it's a Laravel pagination response
+      if (response.data !== undefined || response.meta !== undefined || response.links !== undefined) {
+        return {
+          data: Array.isArray(response.data) ? response.data : [],
+          meta: response.meta || null,
+          links: response.links || null
+        };
+      }
+      // If it's a direct array or object
+      return {
+        data: Array.isArray(response) ? response : (response.data || []),
+        meta: null,
+        links: null
+      };
+    }
+    
+    // Fallback
+    return {
+      data: [],
+      meta: null,
+      links: null
+    };
+  } catch (error) {
+    console.error('Error fetching courses:', error);
+    throw error;
+  }
+};
 
 export const getCourseById = (id, lang = "en") =>
   fetchJson(`${API_BASE}/courses/${id}`, {}, lang);

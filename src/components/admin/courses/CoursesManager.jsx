@@ -55,9 +55,25 @@ const CoursesManager = () => {
       setIsLoading(true);
       setError("");
       const response = await getCourses(pageNum, 6, i18n.language);
-      setCourses(response.data || []);
-      setMeta(response.meta || null);
-      setPage(response.meta?.current_page || 1);
+      
+      // Handle Laravel pagination response structure
+      if (response && typeof response === 'object') {
+        // If response has data property (Laravel pagination)
+        if (response.data !== undefined) {
+          setCourses(Array.isArray(response.data) ? response.data : []);
+          setMeta(response.meta || null);
+          setPage(response.meta?.current_page || pageNum);
+        } else {
+          // If response is direct array
+          setCourses(Array.isArray(response) ? response : []);
+          setMeta(null);
+          setPage(pageNum);
+        }
+      } else {
+        setCourses([]);
+        setMeta(null);
+        setPage(pageNum);
+      }
     } catch (err) {
       console.error("Failed to fetch courses:", err);
       setError(
@@ -65,6 +81,8 @@ const CoursesManager = () => {
           error: err.message || t("common.error")
         })
       );
+      setCourses([]);
+      setMeta(null);
     } finally {
       setIsLoading(false);
     }
