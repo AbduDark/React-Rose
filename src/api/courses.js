@@ -3,16 +3,16 @@ const API_BASE = import.meta.env.VITE_API_BASE;
 // Helper: pick localized message with better fallback support
 const getMessage = (data, lang = "en") => {
   if (!data) return null;
-  
+
   // Handle direct string messages
   if (typeof data.message === "string") return data.message;
-  
+
   // Handle localized message objects
   if (typeof data.message === "object" && data.message !== null) {
     const message = data.message[lang] || data.message.ar || data.message.en || Object.values(data.message)[0];
     return typeof message === "string" ? message : JSON.stringify(message);
   }
-  
+
   // Handle error messages
   if (data.error) {
     if (typeof data.error === "string") return data.error;
@@ -21,7 +21,7 @@ const getMessage = (data, lang = "en") => {
       return typeof error === "string" ? error : JSON.stringify(error);
     }
   }
-  
+
   // Handle validation errors
   if (data.errors && typeof data.errors === "object") {
     const firstError = Object.values(data.errors)[0];
@@ -30,14 +30,14 @@ const getMessage = (data, lang = "en") => {
     }
     return typeof firstError === "string" ? firstError : JSON.stringify(firstError);
   }
-  
+
   return null;
 };
 
 // Helper: extract success message from response
 const getSuccessMessage = (data, lang = "en") => {
   if (!data) return null;
-  
+
   // Check for success message in response
   if (data.message) {
     if (typeof data.message === "string") return data.message;
@@ -45,7 +45,7 @@ const getSuccessMessage = (data, lang = "en") => {
       return data.message[lang] || data.message.ar || data.message.en || Object.values(data.message)[0];
     }
   }
-  
+
   return null;
 };
 
@@ -66,7 +66,16 @@ const fetchJson = async (url, options = {}, lang = "en") => {
     data = await res.json();
   } else {
     const text = await res.text();
-    throw new Error(`Server error (${res.status}): ${text.substring(0, 200)}`);
+    // Only throw error if it's actually an error status
+    if (!res.ok) {
+      throw new Error(`Server error (${res.status}): ${text.substring(0, 200)}`);
+    }
+    // For successful responses with non-JSON content, try to parse as JSON anyway
+    try {
+      data = JSON.parse(text);
+    } catch {
+      throw new Error(`Server error (${res.status}): ${text.substring(0, 200)}`);
+    }
   }
 
   if (!res.ok) {
@@ -81,7 +90,7 @@ const fetchJson = async (url, options = {}, lang = "en") => {
 export const getCourses = async (page = 1, perPage = 6, lang = "en") => {
   try {
     const response = await fetchJson(`${API_BASE}/courses?page=${page}&per_page=${perPage}`, {}, lang);
-    
+
     // Handle Laravel pagination response
     if (response && typeof response === 'object') {
       // If it's a Laravel pagination response
@@ -99,7 +108,7 @@ export const getCourses = async (page = 1, perPage = 6, lang = "en") => {
         links: null
       };
     }
-    
+
     // Fallback
     return {
       data: [],
@@ -159,14 +168,23 @@ export const createAdminCourse = async (courseData, token, lang = "en") => {
     data = await res.json();
   } else {
     const text = await res.text();
-    throw new Error(`Server error (${res.status}): ${text.substring(0, 200)}`);
+    // Only throw error if it's actually an error status
+    if (!res.ok) {
+      throw new Error(`Server error (${res.status}): ${text.substring(0, 200)}`);
+    }
+    // For successful responses with non-JSON content, try to parse as JSON anyway
+    try {
+      data = JSON.parse(text);
+    } catch {
+      throw new Error(`Server error (${res.status}): ${text.substring(0, 200)}`);
+    }
   }
 
   if (!res.ok) {
     const message = getMessage(data, lang) || `Request failed (${res.status})`;
     throw new Error(message);
   }
-  
+
   return {
     ...data,
     successMessage: getSuccessMessage(data, lang)
@@ -216,14 +234,23 @@ export const updateAdminCourse = async (id, courseData, token, lang = "en") => {
     data = await res.json();
   } else {
     const text = await res.text();
-    throw new Error(`Server error (${res.status}): ${text.substring(0, 200)}`);
+    // Only throw error if it's actually an error status
+    if (!res.ok) {
+      throw new Error(`Server error (${res.status}): ${text.substring(0, 200)}`);
+    }
+    // For successful responses with non-JSON content, try to parse as JSON anyway
+    try {
+      data = JSON.parse(text);
+    } catch {
+      throw new Error(`Server error (${res.status}): ${text.substring(0, 200)}`);
+    }
   }
 
   if (!res.ok) {
     const message = getMessage(data, lang) || `Request failed (${res.status})`;
     throw new Error(message);
   }
-  
+
   return {
     ...data,
     successMessage: getSuccessMessage(data, lang)
