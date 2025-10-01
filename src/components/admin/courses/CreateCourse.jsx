@@ -97,6 +97,11 @@ function CreateCourse({ onCourseCreated, isOpen, onClose }) {
         image: null,
       });
 
+      // Show success message
+      const successMessage = response.successMessage || 
+                           t("adminDashboard.coursesManager.createSuccess");
+      alert(successMessage);
+
       onClose();
       if (onCourseCreated) {
         onCourseCreated(response.data);

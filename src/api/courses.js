@@ -9,14 +9,14 @@ const getMessage = (data, lang = "en") => {
   
   // Handle localized message objects
   if (typeof data.message === "object" && data.message !== null) {
-    return data.message[lang] || data.message.en || data.message.ar || Object.values(data.message)[0];
+    return data.message[lang] || data.message.ar || data.message.en || Object.values(data.message)[0];
   }
   
   // Handle error messages
   if (data.error) {
     if (typeof data.error === "string") return data.error;
     if (typeof data.error === "object" && data.error !== null) {
-      return data.error[lang] || data.error.en || data.error.ar || Object.values(data.error)[0];
+      return data.error[lang] || data.error.ar || data.error.en || Object.values(data.error)[0];
     }
   }
   
@@ -27,6 +27,21 @@ const getMessage = (data, lang = "en") => {
       return firstError[0];
     }
     return firstError;
+  }
+  
+  return null;
+};
+
+// Helper: extract success message from response
+const getSuccessMessage = (data, lang = "en") => {
+  if (!data) return null;
+  
+  // Check for success message in response
+  if (data.message) {
+    if (typeof data.message === "string") return data.message;
+    if (typeof data.message === "object") {
+      return data.message[lang] || data.message.ar || data.message.en || Object.values(data.message)[0];
+    }
   }
   
   return null;
@@ -87,7 +102,7 @@ export const createAdminCourse = async (courseData, token, lang = "en") => {
   if (courseData.is_active != null)
     formData.append("is_active", String(toIsActiveInt(courseData.is_active)));
 
-  return fetchJson(
+  const response = await fetchJson(
     `${API_BASE}/admin/courses`,
     {
       method: "POST",
@@ -99,6 +114,11 @@ export const createAdminCourse = async (courseData, token, lang = "en") => {
     },
     lang
   );
+  
+  return {
+    ...response,
+    successMessage: getSuccessMessage(response, lang)
+  };
 };
 
 export const updateAdminCourse = async (id, courseData, token, lang = "en") => {
@@ -127,7 +147,7 @@ export const updateAdminCourse = async (id, courseData, token, lang = "en") => {
   if (courseData.is_active != null)
     formData.append("is_active", String(toIsActiveInt(courseData.is_active)));
 
-  return fetchJson(
+  const response = await fetchJson(
     `${API_BASE}/admin/courses/${id}`,
     {
       method: "PUT",
@@ -139,6 +159,11 @@ export const updateAdminCourse = async (id, courseData, token, lang = "en") => {
     },
     lang
   );
+  
+  return {
+    ...response,
+    successMessage: getSuccessMessage(response, lang)
+  };
 };
 
 export const deleteAdminCourse = (id, token, lang = "en") =>

@@ -101,6 +101,11 @@ function UpdateCourse({ course, onCourseUpdated, isOpen, onClose }) {
 
       const response = await updateAdminCourse(course.id, courseData, token, i18n.language);
 
+      // Show success message
+      const successMessage = response.successMessage || 
+                           t("adminDashboard.coursesManager.updateSuccess");
+      alert(successMessage);
+
       onClose();
       if (onCourseUpdated) {
         onCourseUpdated(response.data);

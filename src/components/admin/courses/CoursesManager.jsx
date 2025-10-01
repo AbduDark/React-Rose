@@ -73,6 +73,8 @@ const CoursesManager = () => {
   const handleCourseCreated = (newCourse) => {
     setCourses((prev) => [...prev, newCourse]);
     setIsCreateModalOpen(false);
+    // Refresh the courses list to show updated data
+    fetchCourses(page);
   };
 
   const handleCourseUpdated = (updatedCourse) => {
@@ -83,6 +85,8 @@ const CoursesManager = () => {
     );
     setIsEditModalOpen(false);
     setCurrentCourse(null);
+    // Refresh the courses list to show updated data
+    fetchCourses(page);
   };
 
   // Handle course deletion
