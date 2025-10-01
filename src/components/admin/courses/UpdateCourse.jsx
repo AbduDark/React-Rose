@@ -75,9 +75,11 @@ function UpdateCourse({ course, onCourseUpdated, isOpen, onClose }) {
     setIsLoading(true);
     setError("");
 
+    console.log("Token in UpdateCourse:", token ? "Token exists" : "No token");
+
     if (!token) {
       setIsLoading(false);
-      setError(t("adminDashboard.updateCourse.unauthenticated"));
+      setError(t("adminDashboard.updateCourse.unauthenticated") || "Authentication required");
       return;
     }
 

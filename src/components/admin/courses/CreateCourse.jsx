@@ -62,9 +62,11 @@ function CreateCourse({ onCourseCreated, isOpen, onClose }) {
     setIsLoading(true);
     setError("");
 
+    console.log("Token in CreateCourse:", token ? "Token exists" : "No token");
+
     if (!token) {
       setIsLoading(false);
-      setError(t("adminDashboard.createCourse.unauthenticated"));
+      setError(t("adminDashboard.createCourse.unauthenticated") || "Authentication required");
       return;
     }
 

@@ -15,15 +15,23 @@ function DeleteCourse({ course, onCourseDeleted, isOpen, onClose }) {
     setIsLoading(true);
     setError("");
 
+    console.log("Token in DeleteCourse:", token ? "Token exists" : "No token");
+
+    if (!token) {
+      setError("Authentication required");
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      await deleteAdminCourse(course.id, token);
+      await deleteAdminCourse(course.id, token, i18next.language);
       onClose();
       if (onCourseDeleted) {
         onCourseDeleted(course.id);
       }
     } catch (err) {
-      setError(err.message);
-      console.log(err.response.data.message.ar);
+      console.error("Delete course error:", err);
+      setError(err.message || "Failed to delete course");
     } finally {
       setIsLoading(false);
     }

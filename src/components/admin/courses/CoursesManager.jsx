@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { FiPlus, FiBook } from "react-icons/fi";
 import { getCourses } from "../../../api/courses";
+import { useAuth } from "../../../context/AuthContext";
 import CreateCourse from "./CreateCourse";
 import UpdateCourse from "./UpdateCourse";
 import DeleteCourse from "./DeleteCourse";
@@ -12,6 +13,7 @@ import i18n from "../../../i18n";
 
 const CoursesManager = () => {
   const { t } = useTranslation();
+  const { token, user } = useAuth();
   const [courses, setCourses] = useState([]);
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -28,8 +30,15 @@ const CoursesManager = () => {
   const [meta, setMeta] = useState(null);
 
   useEffect(() => {
-    fetchCourses(page);
-  }, [page]);
+    if (token && user) {
+      console.log("CoursesManager - Token exists:", !!token);
+      console.log("CoursesManager - User role:", user.role);
+      fetchCourses(page);
+    } else {
+      console.log("CoursesManager - No token or user");
+      setError("Authentication required");
+    }
+  }, [page, token, user]);
 
   useEffect(() => {
     const filtered = courses.filter((course) => {

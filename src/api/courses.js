@@ -126,6 +126,10 @@ export const getCourseById = (id, lang = "en") =>
 
 // Admin course endpoints
 export const createAdminCourse = async (courseData, token, lang = "en") => {
+  if (!token) {
+    throw new Error("Authentication token is required");
+  }
+
   const formData = new FormData();
 
   const toIsActiveInt = (value) => {
@@ -151,6 +155,8 @@ export const createAdminCourse = async (courseData, token, lang = "en") => {
   if (courseData.is_active != null)
     formData.append("is_active", String(toIsActiveInt(courseData.is_active)));
 
+  console.log("Creating course with token:", token ? "Token exists" : "No token");
+  
   const res = await fetch(`${API_BASE}/admin/courses`, {
     method: "POST",
     headers: {
@@ -192,6 +198,10 @@ export const createAdminCourse = async (courseData, token, lang = "en") => {
 };
 
 export const updateAdminCourse = async (id, courseData, token, lang = "en") => {
+  if (!token) {
+    throw new Error("Authentication token is required");
+  }
+
   const formData = new FormData();
 
   const toIsActiveInt = (value) => {
@@ -201,6 +211,9 @@ export const updateAdminCourse = async (id, courseData, token, lang = "en") => {
       return 0;
     return value ? 1 : 0;
   };
+
+  // Add the _method field for Laravel PUT request
+  formData.append("_method", "PUT");
 
   if (courseData.title) formData.append("title", String(courseData.title));
   if (courseData.description)
@@ -217,8 +230,10 @@ export const updateAdminCourse = async (id, courseData, token, lang = "en") => {
   if (courseData.is_active != null)
     formData.append("is_active", String(toIsActiveInt(courseData.is_active)));
 
+  console.log("Updating course with token:", token ? "Token exists" : "No token");
+  
   const res = await fetch(`${API_BASE}/admin/courses/${id}`, {
-    method: "PUT",
+    method: "POST", // Laravel expects POST with _method=PUT for file uploads
     headers: {
       Accept: "application/json",
       "Accept-Language": lang,
@@ -257,15 +272,26 @@ export const updateAdminCourse = async (id, courseData, token, lang = "en") => {
   };
 };
 
-export const deleteAdminCourse = (id, token, lang = "en") =>
-  fetchJson(
+export const deleteAdminCourse = async (id, token, lang = "en") => {
+  if (!token) {
+    throw new Error("Authentication token is required");
+  }
+
+  console.log("Deleting course with token:", token ? "Token exists" : "No token");
+  
+  return fetchJson(
     `${API_BASE}/admin/courses/${id}`,
     {
       method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { 
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+        "Accept-Language": lang
+      },
     },
     lang
   );
+};
 
 export const getCourseRatings = (courseId = 1, lang = "en") =>
   fetchJson(
