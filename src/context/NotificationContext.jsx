@@ -34,62 +34,6 @@ export const NotificationProvider = ({ children }) => {
     }
   }, [token, user, isLoading]);
 
-  useEffect(() => {
-    if (token && user) {
-      fetchUnreadCount();
-    } else {
-      setUnreadCount(0);
-    }
-  }, [token, user, fetchUnreadCount]);
-
-  const value = {
-    unreadCount,
-    setUnreadCount,
-    fetchUnreadCount,
-    isLoading
-  };
-
-  return (
-    <NotificationContext.Provider value={value}>
-      {children}
-    </NotificationContext.Provider>
-  );
-};
-
-const NotificationContext = createContext();
-
-export const useNotifications = () => {
-  const context = useContext(NotificationContext);
-  if (!context) {
-    throw new Error(
-      "useNotifications must be used within a NotificationProvider"
-    );
-  }
-  return context;
-};
-
-export const NotificationProvider = ({ children }) => {
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const { user } = useAuth();
-
-  const fetchUnreadCount = async () => {
-    if (!user) {
-      setUnreadCount(0);
-      return;
-    }
-
-    try {
-      setLoading(true);
-      const count = await getUnreadCount();
-      setUnreadCount(count);
-    } catch (error) {
-      console.error("Error fetching unread count:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const updateUnreadCount = (newCount) => {
     setUnreadCount(newCount);
   };
@@ -103,18 +47,19 @@ export const NotificationProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchUnreadCount();
-
-    if (user) {
+    if (token && user) {
+      fetchUnreadCount();
       // Set up interval to refresh count every 30 seconds
       const interval = setInterval(fetchUnreadCount, 30000);
       return () => clearInterval(interval);
+    } else {
+      setUnreadCount(0);
     }
-  }, [user]);
+  }, [token, user, fetchUnreadCount]);
 
   const value = {
     unreadCount,
-    loading,
+    isLoading,
     fetchUnreadCount,
     updateUnreadCount,
     decrementUnreadCount,
