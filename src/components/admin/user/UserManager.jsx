@@ -55,10 +55,13 @@ const UserManager = () => {
       setIsLoading(true);
 
       const response = await getAllUsers(pageNum);
-      setUsers(response.data.data || []);
-      setMeta(response.data || null);
-      setPage(response?.data?.current_page || 1);
-      setTotalUsers(response.data.total || 0);
+      const usersData = response?.data?.data || response?.data || [];
+      const metaData = response?.data || null;
+      
+      setUsers(Array.isArray(usersData) ? usersData : []);
+      setMeta(metaData);
+      setPage(metaData?.current_page || pageNum);
+      setTotalUsers(metaData?.total || 0);
       setError("");
     } catch (err) {
       setError(

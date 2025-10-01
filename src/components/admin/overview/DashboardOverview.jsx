@@ -29,11 +29,18 @@ const DashboardOverview = () => {
     try {
       setIsLoading(true);
       const response = await getDashboardStats();
-      setStats(response.data);
-      setError("");
+      const statsData = response?.data || response;
+      
+      if (statsData && (statsData.general_stats || statsData.monthly_stats)) {
+        setStats(statsData);
+        setError("");
+      } else {
+        throw new Error("Invalid stats data format");
+      }
     } catch (err) {
+      console.error("Dashboard stats error:", err);
       setError(
-        t("adminDashboard.dashboardOverview.failedToFetchStats") + err.message
+        t("adminDashboard.dashboardOverview.failedToFetchStats") + ": " + err.message
       );
     } finally {
       setIsLoading(false);

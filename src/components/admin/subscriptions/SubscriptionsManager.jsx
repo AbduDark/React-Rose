@@ -82,14 +82,16 @@ const SubscriptionsManager = () => {
           localStorage.getItem("token"),
           currentPage
         );
-        setSubscriptions(response.data.data || []);
-        setTotalPages(response.data.last_page || 1);
-        setTotalSubscriptions(response.data.total || 0);
+        const pendingData = response?.data?.data || response?.data || [];
+        setSubscriptions(Array.isArray(pendingData) ? pendingData : []);
+        setTotalPages(response?.data?.last_page || 1);
+        setTotalSubscriptions(response?.data?.total || 0);
       } else {
         response = await getAllSubscriptions(localStorage.getItem("token"));
-        setSubscriptions(response.data.subscriptions || []);
+        const allData = response?.data?.subscriptions || response?.data || [];
+        setSubscriptions(Array.isArray(allData) ? allData : []);
         setTotalPages(1);
-        setTotalSubscriptions(response.data.subscriptions?.length || 0);
+        setTotalSubscriptions(Array.isArray(allData) ? allData.length : 0);
       }
 
       setError("");

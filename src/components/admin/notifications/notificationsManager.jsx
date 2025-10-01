@@ -19,13 +19,17 @@ const NotificationsManager = () => {
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      const [statsResponse] = await Promise.all([
-        getNotificationsStatistics(),
-      ]);
-
-      setStatistics(statsResponse.data);
-      setError("");
+      const statsResponse = await getNotificationsStatistics();
+      const statsData = statsResponse?.data || statsResponse;
+      
+      if (statsData) {
+        setStatistics(statsData);
+        setError("");
+      } else {
+        throw new Error("No statistics data received");
+      }
     } catch (err) {
+      console.error("Notifications stats error:", err);
       setError(
         t("adminDashboard.notificationsManager.failedToFetch") +
           ": " +

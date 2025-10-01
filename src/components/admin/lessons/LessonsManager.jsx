@@ -98,15 +98,12 @@ const LessonsManager = () => {
       const response = await getAllLessons(params, token);
 
       // Handle different response formats
-      if (response.data) {
-        setLessons(response.data.data || response.data || []);
-        setMeta(response.data);
-        setPage(response.data.current_page || pageNum);
-      } else {
-        setLessons(response || []);
-        setMeta(null);
-        setPage(pageNum);
-      }
+      const lessonsData = response?.data?.data || response?.data || response || [];
+      const metaData = response?.data || response?.meta || null;
+      
+      setLessons(Array.isArray(lessonsData) ? lessonsData : []);
+      setMeta(metaData);
+      setPage(metaData?.current_page || pageNum);
 
     } catch (err) {
       console.error("Failed to fetch lessons:", err);

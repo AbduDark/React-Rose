@@ -32,6 +32,10 @@ export const getAllNotifications = async (page = 1) => {
 
 export const getUnreadCount = async (token) => {
   try {
+    if (!token) {
+      return 0;
+    }
+
     const response = await fetch(`${API_BASE}/notifications/unread-count`, {
       method: "GET",
       headers: {
@@ -49,7 +53,7 @@ export const getUnreadCount = async (token) => {
 
     const data = await response.json();
     console.log("Unread notifications response:", data);
-    return data?.count || 0;
+    return data?.data?.count || data?.count || 0;
   } catch (error) {
     console.error("Error fetching unread count:", error);
     return 0;
