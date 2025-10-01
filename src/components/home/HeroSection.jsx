@@ -100,7 +100,7 @@ const IntroSection = () => {
       </svg>
 
       {/* Custom Animation Styles */}
-      <style jsx="true">{`
+      <style jsx>{`
         @keyframes pulse-border {
           0% {
             transform: translate(-50%, -50%) scale(1);

@@ -38,22 +38,17 @@ const LessonsManager = () => {
     const timeoutId = setTimeout(() => {
       if (searchTerm !== "") {
         setPage(1); // Reset to first page when searching
-        fetchLessons(1);
       }
+      fetchLessons(searchTerm !== "" ? 1 : page);
     }, 500);
 
     return () => clearTimeout(timeoutId);
   }, [searchTerm]);
 
   useEffect(() => {
-    if (searchTerm === "") {
-      fetchLessons(page);
-    }
-  }, [page, selectedCourse]);
-
-  useEffect(() => {
+    fetchLessons(page);
     fetchCoursesList();
-  }, []);
+  }, [page, selectedCourse]);
 
   useEffect(() => {
     // Ensure lessons is an array before filtering
