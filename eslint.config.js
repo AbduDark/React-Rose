@@ -6,13 +6,13 @@ import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
   {
-    files: ['**/*.{js,jsx}'],
+    files: ['**/*.{js,jsx,ts,tsx}'], // ✅ دعم JS/TS/React
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
       parserOptions: {
         ecmaFeatures: {
-          jsx: true, // ✅ لدعم JSX
+          jsx: true,
         },
       },
       globals: {
