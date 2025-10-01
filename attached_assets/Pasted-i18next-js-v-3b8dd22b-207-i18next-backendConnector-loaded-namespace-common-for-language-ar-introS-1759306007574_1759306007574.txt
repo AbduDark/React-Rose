@@ -1,0 +1,130 @@
+i18next.js?v=3b8dd22b:207 i18next::backendConnector: loaded namespace common for language ar {introSection: {…}, header: {…}, features: {…}, popularCourses: {…}, recentCourses: {…}, …}
+i18next.js?v=3b8dd22b:207 i18next::backendConnector: loaded namespace translation for language ar {welcome: 'مرحباً', deleteLesson: {…}, videoUpload: {…}}
+i18next.js?v=3b8dd22b:207 i18next: languageChanged ar
+i18next.js?v=3b8dd22b:207 i18next: initialized {debug: true, initAsync: true, ns: Array(2), defaultNS: 'common', fallbackLng: Array(1), …}
+notifications.js:56 Unread notifications response: {success: false, status_code: 401, message: {…}}
+notifications.js:56 Unread notifications response: {success: false, status_code: 401, message: {…}}
+auth.js:243 Dashboard stats response: {success: false, status_code: 401, message: {…}}
+DashboardOverview.jsx:32 Dashboard stats API response: {success: false, status_code: 401, message: {…}}
+DashboardOverview.jsx:46 Processed stats data: {success: false, status_code: 401, message: {…}}
+DashboardOverview.jsx:67 Normalized stats: {general_stats: {…}, monthly_stats: {…}}
+ChartComponent.jsx:50 Received NaN for the `strokeDashoffset` attribute. If this is expected, cast the value to a string.
+overrideMethod @ hook.js:608
+validateProperty @ react-dom_client.js?v=3b8dd22b:2395
+warnUnknownProperties @ react-dom_client.js?v=3b8dd22b:2545
+validatePropertiesInDevelopment @ react-dom_client.js?v=3b8dd22b:12240
+setInitialProperties @ react-dom_client.js?v=3b8dd22b:12667
+completeWork @ react-dom_client.js?v=3b8dd22b:8181
+runWithFiberInDEV @ react-dom_client.js?v=3b8dd22b:1485
+completeUnitOfWork @ react-dom_client.js?v=3b8dd22b:10976
+performUnitOfWork @ react-dom_client.js?v=3b8dd22b:10882
+workLoopSync @ react-dom_client.js?v=3b8dd22b:10728
+renderRootSync @ react-dom_client.js?v=3b8dd22b:10711
+performWorkOnRoot @ react-dom_client.js?v=3b8dd22b:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=3b8dd22b:11623
+performWorkUntilDeadline @ react-dom_client.js?v=3b8dd22b:36
+<circle>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=3b8dd22b:250
+(anonymous) @ ChartComponent.jsx:50
+ChartComponent @ ChartComponent.jsx:44
+react_stack_bottom_frame @ react-dom_client.js?v=3b8dd22b:17424
+renderWithHooksAgain @ react-dom_client.js?v=3b8dd22b:4281
+renderWithHooks @ react-dom_client.js?v=3b8dd22b:4217
+updateFunctionComponent @ react-dom_client.js?v=3b8dd22b:6619
+beginWork @ react-dom_client.js?v=3b8dd22b:7654
+runWithFiberInDEV @ react-dom_client.js?v=3b8dd22b:1485
+performUnitOfWork @ react-dom_client.js?v=3b8dd22b:10868
+workLoopSync @ react-dom_client.js?v=3b8dd22b:10728
+renderRootSync @ react-dom_client.js?v=3b8dd22b:10711
+performWorkOnRoot @ react-dom_client.js?v=3b8dd22b:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=3b8dd22b:11623
+performWorkUntilDeadline @ react-dom_client.js?v=3b8dd22b:36
+<ChartComponent>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=3b8dd22b:250
+DashboardOverview @ DashboardOverview.jsx:507
+react_stack_bottom_frame @ react-dom_client.js?v=3b8dd22b:17424
+renderWithHooksAgain @ react-dom_client.js?v=3b8dd22b:4281
+renderWithHooks @ react-dom_client.js?v=3b8dd22b:4217
+updateFunctionComponent @ react-dom_client.js?v=3b8dd22b:6619
+beginWork @ react-dom_client.js?v=3b8dd22b:7654
+runWithFiberInDEV @ react-dom_client.js?v=3b8dd22b:1485
+performUnitOfWork @ react-dom_client.js?v=3b8dd22b:10868
+workLoopSync @ react-dom_client.js?v=3b8dd22b:10728
+renderRootSync @ react-dom_client.js?v=3b8dd22b:10711
+performWorkOnRoot @ react-dom_client.js?v=3b8dd22b:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=3b8dd22b:11623
+performWorkUntilDeadline @ react-dom_client.js?v=3b8dd22b:36
+<DashboardOverview>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=3b8dd22b:250
+renderContent @ AdminPage.jsx:111
+AdminPage @ AdminPage.jsx:351
+react_stack_bottom_frame @ react-dom_client.js?v=3b8dd22b:17424
+renderWithHooksAgain @ react-dom_client.js?v=3b8dd22b:4281
+renderWithHooks @ react-dom_client.js?v=3b8dd22b:4217
+updateFunctionComponent @ react-dom_client.js?v=3b8dd22b:6619
+beginWork @ react-dom_client.js?v=3b8dd22b:7654
+runWithFiberInDEV @ react-dom_client.js?v=3b8dd22b:1485
+performUnitOfWork @ react-dom_client.js?v=3b8dd22b:10868
+workLoopSync @ react-dom_client.js?v=3b8dd22b:10728
+renderRootSync @ react-dom_client.js?v=3b8dd22b:10711
+performWorkOnRoot @ react-dom_client.js?v=3b8dd22b:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=3b8dd22b:11623
+performWorkUntilDeadline @ react-dom_client.js?v=3b8dd22b:36
+<AdminPage>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=3b8dd22b:250
+AppRoute @ AppRoute.jsx:125
+react_stack_bottom_frame @ react-dom_client.js?v=3b8dd22b:17424
+renderWithHooksAgain @ react-dom_client.js?v=3b8dd22b:4281
+renderWithHooks @ react-dom_client.js?v=3b8dd22b:4217
+updateFunctionComponent @ react-dom_client.js?v=3b8dd22b:6619
+beginWork @ react-dom_client.js?v=3b8dd22b:7654
+runWithFiberInDEV @ react-dom_client.js?v=3b8dd22b:1485
+performUnitOfWork @ react-dom_client.js?v=3b8dd22b:10868
+workLoopSync @ react-dom_client.js?v=3b8dd22b:10728
+renderRootSync @ react-dom_client.js?v=3b8dd22b:10711
+performWorkOnRoot @ react-dom_client.js?v=3b8dd22b:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=3b8dd22b:11623
+performWorkUntilDeadline @ react-dom_client.js?v=3b8dd22b:36
+<AppRoute>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=3b8dd22b:250
+Router @ App.jsx:7
+react_stack_bottom_frame @ react-dom_client.js?v=3b8dd22b:17424
+renderWithHooksAgain @ react-dom_client.js?v=3b8dd22b:4281
+renderWithHooks @ react-dom_client.js?v=3b8dd22b:4217
+updateFunctionComponent @ react-dom_client.js?v=3b8dd22b:6619
+beginWork @ react-dom_client.js?v=3b8dd22b:7654
+runWithFiberInDEV @ react-dom_client.js?v=3b8dd22b:1485
+performUnitOfWork @ react-dom_client.js?v=3b8dd22b:10868
+workLoopSync @ react-dom_client.js?v=3b8dd22b:10728
+renderRootSync @ react-dom_client.js?v=3b8dd22b:10711
+performWorkOnRoot @ react-dom_client.js?v=3b8dd22b:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=3b8dd22b:11623
+performWorkUntilDeadline @ react-dom_client.js?v=3b8dd22b:36
+<Router>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=3b8dd22b:250
+(anonymous) @ main.jsx:11
+auth.js:243 Dashboard stats response: {success: false, status_code: 401, message: {…}}
+DashboardOverview.jsx:32 Dashboard stats API response: {success: false, status_code: 401, message: {…}}
+DashboardOverview.jsx:46 Processed stats data: {success: false, status_code: 401, message: {…}}
+DashboardOverview.jsx:67 Normalized stats: {general_stats: {…}, monthly_stats: {…}}
+CoursesManager.jsx:59 Courses response: {data: Array(3), meta: {…}, links: {…}}
+CoursesManager.jsx:59 Courses response: {data: Array(3), meta: {…}, links: {…}}
+LessonsManager.jsx:96 Fetching lessons with params: {page: 1, per_page: 12, search: ''}
+lessons.js:56 Fetching lessons from: /api/admin/lessons?page=1&per_page=12
+LessonsManager.jsx:96 Fetching lessons with params: {page: 1, per_page: 12, search: ''}
+lessons.js:56 Fetching lessons from: /api/admin/lessons?page=1&per_page=12
+LessonsManager.jsx:99 Lessons API response: 
+{"success":false,"status_code":401,"message":{"ar":"\u063a\u064a\u0631 \u0645\u0635\u0631\u062d \u0644\u0643 \u0628\u0627\u0644\u0648\u0635\u0648\u0644 - \u064a\u062c\u0628 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062f\u062e\u0648\u0644","en":"Unauthorized access - Login required"}}
+LessonsManager.jsx:127 Processed lessons data: []
+LessonsManager.jsx:128 Meta data: null
+LessonsManager.jsx:99 Lessons API response: 
+{"success":false,"status_code":401,"message":{"ar":"\u063a\u064a\u0631 \u0645\u0635\u0631\u062d \u0644\u0643 \u0628\u0627\u0644\u0648\u0635\u0648\u0644 - \u064a\u062c\u0628 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062f\u062e\u0648\u0644","en":"Unauthorized access - Login required"}}
+LessonsManager.jsx:127 Processed lessons data: []
+LessonsManager.jsx:128 Meta data: null
+notifications.js:56 Unread notifications response: {success: false, status_code: 401, message: {…}}
+notificationsManager.jsx:23 Notifications stats API response: {success: false, status_code: 401, message: {…}}
+notificationsManager.jsx:36 Processed notifications stats: {success: false, status_code: 401, message: {…}}
+notificationsManager.jsx:50 Normalized notifications stats: {total_notifications: 0, today_notifications: 0, read_notifications: 0, unread_notifications: 0, this_week_notifications: 0, …}
+notificationsManager.jsx:23 Notifications stats API response: {success: false, status_code: 401, message: {…}}
+notificationsManager.jsx:36 Processed notifications stats: {success: false, status_code: 401, message: {…}}
+notificationsManager.jsx:50 Normalized notifications stats: {total_notifications: 0, today_notifications: 0, read_notifications: 0, unread_notifications: 0, this_week_notifications: 0, …}
