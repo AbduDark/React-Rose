@@ -129,7 +129,7 @@ export const renewSubscription = async (token, renewalData) => {
 // Get payment proof image
 export const getPaymentProof = async (filename) => {
   try {
-    const res = await fetch(`${API_BASE}/auth/payment-proofs/${filename}`, {
+    const res = await fetch(`${API_BASE}/payment-proofs/${filename}`, {
       method: "GET",
       headers: {
         Accept: "image/*",
