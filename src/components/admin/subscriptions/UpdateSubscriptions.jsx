@@ -10,7 +10,6 @@ function UpdateSubscriptions({
   onClose,
 }) {
   const { t } = useTranslation();
-  const { user: authUser } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 

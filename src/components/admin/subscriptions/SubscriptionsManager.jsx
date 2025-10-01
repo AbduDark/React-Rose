@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  FiPlus,
   FiUsers,
-  FiClock,
-  FiCheckCircle,
-  FiXCircle,
 } from "react-icons/fi";
 import {
   getAllSubscriptions,
@@ -109,12 +105,6 @@ const SubscriptionsManager = () => {
 
   // Handle subscription approval
   const handleApproveSubscription = async (subscriptionId) => {
-    const adminNotes = prompt(
-      t("adminDashboard.subscriptionsManager.approveNotes") || 
-      "ملاحظات الموافقة (اختياري):"
-    );
-    
-    // Allow approval even if notes are empty
     try {
       await approveSubscription(localStorage.getItem("token"), subscriptionId);
       // Refresh the list
@@ -177,17 +167,7 @@ const SubscriptionsManager = () => {
     setSubscriptionToDelete(null);
   };
 
-  // Open edit modal
-  const handleEditSubscription = (subscription) => {
-    setCurrentSubscription(subscription);
-    setIsEditModalOpen(true);
-  };
-
-  // Open delete modal
-  const handleDeleteSubscription = (subscription) => {
-    setSubscriptionToDelete(subscription);
-    setIsDeleteModalOpen(true);
-  };
+  
 
   // Handle page change
   const handlePageChange = (page) => {

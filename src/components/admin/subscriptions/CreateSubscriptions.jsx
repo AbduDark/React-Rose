@@ -5,7 +5,6 @@ import { useAuth } from "../../../context/AuthContext";
 
 function CreateSubscriptions({ onSubscriptionCreated, isOpen, onClose }) {
   const { t } = useTranslation();
-  const { user: authUser } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [users, setUsers] = useState([]);
