@@ -1,0 +1,510 @@
+async function subscribeToCourse(courseId, vodafoneNumber, parentPhone, studentInfo, paymentProofFile) {
+  const token = localStorage.getItem('access_token');
+  
+  const formData = new FormData();
+  formData.append('course_id', courseId);
+  formData.append('vodafone_number', vodafoneNumber);
+  formData.append('parent_phone', parentPhone);
+  formData.append('student_info', studentInfo);
+  formData.append('payment_proof', paymentProofFile);
+  
+  const response = await fetch(`${BASE_URL}/subscribe`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json',
+    },
+    body: formData
+  });
+  
+  const data = await response.json();
+  
+  if (response.ok) {
+    return data.data.subscription;
+  } else {
+    throw new Error(data.message || 'فشل الاشتراك');
+  }
+}
+```
+
+### جلب اشتراكات المستخدم
+```javascript
+async function getMySubscriptions() {
+  const token = localStorage.getItem('access_token');
+  
+  const response = await fetch(`${BASE_URL}/my-subscriptions`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json',
+    }
+  });
+  
+  const data = await response.json();
+  return data.data.subscriptions;
+}
+```
+
+### تجديد اشتراك
+```javascript
+async function renewSubscription(subscriptionId, vodafoneNumber, parentPhone, paymentProofFile) {
+  const token = localStorage.getItem('access_token');
+  
+  const formData = new FormData();
+  formData.append('subscription_id', subscriptionId);
+  formData.append('vodafone_number', vodafoneNumber);
+  formData.append('parent_phone', parentPhone);
+  formData.append('payment_proof', paymentProofFile);
+  
+  const response = await fetch(`${BASE_URL}/subscriptions/renew`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json',
+    },
+    body: formData
+  });
+  
+  const data = await response.json();
+  
+  if (response.ok) {
+    return data.data.renewal_request;
+  } else {
+    throw new Error(data.message || 'فشل التجديد');
+  }
+}
+```
+
+### إلغاء اشتراك
+```javascript
+async function cancelSubscription(subscriptionId) {
+  const token = localStorage.getItem('access_token');
+  
+  const response = await fetch(`${BASE_URL}/subscriptions/${subscriptionId}/cancel`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json',
+    }
+  });
+  
+  return response.ok;
+}
+```
+
+### جلب الاشتراكات المنتهية الصلاحية
+```javascript
+async function getExpiredSubscriptions() {
+  const token = localStorage.getItem('access_token');
+  
+  const response = await fetch(`${BASE_URL}/expired-subscriptions`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json',
+    }
+  });
+  
+  const data = await response.json();
+  return data.data.expired_subscriptions;
+}
+```
+
+### التحقق من حالة الاشتراك لكورس معين
+```javascript
+async function getSubscriptionStatus(courseId) {
+  const token = localStorage.getItem('access_token');
+  
+  const response = await fetch(`${BASE_URL}/subscriptions/status/${courseId}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json',
+    }
+  });
+  
+  const data = await response.json();
+  return data.data;
+}
+```
+
+---
+
+## 4. Admin Subscription Management APIs
+
+### جلب جميع الاشتراكات (للمدير)
+```javascript
+async function getAllSubscriptions(search = '', status = '') {
+  const token = localStorage.getItem('access_token');
+  
+  let url = `${BASE_URL}/admin/subscriptions`;
+  const params = new URLSearchParams();
+  
+  if (search) params.append('search', search);
+  if (status) params.append('status', status);
+  
+  if (params.toString()) {
+    url += `?${params.toString()}`;
+  }
+  
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json',
+    }
+  });
+  
+  const data = await response.json();
+  return data.data.subscriptions;
+}
+```
+
+### جلب الاشتراكات المعلقة
+```javascript
+async function getPendingSubscriptions() {
+  const token = localStorage.getItem('access_token');
+  
+  const response = await fetch(`${BASE_URL}/admin/subscriptions/pending`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json',
+    }
+  });
+  
+  const data = await response.json();
+  return data.data.subscriptions;
+}
+```
+
+### قبول اشتراك
+```javascript
+async function approveSubscription(subscriptionId, adminNotes = '') {
+  const token = localStorage.getItem('access_token');
+  
+  const response = await fetch(`${BASE_URL}/admin/subscriptions/${subscriptionId}/approve`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+    body: JSON.stringify({
+      admin_notes: adminNotes
+    })
+  });
+  
+  const data = await response.json();
+  
+  if (response.ok) {
+    return data.data.subscription;
+  } else {
+    throw new Error(data.message || 'فشل قبول الاشتراك');
+  }
+}
+
+```
+### رفض اشتراك
+```javascript
+async function rejectSubscription(subscriptionId, adminNotes) {
+  const token = localStorage.getItem('access_token');
+  
+  const response = await fetch(`${BASE_URL}/admin/subscriptions/${subscriptionId}/reject`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+    body: JSON.stringify({
+      admin_notes: adminNotes
+    })
+  });
+  
+  const data = await response.json();
+  
+  if (response.ok) {
+    return data.data.subscription;
+  } else {
+    throw new Error(data.message || 'فشل رفض الاشتراك');
+  }
+}
+```
+
+---
+
+## 5. نماذج البيانات (Data Models)
+
+### نموذج المستخدم (User)
+```javascript
+const userModel = {
+  id: 1,
+  name: "أحمد محمد",
+  email: "ahmed@example.com",
+  phone: "01012345678",
+  gender: "male",
+  is_admin: false,
+  role: "student"
+};
+```
+
+### نموذج الكورس (Course)
+```javascript
+const courseModel = {
+  id: 1,
+  title: "الرياضيات - الصف الثالث الثانوي",
+  description: "شرح مفصل لمنهج الرياضيات",
+  price: 500,
+  grade: "3rd_secondary",
+  gender: "mixed",
+  image: "http://localhost:8000/uploads/courses/course1.jpg",
+  created_at: "2025-01-20 10:00:00",
+  updated_at: "2025-01-20 10:00:00"
+};
+```
+
+### نموذج الاشتراك (Subscription)
+```javascript
+const subscriptionModel = {
+  id: 1,
+  user: {
+    id: 1,
+    name: "أحمد محمد",
+    email: "ahmed@example.com",
+    phone: "01012345678"
+  },
+  course: {
+    id: 1,
+    title: "الرياضيات - الصف الثالث الثانوي",
+    price: 500,
+    image: "http://localhost:8000/uploads/courses/course1.jpg"
+  },
+  vodafone_number: "01012345678",
+  parent_phone: "01087654321",
+  student_info: "طالب في الصف الثالث الثانوي",
+  payment_proof_image: "http://localhost:8000/uploads/payment_proofs/proof1.jpg", // Deprecated
+  payment_proof_url: "http://localhost:8000/api/payment-proofs/1234567890_proof.jpg", // URL لعرض إثبات الدفع
+  status: "pending", // pending, approved, rejected
+  is_active: false,
+  is_approved: false,
+  admin_notes: null,
+  subscribed_at: "2025-01-20 10:00:00",
+  expires_at: null,
+  approved_at: null,
+  rejected_at: null,
+  approved_by: null,
+  rejected_by: null,
+  created_at: "2025-01-20 10:00:00",
+  updated_at: "2025-01-20 10:00:00"
+};
+```
+
+---
+
+## 6. معالجة الأخطاء (Error Handling)
+
+### نموذج الخطأ
+```javascript
+const errorResponse = {
+  success: false,
+  message: {
+    ar: "رسالة الخطأ بالعربية",
+    en: "Error message in English"
+  },
+  errors: {
+    field_name: ["Validation error message"]
+  }
+};
+```
+
+### معالجة الأخطاء الشاملة
+```javascript
+async function handleApiCall(apiFunction) {
+  try {
+    const result = await apiFunction();
+    return { success: true, data: result };
+  } catch (error) {
+    console.error('API Error:', error);
+    
+    if (error.message.includes('401')) {
+      // إعادة توجيه لصفحة تسجيل الدخول
+      logout();
+      window.location.href = '/login';
+    }
+    
+    return { 
+      success: false, 
+      error: error.message || 'حدث خطأ غير متوقع' 
+    };
+  }
+}
+```
+
+---
+
+## 7. مثال على Integration كامل
+
+### مكون React للاشتراك في كورس
+```javascript
+import React, { useState, useEffect } from 'react';
+
+const SubscriptionForm = ({ courseId }) => {
+  const [course, setCourse] = useState(null);
+  const [formData, setFormData] = useState({
+    vodafoneNumber: '',
+    parentPhone: '',
+    studentInfo: '',
+    paymentProof: null
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    loadCourseDetails();
+  }, [courseId]);
+
+  const loadCourseDetails = async () => {
+    try {
+      const courseData = await getCourseDetails(courseId);
+      setCourse(courseData);
+    } catch (err) {
+      setError('فشل في جلب بيانات الكورس');
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      const subscription = await subscribeToCore(
+        courseId,
+        formData.vodafoneNumber,
+        formData.parentPhone,
+        formData.studentInfo,
+        formData.paymentProof
+      );
+      
+      alert('تم إرسال طلب الاشتراك بنجاح!');
+      // إعادة توجيه أو تحديث الصفحة
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFileChange = (e) => {
+    setFormData({
+      ...formData,
+      paymentProof: e.target.files[0]
+    });
+  };
+
+  return (
+    <div className="subscription-form">
+      {course && (
+        <div className="course-info">
+          <h2>{course.title}</h2>
+          <p>السعر: {course.price} جنيه</p>
+        </div>
+      )}
+
+      {error && <div className="error">{error}</div>}
+
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label>رقم فودافون كاش:</label>
+          <input
+            type="text"
+            value={formData.vodafoneNumber}
+            onChange={(e) => setFormData({...formData, vodafoneNumber: e.target.value})}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>رقم هاتف ولي الأمر:</label>
+          <input
+            type="text"
+            value={formData.parentPhone}
+            onChange={(e) => setFormData({...formData, parentPhone: e.target.value})}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>معلومات الطالب:</label>
+          <textarea
+            value={formData.studentInfo}
+            onChange={(e) => setFormData({...formData, studentInfo: e.target.value})}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>صورة إثبات الدفع:</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            required
+          />
+        </div>
+
+        <button type="submit" disabled={loading}>
+          {loading ? 'جاري الإرسال...' : 'اشتراك'}
+        </button>
+      </form>
+    </div>
+  );
+};
+```
+
+### مكون إدارة الاشتراكات للمدير
+```javascript
+import React, { useState, useEffect } from 'react';
+
+const AdminSubscriptions = () => {
+  const [subscriptions, setSubscriptions] = useState([]);
+  const [filter, setFilter] = useState('pending');
+  const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    loadSubscriptions();
+  }, [filter, search]);
+
+  const loadSubscriptions = async () => {
+    setLoading(true);
+    try {
+      const data = await getAllSubscriptions(search, filter);
+      setSubscriptions(data);
+    } catch (err) {
+      console.error('فشل في جلب الاشتراكات:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleApprove = async (subscriptionId) => {
+    try {
+      await approveSubscription(subscriptionId, 'تم قبول الاشتراك');
+      loadSubscriptions(); // إعادة تحميل القائمة
+    } catch (err) {
+      alert('فشل في قبول الاشتراك');
+    }
+  };
+
+  const handleReject = async (subscriptionId) => {
+    const reason = prompt('سبب الرفض:');
+    if (reason) {
+      try {
+        await rejectSubscription(subscriptionId, reason);
+        loadSubscriptions(); // إعادة تحميل القائمة
+      } catch (err) {
+        alert('فشل في رفض الاشتراك');
+      }
+    }
+  };
