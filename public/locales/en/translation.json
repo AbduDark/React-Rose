@@ -27,5 +27,13 @@
     "close": "Close",
     "invalidFileType": "Please select a valid video file",
     "fileTooLarge": "File size too large (max 500MB)"
-  }
+  },
+  "unknownLevel": "Unknown Level",
+  "price": "Price",
+  "duration": "Duration",
+  "hours": "hours",
+  "instructor": "Instructor",
+  "grade": "Grade",
+  "paymentProof": "Payment Proof",
+  "viewPaymentProof": "View Payment Proof"
 }

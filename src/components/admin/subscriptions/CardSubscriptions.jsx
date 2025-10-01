@@ -224,7 +224,7 @@ function CardSubscriptions({ subscription, onApprove, onReject }) {
         </div>
 
         {/* Payment Proof */}
-        {subscription.payment_proof && (
+        {(subscription.payment_proof || subscription.payment_proof_image) && (
           <div className="border-t border-gray-700 pt-4 mb-4">
             <h4 className="text-sm font-medium text-gray-400 mb-3">
               {t("adminDashboard.cardSubscription.paymentProof")}
@@ -232,7 +232,11 @@ function CardSubscriptions({ subscription, onApprove, onReject }) {
             <div className="flex items-center gap-2">
               <FiImage className="w-4 h-4 text-gray-400" />
               <button
-                onClick={() => window.open(`${import.meta.env.VITE_API_BASE}/auth/payment-proofs/${subscription.payment_proof}`, '_blank')}
+                onClick={() => {
+                  const paymentProofUrl = subscription.payment_proof_image || 
+                    `${import.meta.env.VITE_API_BASE}/auth/payment-proofs/${subscription.payment_proof}`;
+                  window.open(paymentProofUrl, '_blank');
+                }}
                 className="text-blue-400 hover:text-blue-300 text-sm flex items-center gap-1"
               >
                 <FiEye className="w-3 h-3" />

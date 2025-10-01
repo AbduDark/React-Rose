@@ -27,5 +27,13 @@
     "close": "إغلاق",
     "invalidFileType": "يرجى اختيار ملف فيديو صالح",
     "fileTooLarge": "حجم الملف كبير جداً (الحد الأقصى 500 ميجابايت)"
-  }
+  },
+  "unknownLevel": "مستوى غير معروف",
+  "price": "السعر",
+  "duration": "المدة",
+  "hours": "ساعات",
+  "instructor": "المدرس",
+  "grade": "الصف",
+  "paymentProof": "إثبات الدفع",
+  "viewPaymentProof": "عرض إثبات الدفع"
 }
