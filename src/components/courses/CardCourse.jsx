@@ -1,21 +1,66 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { FaStar, FaStarHalfAlt, FaRegStar, FaClock } from "react-icons/fa";
+import { FiHeart } from "react-icons/fi";
 import { useCourse } from "../../context/CourseContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import Loader from "../common/Loader";
 import i18next from "i18next";
 import ImageNotFound from "../../assets/images/ImageNotFound.png";
 import Pagination from "../common/Pagination";
+import { useAuth } from "../../context/AuthContext";
+import { addToFavorites, removeFromFavorites, getFavoriteSubscriptions } from "../../api/favorites";
 
 function CardCourse() {
   const { t } = useTranslation();
   const { courses, loading, error, page, setPage, meta } = useCourse();
   const navigate = useNavigate();
   const location = useLocation();
+  const { token } = useAuth();
+  const [favoriteCourseIds, setFavoriteCourseIds] = useState([]);
+  const [favoriteLoading, setFavoriteLoading] = useState({});
+
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      if (!token) return;
+      try {
+        const data = await getFavoriteSubscriptions(token);
+        const subscriptions = data?.data?.subscriptions || data?.subscriptions || [];
+        const favoriteIds = subscriptions.map(sub => sub.course_id);
+        setFavoriteCourseIds(favoriteIds);
+      } catch (err) {
+        console.error("Error fetching favorites:", err);
+      }
+    };
+    fetchFavorites();
+  }, [token]);
 
   const handleCourseClick = (courseId) => {
     navigate(`/courses/${courseId}`);
+  };
+
+  const handleToggleFavorite = async (e, courseId) => {
+    e.stopPropagation();
+    if (!token) {
+      navigate("/auth/login");
+      return;
+    }
+
+    setFavoriteLoading(prev => ({ ...prev, [courseId]: true }));
+    try {
+      const isFavorite = favoriteCourseIds.includes(courseId);
+      if (isFavorite) {
+        await removeFromFavorites(token, courseId);
+        setFavoriteCourseIds(prev => prev.filter(id => id !== courseId));
+      } else {
+        await addToFavorites(token, courseId);
+        setFavoriteCourseIds(prev => [...prev, courseId]);
+      }
+    } catch (err) {
+      console.error("Error toggling favorite:", err);
+    } finally {
+      setFavoriteLoading(prev => ({ ...prev, [courseId]: false }));
+    }
   };
 
   const renderStars = (rating) => {
@@ -59,8 +104,18 @@ function CardCourse() {
             <div
               key={course.id}
               onClick={() => handleCourseClick(course.id)}
-              className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 hover:-translate-y-1 cursor-pointer"
+              className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 hover:-translate-y-1 cursor-pointer relative"
             >
+              <button
+                onClick={(e) => handleToggleFavorite(e, course.id)}
+                disabled={favoriteLoading[course.id]}
+                className={`absolute top-3 right-3 z-10 p-2 rounded-full bg-white/90 hover:bg-white transition-all ${
+                  token && favoriteCourseIds.includes(course.id) ? "text-red-500" : "text-gray-400"
+                } ${favoriteLoading[course.id] ? "opacity-50" : ""}`}
+                title={token && favoriteCourseIds.includes(course.id) ? t("favorites.removeFromFavorites") || "إزالة من المفضلة" : t("favorites.addToFavorites") || "إضافة للمفضلة"}
+              >
+                <FiHeart className={`w-5 h-5 ${token && favoriteCourseIds.includes(course.id) ? "fill-current" : ""}`} />
+              </button>
               <img
                 src={course.image_url || ImageNotFound}
                 alt={course.title}

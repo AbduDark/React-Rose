@@ -1,20 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { FiPlus, FiBell, FiUsers, FiBarChart2 } from "react-icons/fi";
-import { getNotificationsStatistics } from "../../../api/notifications";
+import { FiPlus, FiBell, FiUsers, FiBarChart2, FiEye } from "react-icons/fi";
+import { getNotificationsStatistics, getAllNotifications } from "../../../api/notifications";
 import CreateNotification from "./Createnotifications";
+import Pagination from "../../common/Pagination";
 
 const NotificationsManager = () => {
   const { t } = useTranslation();
   const [statistics, setStatistics] = useState(null);
+  const [notifications, setNotifications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [showNotificationsList, setShowNotificationsList] = useState(false);
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (showNotificationsList) {
+      fetchNotifications();
+    }
+  }, [currentPage, showNotificationsList]);
 
   const fetchData = async () => {
     try {
@@ -86,9 +96,46 @@ const NotificationsManager = () => {
     }
   };
 
+  const fetchNotifications = async () => {
+    try {
+      const response = await getAllNotifications(currentPage);
+      console.log("Notifications list response:", response);
+      
+      if (response?.data) {
+        const notificationsList = response.data.data || response.data || [];
+        setNotifications(Array.isArray(notificationsList) ? notificationsList : []);
+        
+        const lastPage = response.data.last_page || response.data.meta?.last_page || response.meta?.last_page || 1;
+        setTotalPages(lastPage);
+        setError("");
+      } else {
+        setNotifications([]);
+        setTotalPages(1);
+      }
+    } catch (err) {
+      console.error("Error fetching notifications list:", err);
+      setError(t("adminDashboard.notificationsManager.failedToFetch") + ": " + err.message);
+      setNotifications([]);
+      setTotalPages(1);
+    }
+  };
+
   const handleNotificationSent = () => {
     setIsCreateModalOpen(false);
     fetchData();
+    if (showNotificationsList) {
+      fetchNotifications();
+    }
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("ar-EG", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   if (isLoading) {
@@ -220,6 +267,94 @@ const NotificationsManager = () => {
               </div>
             </div>
           </div>
+        )}
+      </div>
+
+      {/* Notifications List Section */}
+      <div className="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-xl font-bold text-white">
+            {t("adminDashboard.notificationsManager.notificationsList") || "قائمة الإشعارات"}
+          </h3>
+          <button
+            onClick={() => setShowNotificationsList(!showNotificationsList)}
+            className="flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600"
+          >
+            <FiEye className="w-4 h-4" />
+            {showNotificationsList ? t("common.hide") || "إخفاء" : t("common.show") || "عرض"}
+          </button>
+        </div>
+
+        {showNotificationsList && (
+          <>
+            {notifications.length === 0 ? (
+              <div className="text-center py-12">
+                <FiBell className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-300 mb-2">
+                  {t("adminDashboard.notificationsManager.noNotifications") || "لا توجد إشعارات"}
+                </h3>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {notifications.map((notification) => (
+                  <div
+                    key={notification.id}
+                    className="bg-gray-700/50 rounded-lg p-4 border border-gray-600 hover:bg-gray-700 transition-colors"
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-start gap-3 flex-1">
+                        <div className={`p-2 rounded-lg ${
+                          notification.type === 'success' ? 'bg-green-500/20' :
+                          notification.type === 'warning' ? 'bg-yellow-500/20' :
+                          notification.type === 'error' ? 'bg-red-500/20' :
+                          'bg-blue-500/20'
+                        }`}>
+                          <FiBell className={`w-5 h-5 ${
+                            notification.type === 'success' ? 'text-green-400' :
+                            notification.type === 'warning' ? 'text-yellow-400' :
+                            notification.type === 'error' ? 'text-red-400' :
+                            'text-blue-400'
+                          }`} />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="text-white font-semibold mb-1">
+                            {notification.title}
+                          </h4>
+                          <p className="text-gray-300 text-sm mb-2">
+                            {notification.message}
+                          </p>
+                          <div className="flex items-center gap-4 text-xs text-gray-400">
+                            <span className="flex items-center gap-1">
+                              <FiUsers className="w-3 h-3" />
+                              {notification.user?.name || t("common.user")}
+                            </span>
+                            <span>
+                              {formatDate(notification.created_at)}
+                            </span>
+                            {notification.is_read && (
+                              <span className="text-green-400">
+                                {t("adminDashboard.notificationsManager.read") || "مقروءة"}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {totalPages > 1 && (
+              <div className="mt-6">
+                <Pagination
+                  page={currentPage}
+                  setPage={setCurrentPage}
+                  pageCount={totalPages}
+                />
+              </div>
+            )}
+          </>
         )}
       </div>
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { FiEdit, FiMenu, FiX, FiVideo } from "react-icons/fi";
+import { FiEdit, FiMenu, FiX, FiVideo, FiHeart } from "react-icons/fi";
 import EditProfile from "../components/user/EditProfile";
 import { getProfile } from "../api/auth";
 import { useAuth } from "../context/AuthContext";
@@ -9,6 +9,7 @@ import ChangePassword from "../components/user/ChangePassword";
 import { TbLockPassword } from "react-icons/tb";
 import Loader from "../components/common/Loader";
 import MySubscriptions from "../components/user/MySubscriptions";
+import MyFavorites from "../components/user/MyFavorites";
 import { useNavigate, useParams } from "react-router-dom";
 import i18next from "i18next";
 
@@ -62,13 +63,20 @@ const StudentDashboardPage = () => {
     },
     {
       id: 2,
+      label: t("favorites.title") || "المفضلات",
+      icon: <FiHeart className="w-5 h-5" />,
+      component: <MyFavorites />,
+      path: "favorites",
+    },
+    {
+      id: 3,
       label: t("studentDashboard.editProfile"),
       icon: <FiEdit className="w-5 h-5" />,
       component: <EditProfile profile={profile} />,
       path: "profile",
     },
     {
-      id: 3,
+      id: 4,
       label: t("studentDashboard.changePassword"),
       icon: <TbLockPassword className="w-5 h-5" />,
       component: <ChangePassword />,
