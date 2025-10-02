@@ -48,7 +48,7 @@ export const removeFromFavorites = async (token, courseId) => {
 
 export const getFavoriteSubscriptions = async (token) => {
   try {
-    const res = await fetch(`${API_BASE}/favorite-subscriptions`, {
+    const res = await fetch(`${API_BASE}/favorites`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

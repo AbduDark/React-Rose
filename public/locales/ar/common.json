@@ -547,6 +547,8 @@
       "rejectSuccess": "تم رفض الاشتراك بنجاح",
       "approveError": "فشل في الموافقة على الاشتراك",
       "rejectError": "فشل في رفض الاشتراك",
+      "rejectNotes": "سبب الرفض",
+      "rejectNotesRequired": "يجب إدخال سبب الرفض",
       "viewMode": {
         "all": "الكل",
         "pending": "معلق"
@@ -580,7 +582,8 @@
       "approveSubscription": "الموافقة على الاشتراك",
       "rejectSubscription": "رفض الاشتراك",
       "paymentProof": "إثبات الدفع",
-      "viewPaymentProof": "عرض إثبات الدفع"
+      "viewPaymentProof": "عرض إثبات الدفع",
+      "studentInformation": "معلومات الطالب"
     },
     "createSubscription": {
       "title": "إنشاء اشتراك جديد",

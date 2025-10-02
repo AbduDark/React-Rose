@@ -166,12 +166,16 @@ function CardSubscriptions({ subscription, onApprove, onReject }) {
       const cancelBtn = modal.querySelector('#cancel-btn');
       const confirmBtn = modal.querySelector('#confirm-btn');
 
-      cancelBtn.onclick = () => {
+      cancelBtn.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         document.body.removeChild(modal);
         resolve(null);
       };
 
-      confirmBtn.onclick = () => {
+      confirmBtn.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         const value = textarea.value.trim();
         if (!value) {
           textarea.classList.add('border-red-500');
@@ -179,6 +183,15 @@ function CardSubscriptions({ subscription, onApprove, onReject }) {
         }
         document.body.removeChild(modal);
         resolve(value);
+      };
+
+      modal.onclick = (e) => {
+        if (e.target === modal) {
+          e.preventDefault();
+          e.stopPropagation();
+          document.body.removeChild(modal);
+          resolve(null);
+        }
       };
     });
 

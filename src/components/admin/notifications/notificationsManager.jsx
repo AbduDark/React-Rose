@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { FiPlus, FiBell, FiUsers, FiBarChart2, FiEye } from "react-icons/fi";
+import { FiPlus, FiBell, FiUsers, FiBarChart2, FiEye, FiTrash2 } from "react-icons/fi";
 import { getNotificationsStatistics, getAllNotifications } from "../../../api/notifications";
 import CreateNotification from "./Createnotifications";
 import Pagination from "../../common/Pagination";
@@ -125,6 +125,33 @@ const NotificationsManager = () => {
     fetchData();
     if (showNotificationsList) {
       fetchNotifications();
+    }
+  };
+
+  const handleDeleteNotification = async (notificationId) => {
+    if (!window.confirm(t("notifications.delete") + "?")) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${import.meta.env.VITE_API_BASE}/notifications/${notificationId}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Accept": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete notification");
+      }
+
+      fetchNotifications();
+      fetchData();
+    } catch (err) {
+      console.error("Error deleting notification:", err);
+      setError(t("notifications.errorDeleting"));
     }
   };
 
@@ -339,6 +366,13 @@ const NotificationsManager = () => {
                           </div>
                         </div>
                       </div>
+                      <button
+                        onClick={() => handleDeleteNotification(notification.id)}
+                        className="p-2 text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded-lg transition-colors"
+                        title={t("notifications.delete")}
+                      >
+                        <FiTrash2 className="w-4 h-4" />
+                      </button>
                     </div>
                   </div>
                 ))}
