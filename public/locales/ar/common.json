@@ -106,7 +106,10 @@
     "yes": "نعم",
     "no": "لا",
     "free": "مجاني",
-    "unknown": "غير معروف"
+    "unknown": "غير معروف",
+    "show": "عرض",
+    "hide": "إخفاء",
+    "user": "مستخدم"
   },
   "aboutPage": {
     "title": "من نحن",
@@ -725,6 +728,8 @@
       "failedToFetch": "فشل في جلب البيانات",
       "sendSuccess": "تم إرسال الإشعار بنجاح",
       "sendError": "فشل في إرسال الإشعار",
+      "notificationsList": "قائمة الإشعارات",
+      "read": "مقروءة",
       "statistics": {
         "totalNotifications": "إجمالي الإشعارات",
         "sentToday": "المرسلة اليوم",

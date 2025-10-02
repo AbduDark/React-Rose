@@ -26,8 +26,8 @@ function CardSubscriptions({ subscription, onApprove, onReject }) {
   const { t } = useTranslation();
 
   const [showProof, setShowProof] = useState(false);
-  const [proofUrl, setProofUrl] = useState("");
-  const [directUrl, setDirectUrl] = useState("");
+  // const [proofUrl, setProofUrl] = useState(""); // Removed as proofUrl is now derived directly
+  // const [directUrl, setDirectUrl] = useState(""); // Removed as directUrl is now derived directly
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -85,58 +85,45 @@ function CardSubscriptions({ subscription, onApprove, onReject }) {
     return `$${num.toFixed(2)}`;
   };
 
-  // Build proof URLs (view and direct)
-  const buildProofUrls = () => {
-    let view = "";
-    let direct = "";
-
-    // If API base present, prepare base without /api for direct upload path
-    const apiBase = import.meta.env.VITE_API_BASE || "";
-    const baseNoApi = apiBase ? apiBase.replace(/\/api\/?$/i, "") : "";
-
-    if (subscription?.payment_proof_image) {
-      // If it's likely a full URL use it, otherwise prefix base
-      if (/^https?:\/\//i.test(subscription.payment_proof_image)) {
-        view = subscription.payment_proof_image;
-        direct = subscription.payment_proof_image;
-      } else if (baseNoApi) {
-        view = `${baseNoApi.replace(/\/$/, "")}/${subscription.payment_proof_image.replace(
-          /^\/+/,
-          ""
-        )}`;
-        direct = view;
-      } else {
-        view = subscription.payment_proof_image;
-        direct = subscription.payment_proof_image;
-      }
-    } else if (subscription?.payment_proof) {
-      // backend authenticated endpoint (may require auth token)
-      if (apiBase) {
-        view = `${apiBase.replace(/\/$/, "")}/auth/payment-proofs/${subscription.payment_proof}`;
-      }
-      // direct upload path (public)
-      if (baseNoApi) {
-        direct = `${baseNoApi.replace(
-          /\/$/,
-          ""
-        )}/uploads/payment_proofs/${subscription.payment_proof}`;
-      } else {
-        direct = `${subscription.payment_proof}`;
-      }
+  // Get payment proof URL from API response or build it
+  const getPaymentProofUrl = () => {
+    // First priority: use payment_proof_url from API
+    if (subscription.payment_proof_url) {
+      return subscription.payment_proof_url;
     }
 
-    return { view, direct };
+    // Second priority: use payment_proof_image_url from API
+    if (subscription.payment_proof_image_url) {
+      return subscription.payment_proof_image_url;
+    }
+
+    // Fallback: build URL manually
+    if (subscription.payment_proof) {
+      const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000/api";
+      const baseUrl = API_BASE.replace("/api", "");
+      return `${baseUrl}/uploads/payment_proofs/${subscription.payment_proof}`;
+    }
+
+    return null;
   };
 
+  const proofUrl = getPaymentProofUrl();
+  // Direct URL logic needs to be reconsidered based on how payment_proof_url/payment_proof_image_url are structured.
+  // For now, we'll use proofUrl as direct if no specific direct URL is provided.
+  const directUrl = proofUrl;
+
+
   const handleViewProof = () => {
-    const { view, direct } = buildProofUrls();
-    const chosen = view || direct;
+    // const { view, direct } = buildProofUrls(); // Replaced with getPaymentProofUrl()
+    // const chosen = view || direct; // Replaced with proofUrl
+    const chosen = proofUrl; // Use the derived proofUrl
+
     if (!chosen) {
       alert(t("adminDashboard.cardSubscription.noPaymentProof") || "لا يوجد إثبات دفع متاح");
       return;
     }
-    setProofUrl(chosen);
-    setDirectUrl(direct || chosen);
+    // setProofUrl(chosen); // Removed as proofUrl is now directly accessible
+    // setDirectUrl(direct || chosen); // Removed as directUrl is now directly accessible
     setShowProof(true);
   };
 
@@ -284,7 +271,7 @@ function CardSubscriptions({ subscription, onApprove, onReject }) {
           </div>
 
           {/* Payment Proof */}
-          {(subscription.payment_proof || subscription.payment_proof_image) && (
+          {(subscription.payment_proof || subscription.payment_proof_image || subscription.payment_proof_url || subscription.payment_proof_image_url) && (
             <div className="border-t border-gray-700 pt-4 mb-4">
               <h4 className="text-sm font-medium text-gray-400 mb-3">
                 {t("adminDashboard.cardSubscription.paymentProof")}
@@ -301,16 +288,16 @@ function CardSubscriptions({ subscription, onApprove, onReject }) {
                 </button>
 
                 {/* direct open (public upload path) */}
-                {subscription.payment_proof && (
+                {directUrl && (
                   <button
                     onClick={() => {
-                      const { direct } = buildProofUrls();
-                      const openUrl = direct || `${direct}`;
+                      // const { direct } = buildProofUrls(); // Replaced
+                      // const openUrl = direct || `${direct}`; // Replaced
+                      const openUrl = directUrl; // Use derived directUrl
                       if (openUrl) window.open(openUrl, "_blank", "noopener");
                       else
                         alert(
-                          t("adminDashboard.cardSubscription.noPaymentProof") ||
-                            "لا يوجد إثبات دفع متاح"
+                          t("adminDashboard.cardSubscription.noPaymentProof") || "لا يوجد إثبات دفع متاح"
                         );
                     }}
                     className="text-green-400 hover:text-green-300 text-xs flex items-center gap-1 hover:bg-green-400/10 px-2 py-1 rounded transition-colors"
