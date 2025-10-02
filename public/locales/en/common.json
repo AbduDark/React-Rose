@@ -83,6 +83,7 @@
     "expires": "Expires",
     "description": "Description",
     "viewCourse": "View Course",
+    "favorites": "Favorites",
     "error": {
       "login": "Please log in to view your subscriptions.",
       "fetchFailed": "Failed to fetch subscriptions. Please try again."

@@ -31,7 +31,7 @@ const NotificationsManager = () => {
       setIsLoading(true);
       const statsResponse = await getNotificationsStatistics();
       console.log("Notifications stats API response:", statsResponse);
-      
+
       if (!statsResponse) {
         // Token was invalid and user was redirected
         return;
@@ -41,10 +41,10 @@ const NotificationsManager = () => {
       if (statsResponse.success === false) {
         throw new Error(statsResponse.message?.en || statsResponse.message || "Failed to fetch notifications statistics");
       }
-      
+
       // Handle different response formats
       let statsData = null;
-      
+
       if (statsResponse && statsResponse.success !== false) {
         if (statsResponse.data) {
           statsData = statsResponse.data;
@@ -52,9 +52,9 @@ const NotificationsManager = () => {
           statsData = statsResponse;
         }
       }
-      
+
       console.log("Processed notifications stats:", statsData);
-      
+
       if (statsData && typeof statsData === 'object') {
         // Ensure all required fields exist with default values
         const normalizedStats = {
@@ -66,7 +66,7 @@ const NotificationsManager = () => {
           this_month_notifications: statsData.this_month_notifications || 0,
           read_percentage: statsData.read_percentage || 0
         };
-        
+
         console.log("Normalized notifications stats:", normalizedStats);
         setStatistics(normalizedStats);
         setError("");
@@ -80,7 +80,7 @@ const NotificationsManager = () => {
           ": " +
           err.message
       );
-      
+
       // Set default stats to prevent crashes
       setStatistics({
         total_notifications: 0,
@@ -100,11 +100,11 @@ const NotificationsManager = () => {
     try {
       const response = await getAllNotifications(currentPage);
       console.log("Notifications list response:", response);
-      
+
       if (response?.data) {
         const notificationsList = response.data.data || response.data || [];
         setNotifications(Array.isArray(notificationsList) ? notificationsList : []);
-        
+
         const lastPage = response.data.last_page || response.data.meta?.last_page || response.meta?.last_page || 1;
         setTotalPages(lastPage);
         setError("");
@@ -318,10 +318,10 @@ const NotificationsManager = () => {
                         </div>
                         <div className="flex-1">
                           <h4 className="text-white font-semibold mb-1">
-                            {notification.title}
+                            {notification.title?.ar || notification.title?.en || notification.title}
                           </h4>
                           <p className="text-gray-300 text-sm mb-2">
-                            {notification.message}
+                            {notification.message?.ar || notification.message?.en || notification.message}
                           </p>
                           <div className="flex items-center gap-4 text-xs text-gray-400">
                             <span className="flex items-center gap-1">
@@ -333,7 +333,7 @@ const NotificationsManager = () => {
                             </span>
                             {notification.is_read && (
                               <span className="text-green-400">
-                                {t("adminDashboard.notificationsManager.read") || "مقروءة"}
+                                {t("notifications.markAsRead")}
                               </span>
                             )}
                           </div>

@@ -8,6 +8,7 @@ import {
 } from "../../api/subscriptions";
 import { useAuth } from "../../context/AuthContext";
 import i18next from "i18next";
+import { FiHeart } from "react-icons/fi";
 
 const MySubscriptions = () => {
   const { t } = useTranslation();

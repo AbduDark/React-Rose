@@ -133,19 +133,31 @@ const EditProfile = ({ profile: initialProfile, onUpdate }) => {
                 <p className="text-sm font-medium text-gray-500">
                   {t("userProfile.name")}
                 </p>
-                <p className="text-gray-800">{formData.name || "N/A"}</p>
+                <p className="text-gray-800 mt-1">{initialProfile?.name || formData.name || "N/A"}</p>
               </div>
               <div className="col-span-1">
                 <p className="text-sm font-medium text-gray-500">
                   {t("userProfile.email")}
                 </p>
-                <p className="text-gray-800">{initialProfile.email || "N/A"}</p>
+                <p className="text-gray-800 mt-1">{initialProfile?.email || "N/A"}</p>
               </div>
               <div className="col-span-1">
                 <p className="text-sm font-medium text-gray-500">
                   {t("userProfile.phone")}
                 </p>
-                <p className="text-gray-800">{formData.phone || "N/A"}</p>
+                <p className="text-gray-800 mt-1">{initialProfile?.phone || formData.phone || "N/A"}</p>
+              </div>
+              <div className="col-span-1">
+                <p className="text-sm font-medium text-gray-500">
+                  {t("userProfile.gender")}
+                </p>
+                <p className="text-gray-800 mt-1">
+                  {initialProfile?.gender === "male" 
+                    ? t("userProfile.male") 
+                    : initialProfile?.gender === "female" 
+                    ? t("userProfile.female") 
+                    : "N/A"}
+                </p>
               </div>
             </div>
           </div>

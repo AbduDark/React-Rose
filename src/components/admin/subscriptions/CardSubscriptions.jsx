@@ -130,6 +130,64 @@ function CardSubscriptions({ subscription, onApprove, onReject }) {
   const isImage = (url) => /\.(jpe?g|png|gif|bmp|webp|svg)$/i.test(url);
   const isPdf = (url) => /\.pdf$/i.test(url);
 
+  const handleReject = async () => {
+    // Create a custom modal for rejection reason
+    const reason = await new Promise((resolve) => {
+      const modal = document.createElement('div');
+      modal.className = 'fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50';
+      modal.innerHTML = `
+        <div class="bg-gray-800 rounded-xl p-6 w-full max-w-md shadow-xl border border-gray-700">
+          <h3 class="text-xl font-semibold text-white mb-4">${t("adminDashboard.subscriptionsManager.rejectNotes")}</h3>
+          <textarea
+            id="rejection-reason"
+            class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-red-500 focus:border-red-500 min-h-[120px]"
+            placeholder="${t("adminDashboard.subscriptionsManager.rejectNotesRequired")}"
+          ></textarea>
+          <div class="flex justify-end gap-3 mt-4">
+            <button
+              id="cancel-btn"
+              class="px-6 py-2 border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-700"
+            >
+              ${t("common.cancel")}
+            </button>
+            <button
+              id="confirm-btn"
+              class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+            >
+              ${t("adminDashboard.cardSubscription.rejectSubscription")}
+            </button>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(modal);
+
+      const textarea = modal.querySelector('#rejection-reason');
+      const cancelBtn = modal.querySelector('#cancel-btn');
+      const confirmBtn = modal.querySelector('#confirm-btn');
+
+      cancelBtn.onclick = () => {
+        document.body.removeChild(modal);
+        resolve(null);
+      };
+
+      confirmBtn.onclick = () => {
+        const value = textarea.value.trim();
+        if (!value) {
+          textarea.classList.add('border-red-500');
+          return;
+        }
+        document.body.removeChild(modal);
+        resolve(value);
+      };
+    });
+
+    if (!reason) return;
+
+    await onReject(subscription.id, reason);
+  };
+
+
   return (
     <>
       <div className="bg-gray-800 rounded-xl shadow-lg border border-gray-700 hover:shadow-xl transition-all duration-300 overflow-hidden hover:border-gray-600">
@@ -177,7 +235,7 @@ function CardSubscriptions({ subscription, onApprove, onReject }) {
                     <FiCheckCircle className="w-4 h-4" />
                   </button>
                   <button
-                    onClick={onReject}
+                    onClick={handleReject}
                     className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
                     title={t("adminDashboard.cardSubscription.rejectSubscription")}
                     aria-label={t("adminDashboard.cardSubscription.rejectSubscription")}
