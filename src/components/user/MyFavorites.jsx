@@ -10,12 +10,13 @@ import { FiHeart, FiBook } from "react-icons/fi";
 import ConfirmDialog from "../common/ConfirmDialog";
 
 const MyFavorites = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { token } = useAuth();
   const navigate = useNavigate();
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const [actionLoading, setActionLoading] = useState(null);
   const [removeConfirm, setRemoveConfirm] = useState({ isOpen: false, courseId: null });
 
@@ -28,8 +29,9 @@ const MyFavorites = () => {
 
     const fetchFavorites = async () => {
       try {
-        const data = await getFavoriteSubscriptions(token);
-        const subscriptions = data?.data?.subscriptions || data?.subscriptions || [];
+        const currentLang = i18n.language || 'ar';
+        const data = await getFavoriteSubscriptions(token, currentLang);
+        const subscriptions = data?.data?.subscriptions || data?.data?.favorites || data?.subscriptions || data?.favorites || [];
         setFavorites(subscriptions);
       } catch (err) {
         setError(err.message || t("mySubscriptions.error.fetchFailed"));
@@ -39,7 +41,7 @@ const MyFavorites = () => {
     };
 
     fetchFavorites();
-  }, [token, t]);
+  }, [token, t, i18n.language]);
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -52,14 +54,25 @@ const MyFavorites = () => {
   const handleRemoveFromFavorites = async () => {
     const courseId = removeConfirm.courseId;
     setActionLoading(courseId);
+    setError(null);
+    setSuccess(null);
     try {
-      await removeFromFavorites(token, courseId);
+      const currentLang = i18n.language || 'ar';
+      const response = await removeFromFavorites(token, courseId, currentLang);
       setFavorites(prev => prev.filter(fav => fav.course_id !== courseId));
       setRemoveConfirm({ isOpen: false, courseId: null });
+      
+      const successMsg = typeof response.message === 'object' 
+        ? response.message[currentLang] || response.message.en || response.message.ar 
+        : response.message;
+      setSuccess(successMsg || t("favorites.removedSuccess"));
+      
+      setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
       setError(err.message || t("common.error"));
-      const data = await getFavoriteSubscriptions(token);
-      const subscriptions = data?.data?.subscriptions || data?.subscriptions || [];
+      const currentLang = i18n.language || 'ar';
+      const data = await getFavoriteSubscriptions(token, currentLang);
+      const subscriptions = data?.data?.subscriptions || data?.data?.favorites || data?.subscriptions || data?.favorites || [];
       setFavorites(subscriptions);
     } finally {
       setActionLoading(null);
@@ -76,6 +89,12 @@ const MyFavorites = () => {
           </h2>
         </div>
 
+        {success && (
+          <div className="mb-8 p-4 bg-green-100 text-green-800 rounded-lg text-center">
+            {success}
+          </div>
+        )}
+        
         {error && (
           <div className="mb-8 p-4 bg-red-100 text-red-800 rounded-lg text-center">
             {error}

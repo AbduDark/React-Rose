@@ -24,8 +24,9 @@ function CardCourse() {
     const fetchFavorites = async () => {
       if (!token) return;
       try {
-        const data = await getFavoriteSubscriptions(token);
-        const subscriptions = data?.data?.subscriptions || data?.subscriptions || [];
+        const currentLang = i18next.language || 'ar';
+        const data = await getFavoriteSubscriptions(token, currentLang);
+        const subscriptions = data?.data?.subscriptions || data?.data?.favorites || data?.subscriptions || data?.favorites || [];
         const favoriteIds = subscriptions.map(sub => sub.course_id);
         setFavoriteCourseIds(favoriteIds);
       } catch (err) {
@@ -48,12 +49,13 @@ function CardCourse() {
 
     setFavoriteLoading(prev => ({ ...prev, [courseId]: true }));
     try {
+      const currentLang = i18next.language || 'ar';
       const isFavorite = favoriteCourseIds.includes(courseId);
       if (isFavorite) {
-        await removeFromFavorites(token, courseId);
+        await removeFromFavorites(token, courseId, currentLang);
         setFavoriteCourseIds(prev => prev.filter(id => id !== courseId));
       } else {
-        await addToFavorites(token, courseId);
+        await addToFavorites(token, courseId, currentLang);
         setFavoriteCourseIds(prev => [...prev, courseId]);
       }
     } catch (err) {

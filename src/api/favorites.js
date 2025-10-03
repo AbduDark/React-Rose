@@ -1,6 +1,13 @@
 const API_BASE = import.meta.env.VITE_API_BASE;
 
-export const addToFavorites = async (token, courseId) => {
+const getErrorMessage = (errorData, currentLang = 'ar') => {
+  if (typeof errorData.message === 'object') {
+    return errorData.message[currentLang] || errorData.message.en || errorData.message.ar || 'An error occurred';
+  }
+  return errorData.message || 'An error occurred';
+};
+
+export const addToFavorites = async (token, courseId, lang = 'ar') => {
   try {
     const res = await fetch(`${API_BASE}/favorite/${courseId}`, {
       method: "POST",
@@ -8,22 +15,25 @@ export const addToFavorites = async (token, courseId) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
+        "Accept-Language": lang,
       },
     });
 
+    const data = await res.json();
+    
     if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.message || `HTTP error! status: ${res.status}`);
+      const message = getErrorMessage(data, lang);
+      throw new Error(message);
     }
 
-    return await res.json();
+    return data;
   } catch (error) {
     console.error("Error adding to favorites:", error);
     throw error;
   }
 };
 
-export const removeFromFavorites = async (token, courseId) => {
+export const removeFromFavorites = async (token, courseId, lang = 'ar') => {
   try {
     const res = await fetch(`${API_BASE}/favorite/${courseId}`, {
       method: "DELETE",
@@ -31,22 +41,25 @@ export const removeFromFavorites = async (token, courseId) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
+        "Accept-Language": lang,
       },
     });
 
+    const data = await res.json();
+    
     if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.message || `HTTP error! status: ${res.status}`);
+      const message = getErrorMessage(data, lang);
+      throw new Error(message);
     }
 
-    return await res.json();
+    return data;
   } catch (error) {
     console.error("Error removing from favorites:", error);
     throw error;
   }
 };
 
-export const getFavoriteSubscriptions = async (token) => {
+export const getFavoriteSubscriptions = async (token, lang = 'ar') => {
   try {
     const res = await fetch(`${API_BASE}/favorites`, {
       method: "GET",
@@ -54,15 +67,18 @@ export const getFavoriteSubscriptions = async (token) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
+        "Accept-Language": lang,
       },
     });
 
+    const data = await res.json();
+    
     if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.message || `HTTP error! status: ${res.status}`);
+      const message = getErrorMessage(data, lang);
+      throw new Error(message);
     }
 
-    return await res.json();
+    return data;
   } catch (error) {
     console.error("Error fetching favorite subscriptions:", error);
     throw error;
