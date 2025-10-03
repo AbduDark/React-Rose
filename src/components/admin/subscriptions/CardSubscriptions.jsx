@@ -131,7 +131,7 @@ function CardSubscriptions({ subscription, onApprove, onReject }) {
   const isImage = (url) => /\.(jpe?g|png|gif|bmp|webp|svg)$/i.test(url);
   const isPdf = (url) => /\.pdf$/i.test(url);
 
-  const handleReject = async (reason) => {
+  const handleReject = async () => {
     // Create a custom modal for rejection reason
     const reason = await new Promise((resolve) => {
       const modal = document.createElement('div');
