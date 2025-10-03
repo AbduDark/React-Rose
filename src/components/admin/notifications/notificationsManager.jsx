@@ -18,6 +18,8 @@ const NotificationsManager = () => {
   const [showNotificationsList, setShowNotificationsList] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false, notificationId: null });
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [filterUnread, setFilterUnread] = useState(false);
+  const [markAllLoading, setMarkAllLoading] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -155,6 +157,32 @@ const NotificationsManager = () => {
       setError(t("notifications.errorDeleting"));
     } finally {
       setDeleteLoading(false);
+    }
+  };
+
+  const handleMarkAllAsRead = async () => {
+    setMarkAllLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${import.meta.env.VITE_API_BASE}/notifications/mark-all-read`, {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Accept": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to mark all as read");
+      }
+
+      fetchNotifications();
+      fetchData();
+    } catch (err) {
+      console.error("Error marking all as read:", err);
+      setError(t("notifications.errorMarkingAsRead") || "فشل في تحديد الإشعارات كمقروءة");
+    } finally {
+      setMarkAllLoading(false);
     }
   };
 
@@ -302,31 +330,68 @@ const NotificationsManager = () => {
 
       {/* Notifications List Section */}
       <div className="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
           <h3 className="text-xl font-bold text-white">
             {t("adminDashboard.notificationsManager.notificationsList") || "قائمة الإشعارات"}
           </h3>
-          <button
-            onClick={() => setShowNotificationsList(!showNotificationsList)}
-            className="flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600"
-          >
-            <FiEye className="w-4 h-4" />
-            {showNotificationsList ? t("common.hide") || "إخفاء" : t("common.show") || "عرض"}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowNotificationsList(!showNotificationsList)}
+              className="flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600"
+            >
+              <FiEye className="w-4 h-4" />
+              {showNotificationsList ? t("common.hide") || "إخفاء" : t("common.show") || "عرض"}
+            </button>
+          </div>
         </div>
 
         {showNotificationsList && (
           <>
-            {notifications.length === 0 ? (
+            <div className="flex justify-between items-center mb-4 flex-wrap gap-4">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setFilterUnread(!filterUnread)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                    filterUnread 
+                      ? 'bg-blue-600 text-white hover:bg-blue-700' 
+                      : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  }`}
+                >
+                  <FiBell className="w-4 h-4" />
+                  {filterUnread ? t("notifications.showAll") || "عرض الكل" : t("notifications.showUnread") || "عرض غير المقروءة"}
+                </button>
+              </div>
+              <button
+                onClick={handleMarkAllAsRead}
+                disabled={markAllLoading}
+                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {markAllLoading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    {t("common.loading") || "جاري التحميل..."}
+                  </>
+                ) : (
+                  <>
+                    <FiBell className="w-4 h-4" />
+                    {t("notifications.markAllAsRead") || "تحديد الكل كمقروء"}
+                  </>
+                )}
+              </button>
+            </div>
+            {notifications.filter(n => !filterUnread || !n.is_read).length === 0 ? (
               <div className="text-center py-12">
                 <FiBell className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-gray-300 mb-2">
-                  {t("adminDashboard.notificationsManager.noNotifications") || "لا توجد إشعارات"}
+                  {filterUnread 
+                    ? (t("notifications.noUnreadNotifications") || "لا توجد إشعارات غير مقروءة") 
+                    : (t("adminDashboard.notificationsManager.noNotifications") || "لا توجد إشعارات")
+                  }
                 </h3>
               </div>
             ) : (
               <div className="space-y-4">
-                {notifications.map((notification) => (
+                {notifications.filter(n => !filterUnread || !n.is_read).map((notification) => (
                   <div
                     key={notification.id}
                     className="bg-gray-700/50 rounded-lg p-4 border border-gray-600 hover:bg-gray-700 transition-colors"
