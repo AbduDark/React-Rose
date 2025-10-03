@@ -103,18 +103,22 @@ const AdminPage = () => {
         const pendingCount = await getPendingSubscriptionsCount(token);
         setPendingSubscriptionsCount(pendingCount);
 
-        // جلب عدد الإشعارات غير المقروءة
+        // جلب عدد الإشعارات غير المقروءة باستخدام الـ endpoint الصحيح
         try {
-          const notificationStats = await getNotificationsStatistics();
-          if (notificationStats?.data?.unread_notifications || notificationStats?.unread_notifications) {
-            setUnreadNotificationsCount(
-              notificationStats?.data?.unread_notifications || 
-              notificationStats?.unread_notifications || 
-              0
-            );
+          const response = await fetch(`${import.meta.env.VITE_API_BASE}/notifications/unread-count`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`,
+            },
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            setUnreadNotificationsCount(data?.data?.count || data?.count || 0);
           }
         } catch (error) {
-          console.error("Error fetching notification stats:", error);
+          console.error("Error fetching unread notifications count:", error);
         }
       }
     };

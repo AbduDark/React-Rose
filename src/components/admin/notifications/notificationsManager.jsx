@@ -29,7 +29,7 @@ const NotificationsManager = () => {
     if (showNotificationsList) {
       fetchNotifications();
     }
-  }, [currentPage, showNotificationsList]);
+  }, [currentPage, showNotificationsList, filterUnread]);
 
   const fetchData = async () => {
     try {
@@ -103,14 +103,33 @@ const NotificationsManager = () => {
 
   const fetchNotifications = async () => {
     try {
-      const response = await getAllNotifications(currentPage);
-      console.log("Notifications list response:", response);
+      const token = localStorage.getItem("token");
+      const params = new URLSearchParams({
+        per_page: '15',
+        page: currentPage.toString(),
+        unread_only: filterUnread ? 'true' : 'false'
+      });
 
-      if (response?.data) {
-        const notificationsList = response.data.data || response.data || [];
+      const response = await fetch(`${import.meta.env.VITE_API_BASE}/notifications?${params}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch notifications");
+      }
+
+      const data = await response.json();
+      console.log("Notifications list response:", data);
+
+      if (data?.data) {
+        const notificationsList = data.data.data || data.data || [];
         setNotifications(Array.isArray(notificationsList) ? notificationsList : []);
 
-        const lastPage = response.data.last_page || response.data.meta?.last_page || response.meta?.last_page || 1;
+        const lastPage = data.data.last_page || data.meta?.last_page || 1;
         setTotalPages(lastPage);
         setError("");
       } else {
@@ -175,6 +194,7 @@ const NotificationsManager = () => {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
           "Accept": "application/json",
         },
       });
@@ -183,12 +203,10 @@ const NotificationsManager = () => {
         throw new Error("Failed to mark all as read");
       }
 
-      // تحديث جميع الإشعارات في الحالة المحلية
-      setNotifications(notifications.map(n => ({ ...n, is_read: true })));
-      
-      // إعادة جلب البيانات لتحديث الإحصائيات
+      // إعادة جلب البيانات
       await fetchData();
       if (showNotificationsList) {
+        setCurrentPage(1); // العودة للصفحة الأولى
         await fetchNotifications();
       }
       
@@ -395,27 +413,22 @@ const NotificationsManager = () => {
                 )}
               </button>
             </div>
-            {(() => {
-              const filteredNotifications = filterUnread 
-                ? notifications.filter(n => !n.is_read) 
-                : notifications;
-              
-              return filteredNotifications.length === 0 ? (
-                <div className="text-center py-12">
-                  <FiBell className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-300 mb-2">
-                    {filterUnread 
-                      ? (t("notifications.noUnreadNotifications") || "لا توجد إشعارات غير مقروءة") 
-                      : (t("adminDashboard.notificationsManager.noNotifications") || "لا توجد إشعارات")
-                    }
-                  </h3>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {filteredNotifications.map((notification) => (
-                  <div
-                    key={notification.id}
-                    className="bg-gray-700/50 rounded-lg p-4 border border-gray-600 hover:bg-gray-700 transition-colors"
+            {notifications.length === 0 ? (
+              <div className="text-center py-12">
+                <FiBell className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-300 mb-2">
+                  {filterUnread 
+                    ? (t("notifications.noUnreadNotifications") || "لا توجد إشعارات غير مقروءة") 
+                    : (t("adminDashboard.notificationsManager.noNotifications") || "لا توجد إشعارات")
+                  }
+                </h3>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {notifications.map((notification) => (
+                <div
+                  key={notification.id}
+                  className="bg-gray-700/50 rounded-lg p-4 border border-gray-600 hover:bg-gray-700 transition-colors"
                   >
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-start gap-3 flex-1">
@@ -465,9 +478,8 @@ const NotificationsManager = () => {
                     </div>
                   </div>
                 ))}
-                </div>
-              );
-            })()}
+              </div>
+            )}
 
             {totalPages > 1 && (
               <div className="mt-6">
