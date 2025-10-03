@@ -2,6 +2,19 @@
 
 Rose Academy is a learning management system (LMS) built for Egyptian high school students. The platform provides video-based courses with a subscription model, featuring a React frontend and Laravel backend API. Students can browse courses, subscribe with payment proof, watch protected video lessons, and track their learning progress. Administrators manage courses, lessons, subscriptions, and user notifications through a comprehensive dashboard.
 
+# Recent Changes
+
+**Date**: October 3, 2025
+
+**Replit Environment Setup Completed**:
+- Installed all Node.js dependencies (429 packages)
+- Configured Vite dev server for Replit environment (already set to 0.0.0.0:5000 with allowedHosts: true)
+- Verified frontend runs successfully with i18next internationalization working
+- Configured deployment for Replit Autoscale (builds with `npm run build`, serves with Vite preview)
+- Note: Backend API at port 8000 is not included in this repository - expected to be deployed separately
+
+**Current Status**: Frontend is fully functional and ready for development. The app displays correctly in both Arabic (default) and English with working navigation, i18n translations, and proper RTL/LTR layout support.
+
 # User Preferences
 
 Preferred communication style: Simple, everyday language.
