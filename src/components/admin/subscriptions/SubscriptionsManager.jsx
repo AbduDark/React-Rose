@@ -120,27 +120,8 @@ const SubscriptionsManager = () => {
 
   // Handle subscription rejection
   const handleRejectSubscription = async (subscriptionId) => {
-    const adminNotes = prompt(
-      t("adminDashboard.subscriptionsManager.rejectNotes") || 
-      "سبب الرفض (مطلوب):"
-    );
-    
-    if (!adminNotes) {
-      alert(t("adminDashboard.subscriptionsManager.rejectNotesRequired") || "يجب إدخال سبب الرفض");
-      return;
-    }
-    
-    try {
-      await rejectSubscription(localStorage.getItem("token"), subscriptionId, adminNotes);
-      // Refresh the list
-      fetchSubscriptions();
-    } catch (err) {
-      setError(
-        t("adminDashboard.subscriptionsManager.rejectError") +
-          ": " +
-          err.message
-      );
-    }
+    // This will be handled in CardSubscriptions component
+    // which already has the custom modal implementation
   };
 
   // Handle subscription creation
@@ -285,7 +266,7 @@ const SubscriptionsManager = () => {
               key={subscription.id}
               subscription={subscription}
               onApprove={() => handleApproveSubscription(subscription.id)}
-              onReject={() => handleRejectSubscription(subscription.id)}
+              onReject={fetchSubscriptions}
             />
           ))}
         </div>

@@ -14,13 +14,14 @@ import {
   FiEye,
   FiDownload,
 } from "react-icons/fi";
+import { rejectSubscription } from "../../../api/subscriptions";
 
 /**
  * CardSubscriptions
  * Props:
  *  - subscription: object (subscription data)
  *  - onApprove: fn
- *  - onReject: fn
+ *  - onReject: fn (optional - will be called after successful rejection)
  */
 function CardSubscriptions({ subscription, onApprove, onReject }) {
   const { t } = useTranslation();
@@ -134,25 +135,25 @@ function CardSubscriptions({ subscription, onApprove, onReject }) {
     // Create a custom modal for rejection reason
     const reason = await new Promise((resolve) => {
       const modal = document.createElement('div');
-      modal.className = 'fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50';
+      modal.className = 'fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-[9999]';
       modal.innerHTML = `
         <div class="bg-gray-800 rounded-xl p-6 w-full max-w-md shadow-xl border border-gray-700">
           <h3 class="text-xl font-semibold text-white mb-4">${t("adminDashboard.subscriptionsManager.rejectNotes")}</h3>
           <textarea
             id="rejection-reason"
-            class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-red-500 focus:border-red-500 min-h-[120px]"
+            class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-red-500 focus:border-red-500 min-h-[120px] resize-none"
             placeholder="${t("adminDashboard.subscriptionsManager.rejectNotesRequired")}"
           ></textarea>
           <div class="flex justify-end gap-3 mt-4">
             <button
               id="cancel-btn"
-              class="px-6 py-2 border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-700"
+              class="px-6 py-2 border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors"
             >
               ${t("common.cancel")}
             </button>
             <button
               id="confirm-btn"
-              class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+              class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
             >
               ${t("adminDashboard.cardSubscription.rejectSubscription")}
             </button>
@@ -197,7 +198,19 @@ function CardSubscriptions({ subscription, onApprove, onReject }) {
 
     if (!reason) return;
 
-    await onReject(subscription.id, reason);
+    try {
+      await rejectSubscription(localStorage.getItem("token"), subscription.id, reason);
+      
+      // Refresh the page or call parent's onReject callback if provided
+      if (onReject) {
+        await onReject();
+      } else {
+        window.location.reload();
+      }
+    } catch (err) {
+      console.error("Error rejecting subscription:", err);
+      // You can add error handling here if needed
+    }.id, reason);
   };
 
 
