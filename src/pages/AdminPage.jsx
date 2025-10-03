@@ -23,6 +23,8 @@ import SubscriptionsManager from "../components/admin/subscriptions/Subscription
 import i18next from "i18next";
 import LanguageSwitcher from "../components/common/LanguageSwitcher";
 import LessonsManager from "../components/admin/lessons/LessonsManager";
+import { getPendingSubscriptionsCount } from "../api/subscriptions";
+import { getNotificationsStatistics } from "../api/notifications";
 
 const AdminPage = () => {
   const { t } = useTranslation();
@@ -31,6 +33,8 @@ const AdminPage = () => {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [avatarMenuOpen, setAvatarMenuOpen] = useState(false);
+  const [pendingSubscriptionsCount, setPendingSubscriptionsCount] = useState(0);
+  const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(0);
   const { logout } = useAuth();
   const navigate = useNavigate();
   const { tab } = useParams();
@@ -90,6 +94,38 @@ const AdminPage = () => {
     const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        // جلب عدد الاشتراكات المعلقة
+        const pendingCount = await getPendingSubscriptionsCount(token);
+        setPendingSubscriptionsCount(pendingCount);
+
+        // جلب عدد الإشعارات غير المقروءة
+        try {
+          const notificationStats = await getNotificationsStatistics();
+          if (notificationStats?.data?.unread_notifications || notificationStats?.unread_notifications) {
+            setUnreadNotificationsCount(
+              notificationStats?.data?.unread_notifications || 
+              notificationStats?.unread_notifications || 
+              0
+            );
+          }
+        } catch (error) {
+          console.error("Error fetching notification stats:", error);
+        }
+      }
+    };
+
+    fetchCounts();
+    
+    // تحديث العدادات كل 30 ثانية
+    const interval = setInterval(fetchCounts, 30000);
+    
+    return () => clearInterval(interval);
+  }, [activeTab]);
 
   const handleLogout = async () => {
     try {
@@ -215,7 +251,7 @@ const AdminPage = () => {
                 navigate(`/admin/${id}`);
                 setMobileSidebarOpen(false);
               }}
-              className={`w-full flex items-center p-3 rounded-lg transition-colors ${
+              className={`w-full flex items-center p-3 rounded-lg transition-colors relative ${
                 activeTab === id
                   ? "bg-gradient-to-r from-secondary to-primary text-white shadow-lg"
                   : "text-gray-300 hover:bg-gray-700"
@@ -231,6 +267,32 @@ const AdminPage = () => {
                 }`}
               />
               {!sidebarCollapsed && label}
+              
+              {/* عداد الاشتراكات المعلقة */}
+              {id === "subscriptions" && pendingSubscriptionsCount > 0 && (
+                <span className={`absolute bg-red-500 text-white text-xs rounded-full h-5 min-w-[20px] px-1.5 flex items-center justify-center font-bold ${
+                  sidebarCollapsed 
+                    ? "top-1 right-1" 
+                    : i18next.language === "ar" 
+                    ? "left-2 top-1/2 -translate-y-1/2" 
+                    : "right-2 top-1/2 -translate-y-1/2"
+                }`}>
+                  {pendingSubscriptionsCount > 99 ? "99+" : pendingSubscriptionsCount}
+                </span>
+              )}
+              
+              {/* عداد الإشعارات غير المقروءة */}
+              {id === "notifications" && unreadNotificationsCount > 0 && (
+                <span className={`absolute bg-red-500 text-white text-xs rounded-full h-5 min-w-[20px] px-1.5 flex items-center justify-center font-bold ${
+                  sidebarCollapsed 
+                    ? "top-1 right-1" 
+                    : i18next.language === "ar" 
+                    ? "left-2 top-1/2 -translate-y-1/2" 
+                    : "right-2 top-1/2 -translate-y-1/2"
+                }`}>
+                  {unreadNotificationsCount > 99 ? "99+" : unreadNotificationsCount}
+                </span>
+              )}
             </button>
           ))}
         </nav>

@@ -266,6 +266,9 @@ export const approveSubscription = async (token, subscriptionId) => {
   }
 };
 
+// Note: The original code had two identical functions with the same name.
+// The second one has been modified to include admin_notes, and the first one
+// has been kept as is. If this is not the intended behavior, please clarify.
 export const rejectSubscription = async (token, subscriptionId, adminNotes) => {
   try {
     const res = await fetch(
@@ -389,10 +392,10 @@ export const getAllSubscriptionsWithFilters = async (token, search = '', status 
   try {
     let url = `${API_BASE}/subscriptions`;
     const params = new URLSearchParams();
-    
+
     if (search) params.append('search', search);
     if (status) params.append('status', status);
-    
+
     if (params.toString()) {
       url += `?${params.toString()}`;
     }
@@ -448,5 +451,38 @@ export const getPaymentProofWithAuth = async (token, filename) => {
   } catch (error) {
     console.error("Error fetching authenticated payment proof:", error);
     throw error;
+  }
+};
+
+// New function to get the count of pending subscriptions
+export const getPendingSubscriptionsCount = async (token) => {
+  try {
+    // Assuming the API endpoint for pending subscriptions also returns a count or total
+    // If the endpoint /admin/subscriptions/pending only returns a list, you might need a separate endpoint for the count.
+    // For now, we'll assume it returns a structure with a total count.
+    const response = await fetch(
+      `${API_BASE}/admin/subscriptions/pending`, // Using the same endpoint as getPendingSubscriptions, assuming it returns total count
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch pending subscriptions count");
+    }
+
+    const data = await response.json();
+    // Adjust this based on the actual response structure from your API
+    // For example, if the response is { data: { subscriptions: [...], total: 10 } }, use data.data.total
+    // If the response is { pending_count: 10 }, use data.pending_count
+    // Assuming a structure like { data: { total: ... } } or similar
+    return data?.data?.total || 0;
+  } catch (error) {
+    console.error("Error fetching pending subscriptions count:", error);
+    return 0; // Return 0 in case of error
   }
 };

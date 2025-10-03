@@ -131,7 +131,7 @@ function CardSubscriptions({ subscription, onApprove, onReject }) {
   const isImage = (url) => /\.(jpe?g|png|gif|bmp|webp|svg)$/i.test(url);
   const isPdf = (url) => /\.pdf$/i.test(url);
 
-  const handleReject = async () => {
+  const handleReject = async (reason) => {
     // Create a custom modal for rejection reason
     const reason = await new Promise((resolve) => {
       const modal = document.createElement('div');
@@ -200,17 +200,11 @@ function CardSubscriptions({ subscription, onApprove, onReject }) {
 
     try {
       await rejectSubscription(localStorage.getItem("token"), subscription.id, reason);
-      
-      // Refresh the page or call parent's onReject callback if provided
-      if (onReject) {
-        await onReject();
-      } else {
-        window.location.reload();
-      }
+      onReject(); // Refresh the list
     } catch (err) {
       console.error("Error rejecting subscription:", err);
       // You can add error handling here if needed
-    }.id, reason);
+    }
   };
 
 
