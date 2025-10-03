@@ -149,8 +149,15 @@ const NotificationsManager = () => {
         throw new Error("Failed to delete notification");
       }
 
-      fetchNotifications();
-      fetchData();
+      // إعادة جلب البيانات
+      await fetchData();
+      if (showNotificationsList) {
+        await fetchNotifications();
+      }
+      
+      // إرسال حدث لتحديث العداد في AdminPage
+      window.dispatchEvent(new CustomEvent('notificationsUpdated'));
+      
       setDeleteConfirm({ isOpen: false, notificationId: null });
     } catch (err) {
       console.error("Error deleting notification:", err);
@@ -176,8 +183,17 @@ const NotificationsManager = () => {
         throw new Error("Failed to mark all as read");
       }
 
-      fetchNotifications();
-      fetchData();
+      // تحديث جميع الإشعارات في الحالة المحلية
+      setNotifications(notifications.map(n => ({ ...n, is_read: true })));
+      
+      // إعادة جلب البيانات لتحديث الإحصائيات
+      await fetchData();
+      if (showNotificationsList) {
+        await fetchNotifications();
+      }
+      
+      // إرسال حدث لتحديث العداد في AdminPage
+      window.dispatchEvent(new CustomEvent('notificationsUpdated'));
     } catch (err) {
       console.error("Error marking all as read:", err);
       setError(t("notifications.errorMarkingAsRead") || "فشل في تحديد الإشعارات كمقروءة");
@@ -379,19 +395,24 @@ const NotificationsManager = () => {
                 )}
               </button>
             </div>
-            {notifications.filter(n => !filterUnread || !n.is_read).length === 0 ? (
-              <div className="text-center py-12">
-                <FiBell className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-300 mb-2">
-                  {filterUnread 
-                    ? (t("notifications.noUnreadNotifications") || "لا توجد إشعارات غير مقروءة") 
-                    : (t("adminDashboard.notificationsManager.noNotifications") || "لا توجد إشعارات")
-                  }
-                </h3>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {notifications.filter(n => !filterUnread || !n.is_read).map((notification) => (
+            {(() => {
+              const filteredNotifications = filterUnread 
+                ? notifications.filter(n => !n.is_read) 
+                : notifications;
+              
+              return filteredNotifications.length === 0 ? (
+                <div className="text-center py-12">
+                  <FiBell className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-300 mb-2">
+                    {filterUnread 
+                      ? (t("notifications.noUnreadNotifications") || "لا توجد إشعارات غير مقروءة") 
+                      : (t("adminDashboard.notificationsManager.noNotifications") || "لا توجد إشعارات")
+                    }
+                  </h3>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {filteredNotifications.map((notification) => (
                   <div
                     key={notification.id}
                     className="bg-gray-700/50 rounded-lg p-4 border border-gray-600 hover:bg-gray-700 transition-colors"
@@ -444,8 +465,9 @@ const NotificationsManager = () => {
                     </div>
                   </div>
                 ))}
-              </div>
-            )}
+                </div>
+              );
+            })()}
 
             {totalPages > 1 && (
               <div className="mt-6">

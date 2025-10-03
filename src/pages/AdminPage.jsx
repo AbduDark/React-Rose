@@ -124,7 +124,17 @@ const AdminPage = () => {
     // تحديث العدادات كل 30 ثانية
     const interval = setInterval(fetchCounts, 30000);
     
-    return () => clearInterval(interval);
+    // الاستماع للحدث المخصص لتحديث العدادات فوراً
+    const handleNotificationsUpdate = () => {
+      fetchCounts();
+    };
+    
+    window.addEventListener('notificationsUpdated', handleNotificationsUpdate);
+    
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('notificationsUpdated', handleNotificationsUpdate);
+    };
   }, [activeTab]);
 
   const handleLogout = async () => {
