@@ -11,12 +11,13 @@ import i18next from "i18next";
 import { FiHeart } from "react-icons/fi";
 
 const MySubscriptions = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { token } = useAuth();
   const navigate = useNavigate();
   const [subscriptions, setSubscriptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const [actionLoading, setActionLoading] = useState(null);
   const [showRenewForm, setShowRenewForm] = useState(null);
   const [renewData, setRenewData] = useState({
@@ -24,6 +25,7 @@ const MySubscriptions = () => {
     parent_phone: "",
     payment_proof: null,
   });
+  
   useEffect(() => {
     if (!token) {
       setError(t("mySubscriptions.error.login"));
@@ -44,7 +46,7 @@ const MySubscriptions = () => {
     };
 
     fetchSubscriptions();
-  }, [token, navigate]);
+  }, [token, navigate, t]);
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -60,9 +62,18 @@ const MySubscriptions = () => {
     }
 
     setActionLoading(subscriptionId);
+    setError(null);
+    setSuccess(null);
     try {
-      await cancelSubscription(token, subscriptionId);
-      // Refresh subscriptions
+      const response = await cancelSubscription(token, subscriptionId);
+      const currentLang = i18n.language || 'ar';
+      const successMsg = typeof response.message === 'object' 
+        ? response.message[currentLang] || response.message.en || response.message.ar 
+        : response.message;
+      setSuccess(successMsg || t("mySubscriptions.cancelSuccess"));
+      
+      setTimeout(() => setSuccess(null), 3000);
+      
       const data = await getMySubscriptions(token);
       setSubscriptions(data?.data?.subscriptions || []);
     } catch (err) {
@@ -73,20 +84,34 @@ const MySubscriptions = () => {
   };
 
   const handleRenewSubscription = async (subscriptionId) => {
-    setActionLoading(subscriptionId);
-    try {
-      const renewalPayload = {
-        subscription_id: subscriptionId,
-        vodafone_number: renewData.vodafone_number,
-        amount: parseFloat(
-          subscriptions.find((s) => s.id === subscriptionId)?.course?.price || 0
-        ),
-        parent_phone: renewData.parent_phone,
-      };
+    if (!renewData.vodafone_number || !renewData.parent_phone || !renewData.payment_proof) {
+      setError(t("enrollCourse.fillAllFields") || "الرجاء ملء جميع الحقول");
+      return;
+    }
 
-      await renewSubscription(token, renewalPayload);
+    setActionLoading(subscriptionId);
+    setError(null);
+    setSuccess(null);
+    try {
+      const formData = new FormData();
+      formData.append('subscription_id', subscriptionId);
+      formData.append('vodafone_number', renewData.vodafone_number);
+      formData.append('parent_phone', renewData.parent_phone);
+      if (renewData.payment_proof instanceof File) {
+        formData.append('payment_proof', renewData.payment_proof);
+      }
+
+      const response = await renewSubscription(token, formData);
+      const currentLang = i18n.language || 'ar';
+      const successMsg = typeof response.message === 'object' 
+        ? response.message[currentLang] || response.message.en || response.message.ar 
+        : response.message;
+      setSuccess(successMsg || t("mySubscriptions.renewSuccess"));
+      
       setShowRenewForm(null);
       setRenewData({ vodafone_number: "", parent_phone: "", payment_proof: null });
+
+      setTimeout(() => setSuccess(null), 5000);
 
       const data = await getMySubscriptions(token);
       setSubscriptions(data?.data?.subscriptions || []);
@@ -112,6 +137,12 @@ const MySubscriptions = () => {
           {t("mySubscriptions.title")}
         </h2>
 
+        {success && (
+          <div className="mb-8 p-4 bg-green-100 text-green-800 rounded-lg text-center">
+            {success}
+          </div>
+        )}
+        
         {error && (
           <div className="mb-8 p-4 bg-red-100 text-red-800 rounded-lg text-center">
             {error}
@@ -263,16 +294,16 @@ const MySubscriptions = () => {
                       </button>
                     )} */}
 
-                    {sub.status === "approved" && (
+                    {(sub.status === "approved" || sub.status === "expired") && (
                       <button
-                        onClick={() =>
-                          setShowRenewForm(
-                            showRenewForm === sub.id ? null : sub.id
-                          )
-                        }
+                        onClick={() => {
+                          setShowRenewForm(showRenewForm === sub.id ? null : sub.id);
+                          setError(null);
+                          setSuccess(null);
+                        }}
                         className="flex-1 bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 text-sm font-semibold"
                       >
-                        {t("common.save")}
+                        {t("mySubscriptions.renew") || "تجديد الاشتراك"}
                       </button>
                     )}
                   </div>
@@ -280,7 +311,7 @@ const MySubscriptions = () => {
                   {showRenewForm === sub.id && (
                     <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
                       <h5 className="font-semibold text-gray-800 mb-2">
-                        {t("enrollCourse.confirmSubscription")}
+                        {t("mySubscriptions.renewForm") || "تجديد الاشتراك"}
                       </h5>
                       <div className="space-y-2">
                         <input
@@ -289,7 +320,7 @@ const MySubscriptions = () => {
                           value={renewData.vodafone_number}
                           onChange={handleRenewInputChange}
                           className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
-                          placeholder={t("enrollCourse.vodafonePlaceholder")}
+                          placeholder={t("enrollCourse.vodafonePlaceholder") || "رقم فودافون"}
                           required
                         />
                         <input
@@ -298,17 +329,27 @@ const MySubscriptions = () => {
                           value={renewData.parent_phone}
                           onChange={handleRenewInputChange}
                           className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
-                          placeholder={t("enrollCourse.parentPhonePlaceholder")}
+                          placeholder={t("enrollCourse.parentPhonePlaceholder") || "رقم ولي الأمر"}
                           required
                         />
-                        <input
-                          type="file"
-                          name="payment_proof"
-                          onChange={handleRenewInputChange}
-                          accept="image/*"
-                          required
-                          className="w-full px-2 py-1 border border-gray-300 rounded text-sm file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700"
-                        />
+                        <div>
+                          <label className="block text-xs text-gray-600 mb-1">
+                            {t("enrollCourse.paymentProof") || "إثبات الدفع"}
+                          </label>
+                          <input
+                            type="file"
+                            name="payment_proof"
+                            onChange={handleRenewInputChange}
+                            accept="image/*"
+                            required
+                            className="w-full px-2 py-1 border border-gray-300 rounded text-sm file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700"
+                          />
+                          {renewData.payment_proof && (
+                            <p className="text-xs text-green-600 mt-1">
+                              ✓ {renewData.payment_proof.name}
+                            </p>
+                          )}
+                        </div>
                         <div
                           className={`flex space-x-2 ${
                             i18next.language === "ar" ? "space-x-reverse" : ""
@@ -317,15 +358,19 @@ const MySubscriptions = () => {
                           <button
                             onClick={() => handleRenewSubscription(sub.id)}
                             disabled={actionLoading === sub.id}
-                            className="flex-1 bg-green-600 text-white px-3 py-1 rounded text-sm font-semibold disabled:opacity-50"
+                            className="flex-1 bg-green-600 text-white px-3 py-1 rounded text-sm font-semibold disabled:opacity-50 hover:bg-green-700"
                           >
                             {actionLoading === sub.id
-                              ? t("enrollCourse.processing")
-                              : t("enrollCourse.confirmSubscription")}
+                              ? t("enrollCourse.processing") || "جارٍ المعالجة..."
+                              : t("mySubscriptions.confirmRenew") || "تأكيد التجديد"}
                           </button>
                           <button
-                            onClick={() => setShowRenewForm(null)}
-                            className="flex-1 bg-gray-500 text-white px-3 py-1 rounded text-sm font-semibold"
+                            onClick={() => {
+                              setShowRenewForm(null);
+                              setRenewData({ vodafone_number: "", parent_phone: "", payment_proof: null });
+                              setError(null);
+                            }}
+                            className="flex-1 bg-gray-500 text-white px-3 py-1 rounded text-sm font-semibold hover:bg-gray-600"
                           >
                             {t("common.cancel")}
                           </button>

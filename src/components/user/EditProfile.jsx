@@ -16,7 +16,7 @@ const EditProfile = ({ profile: initialProfile, onUpdate }) => {
   const [profileImage, setProfileImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState(null);
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
@@ -66,8 +66,15 @@ const EditProfile = ({ profile: initialProfile, onUpdate }) => {
     setSuccess(false);
 
     try {
-      const updatedProfile = await updateProfile(formData, token);
-      setSuccess(true);
+      const response = await updateProfile(formData, token);
+      const updatedProfile = response?.data || response;
+      
+      const currentLang = i18n.language || 'ar';
+      const successMsg = typeof response.message === 'object' 
+        ? response.message[currentLang] || response.message.en || response.message.ar 
+        : response.message;
+      
+      setSuccess(successMsg || t("userProfile.profileUpdated"));
       setEditMode(false);
       if (onUpdate) onUpdate();
       setFormData({
@@ -76,8 +83,11 @@ const EditProfile = ({ profile: initialProfile, onUpdate }) => {
         image: null,
       });
       setProfileImage(updatedProfile.image || null);
+      
+      setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
-      setError(t("userProfile.updateError"));
+      const errorMsg = err.message || t("userProfile.updateError");
+      setError(errorMsg);
       console.error("Submit error:", err);
     } finally {
       setLoading(false);
@@ -124,7 +134,7 @@ const EditProfile = ({ profile: initialProfile, onUpdate }) => {
             )}
             {success && (
               <div className="mb-6 p-3 bg-green-100 text-green-700 rounded-md">
-                {t("userProfile.profileUpdated")}
+                {typeof success === 'string' ? success : t("userProfile.profileUpdated")}
               </div>
             )}
 
@@ -184,7 +194,7 @@ const EditProfile = ({ profile: initialProfile, onUpdate }) => {
         <div className="p-4 sm:p-6">
           {success && (
             <div className="mb-6 p-3 bg-green-100 text-green-700 rounded-md">
-              {t("userProfile.profileUpdated")}
+              {typeof success === 'string' ? success : t("userProfile.profileUpdated")}
             </div>
           )}
           {error && (

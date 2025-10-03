@@ -15,7 +15,7 @@ const ChangePassword = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,15 +46,23 @@ const ChangePassword = () => {
     setSuccess(false);
 
     try {
-      await changePassword(formData, token);
-      setSuccess(true);
+      const response = await changePassword(formData, token);
+      const currentLang = i18next.language || 'ar';
+      const successMsg = typeof response.message === 'object' 
+        ? response.message[currentLang] || response.message.en || response.message.ar 
+        : response.message;
+      
+      setSuccess(successMsg || t("changePassword.passwordChanged"));
       setFormData({
         current_password: "",
         new_password: "",
         new_password_confirmation: "",
       });
+      
+      setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
-      setError(err.message || t("changePassword.changeError"));
+      const errorMsg = err.message || t("changePassword.changeError");
+      setError(errorMsg);
       console.error("Submit error:", err);
     } finally {
       setLoading(false);
@@ -68,7 +76,7 @@ const ChangePassword = () => {
       new_password_confirmation: "",
     });
     setError(null);
-    setSuccess(false);
+    setSuccess(null);
   };
 
   return (
@@ -94,7 +102,7 @@ const ChangePassword = () => {
         <div className="p-4 sm:p-6">
           {success && (
             <div className="mb-6 p-3 bg-green-100 text-green-700 rounded-md">
-              {t("changePassword.passwordChanged")}
+              {typeof success === 'string' ? success : t("changePassword.passwordChanged")}
             </div>
           )}
           {error && (
