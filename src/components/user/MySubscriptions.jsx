@@ -36,7 +36,8 @@ const MySubscriptions = () => {
 
     const fetchSubscriptions = async () => {
       try {
-        const data = await getMySubscriptions(token);
+        const currentLang = i18n.language || 'ar';
+        const data = await getMySubscriptions(token, currentLang);
         setSubscriptions(data?.data?.subscriptions || []);
       } catch (err) {
         setError(err.message || t("mySubscriptions.error.fetchFailed"));
@@ -46,7 +47,7 @@ const MySubscriptions = () => {
     };
 
     fetchSubscriptions();
-  }, [token, navigate, t]);
+  }, [token, navigate, t, i18n.language]);
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -65,8 +66,8 @@ const MySubscriptions = () => {
     setError(null);
     setSuccess(null);
     try {
-      const response = await cancelSubscription(token, subscriptionId);
       const currentLang = i18n.language || 'ar';
+      const response = await cancelSubscription(token, subscriptionId, currentLang);
       const successMsg = typeof response.message === 'object' 
         ? response.message[currentLang] || response.message.en || response.message.ar 
         : response.message;
@@ -74,7 +75,7 @@ const MySubscriptions = () => {
       
       setTimeout(() => setSuccess(null), 3000);
       
-      const data = await getMySubscriptions(token);
+      const data = await getMySubscriptions(token, currentLang);
       setSubscriptions(data?.data?.subscriptions || []);
     } catch (err) {
       setError(err.message || t("common.error"));
@@ -93,6 +94,7 @@ const MySubscriptions = () => {
     setError(null);
     setSuccess(null);
     try {
+      const currentLang = i18n.language || 'ar';
       const formData = new FormData();
       formData.append('subscription_id', subscriptionId);
       formData.append('vodafone_number', renewData.vodafone_number);
@@ -101,8 +103,7 @@ const MySubscriptions = () => {
         formData.append('payment_proof', renewData.payment_proof);
       }
 
-      const response = await renewSubscription(token, formData);
-      const currentLang = i18n.language || 'ar';
+      const response = await renewSubscription(token, formData, currentLang);
       const successMsg = typeof response.message === 'object' 
         ? response.message[currentLang] || response.message.en || response.message.ar 
         : response.message;
@@ -113,7 +114,7 @@ const MySubscriptions = () => {
 
       setTimeout(() => setSuccess(null), 5000);
 
-      const data = await getMySubscriptions(token);
+      const data = await getMySubscriptions(token, currentLang);
       setSubscriptions(data?.data?.subscriptions || []);
     } catch (err) {
       setError(err.message || t("common.error"));

@@ -1,6 +1,19 @@
 const API_BASE = import.meta.env.VITE_API_BASE;
 
-export const getMySubscriptions = async (token) => {
+const getErrorMessage = (errorData, currentLang = 'ar') => {
+  if (typeof errorData === 'object' && errorData?.message) {
+    if (typeof errorData.message === 'object') {
+      return errorData.message[currentLang] || errorData.message.en || errorData.message.ar || 'An error occurred';
+    }
+    return errorData.message;
+  }
+  if (typeof errorData === 'string') {
+    return errorData;
+  }
+  return 'An error occurred';
+};
+
+export const getMySubscriptions = async (token, lang = 'ar') => {
   try {
     const res = await fetch(`${API_BASE}/my-subscriptions`, {
       method: "GET",
@@ -8,27 +21,31 @@ export const getMySubscriptions = async (token) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
+        "Accept-Language": lang,
       },
     });
 
+    const data = await res.json();
+
     if (!res.ok) {
-      const errorData = await res.json();
-      throw errorData;
+      const message = getErrorMessage(data, lang);
+      throw new Error(message);
     }
 
-    return await res.json();
+    return data;
   } catch (error) {
     console.error("Error fetching subscriptions:", error);
     throw error;
   }
 };
 
-export const subscribeToCourse = async (token, subscriptionData) => {
+export const subscribeToCourse = async (token, subscriptionData, lang = 'ar') => {
   try {
     let body;
     let headers = {
       Authorization: `Bearer ${token}`,
       Accept: "application/json",
+      "Accept-Language": lang,
     };
 
     // إذا كانت البيانات تحتوي على FormData أو ملف
@@ -51,19 +68,21 @@ export const subscribeToCourse = async (token, subscriptionData) => {
       body,
     });
 
+    const data = await res.json();
+
     if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.message || `HTTP error! status: ${res.status}`);
+      const message = getErrorMessage(data, lang);
+      throw new Error(message);
     }
 
-    return await res.json();
+    return data;
   } catch (error) {
     console.error("Error subscribing to course:", error);
     throw error;
   }
 };
 
-export const cancelSubscription = async (token, subscriptionId) => {
+export const cancelSubscription = async (token, subscriptionId, lang = 'ar') => {
   try {
     const res = await fetch(
       `${API_BASE}/subscriptions/${subscriptionId}/cancel`,
@@ -73,32 +92,37 @@ export const cancelSubscription = async (token, subscriptionId) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
+          "Accept-Language": lang,
         },
       }
     );
 
+    const data = await res.json();
+
     if (!res.ok) {
-      const errorData = await res.json();
-      throw errorData;
+      const message = getErrorMessage(data, lang);
+      throw new Error(message);
     }
 
-    return await res.json();
+    return data;
   } catch (error) {
     console.error("Error canceling subscription:", error);
     throw error;
   }
 };
 
-export const renewSubscription = async (token, renewalData) => {
+export const renewSubscription = async (token, renewalData, lang = 'ar') => {
   try {
-    // Create FormData if payment proof is included
     let body;
     let headers = {
       Authorization: `Bearer ${token}`,
       Accept: "application/json",
+      "Accept-Language": lang,
     };
 
-    if (renewalData.payment_proof instanceof File) {
+    if (renewalData instanceof FormData) {
+      body = renewalData;
+    } else if (renewalData.payment_proof instanceof File) {
       body = new FormData();
       Object.keys(renewalData).forEach(key => {
         body.append(key, renewalData[key]);
@@ -114,12 +138,14 @@ export const renewSubscription = async (token, renewalData) => {
       body,
     });
 
+    const data = await res.json();
+
     if (!res.ok) {
-      const errorData = await res.json();
-      throw errorData;
+      const message = getErrorMessage(data, lang);
+      throw new Error(message);
     }
 
-    return await res.json();
+    return data;
   } catch (error) {
     console.error("Error renewing subscription:", error);
     throw error;
@@ -147,27 +173,31 @@ export const getPaymentProof = async (filename) => {
   }
 };
 
-export const getSubscriptionStatus = async (token, courseId) => {
+export const getSubscriptionStatus = async (token, courseId, lang = 'ar') => {
   try {
     const res = await fetch(`${API_BASE}/subscriptions/status/${courseId}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
+        "Accept-Language": lang,
       },
     });
+    
+    const data = await res.json();
+    
     if (!res.ok) {
-      const errorData = await res.json();
-      throw errorData;
+      const message = getErrorMessage(data, lang);
+      throw new Error(message);
     }
-    return await res.json();
+    return data;
   } catch (error) {
     console.error("Error getting subscription status:", error);
     throw error;
   }
 };
 
-export const getExpiredSubscriptions = async (token) => {
+export const getExpiredSubscriptions = async (token, lang = 'ar') => {
   try {
     const res = await fetch(`${API_BASE}/expired-subscriptions`, {
       method: "GET",
@@ -175,15 +205,18 @@ export const getExpiredSubscriptions = async (token) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
+        "Accept-Language": lang,
       },
     });
 
+    const data = await res.json();
+
     if (!res.ok) {
-      const errorData = await res.json();
-      throw errorData;
+      const message = getErrorMessage(data, lang);
+      throw new Error(message);
     }
 
-    return await res.json();
+    return data;
   } catch (error) {
     console.error("Error fetching expired subscriptions:", error);
     throw error;

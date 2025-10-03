@@ -1,10 +1,16 @@
 const API_BASE = import.meta.env.VITE_API_BASE;
 
 const getErrorMessage = (errorData, currentLang = 'ar') => {
-  if (typeof errorData.message === 'object') {
-    return errorData.message[currentLang] || errorData.message.en || errorData.message.ar || 'An error occurred';
+  if (typeof errorData === 'object' && errorData?.message) {
+    if (typeof errorData.message === 'object') {
+      return errorData.message[currentLang] || errorData.message.en || errorData.message.ar || 'An error occurred';
+    }
+    return errorData.message;
   }
-  return errorData.message || 'An error occurred';
+  if (typeof errorData === 'string') {
+    return errorData;
+  }
+  return 'An error occurred';
 };
 
 export const addToFavorites = async (token, courseId, lang = 'ar') => {
@@ -85,9 +91,9 @@ export const getFavoriteSubscriptions = async (token, lang = 'ar') => {
   }
 };
 
-export const checkIfFavorite = async (token, courseId) => {
+export const checkIfFavorite = async (token, courseId, lang = 'ar') => {
   try {
-    const favorites = await getFavoriteSubscriptions(token);
+    const favorites = await getFavoriteSubscriptions(token, lang);
     const favoriteCourseIds = favorites?.data?.subscriptions?.map(sub => sub.course_id) || [];
     return favoriteCourseIds.includes(courseId);
   } catch (error) {
@@ -96,12 +102,12 @@ export const checkIfFavorite = async (token, courseId) => {
   }
 };
 
-export const toggleFavorite = async (token, courseId, isFavorite) => {
+export const toggleFavorite = async (token, courseId, isFavorite, lang = 'ar') => {
   try {
     if (isFavorite) {
-      return await removeFromFavorites(token, courseId);
+      return await removeFromFavorites(token, courseId, lang);
     } else {
-      return await addToFavorites(token, courseId);
+      return await addToFavorites(token, courseId, lang);
     }
   } catch (error) {
     console.error("Error toggling favorite:", error);

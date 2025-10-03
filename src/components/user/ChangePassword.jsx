@@ -43,11 +43,11 @@ const ChangePassword = () => {
     }
     setLoading(true);
     setError(null);
-    setSuccess(false);
+    setSuccess(null);
 
     try {
-      const response = await changePassword(formData, token);
       const currentLang = i18next.language || 'ar';
+      const response = await changePassword(formData, token, currentLang);
       const successMsg = typeof response.message === 'object' 
         ? response.message[currentLang] || response.message.en || response.message.ar 
         : response.message;

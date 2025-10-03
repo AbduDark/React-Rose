@@ -63,13 +63,13 @@ const EditProfile = ({ profile: initialProfile, onUpdate }) => {
     }
     setLoading(true);
     setError(null);
-    setSuccess(false);
+    setSuccess(null);
 
     try {
-      const response = await updateProfile(formData, token);
+      const currentLang = i18n.language || 'ar';
+      const response = await updateProfile(formData, token, currentLang);
       const updatedProfile = response?.data || response;
       
-      const currentLang = i18n.language || 'ar';
       const successMsg = typeof response.message === 'object' 
         ? response.message[currentLang] || response.message.en || response.message.ar 
         : response.message;
@@ -84,7 +84,7 @@ const EditProfile = ({ profile: initialProfile, onUpdate }) => {
       });
       setProfileImage(updatedProfile.image || null);
       
-      setTimeout(() => setSuccess(false), 3000);
+      setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
       const errorMsg = err.message || t("userProfile.updateError");
       setError(errorMsg);

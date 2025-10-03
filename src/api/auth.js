@@ -1,4 +1,17 @@
 const API_BASE = import.meta.env.VITE_API_BASE;
+
+const getErrorMessage = (payload, currentLang = 'ar') => {
+  if (typeof payload === 'object' && payload?.message) {
+    if (typeof payload.message === 'object') {
+      return payload.message[currentLang] || payload.message.en || payload.message.ar || 'An error occurred';
+    }
+    return payload.message;
+  }
+  if (typeof payload === 'string') {
+    return payload;
+  }
+  return 'An error occurred';
+};
 export const login = async (email, password) => {
   const res = await fetch(`${API_BASE}/auth/login`, {
     method: "POST",
@@ -112,7 +125,7 @@ export const getProfile = async (token) => {
     throw error;
   }
 };
-export const updateProfile = async ({ name, phone, image }, token) => {
+export const updateProfile = async ({ name, phone, image }, token, lang = 'ar') => {
   if (!token) {
     throw new Error("No authentication token provided");
   }
@@ -143,6 +156,7 @@ export const updateProfile = async ({ name, phone, image }, token) => {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
+        "Accept-Language": lang,
       },
       body: formData,
     });
@@ -153,16 +167,10 @@ export const updateProfile = async ({ name, phone, image }, token) => {
       : await res.text();
 
     if (!res.ok) {
-      const message =
-        (typeof payload === "object" && payload?.message) ||
-        (typeof payload === "string"
-          ? `Server error (${res.status}): ${payload
-              .substring(0, 180)
-              .replace(/\n/g, " ")}`
-          : `Failed to update profile (Status: ${res.status})`);
+      const message = getErrorMessage(payload, lang);
       throw new Error(message);
     }
-    return payload.data || payload;
+    return payload;
   } catch (error) {
     console.error("Error updating profile:", error);
     throw error;
@@ -170,7 +178,8 @@ export const updateProfile = async ({ name, phone, image }, token) => {
 };
 export const changePassword = async (
   { current_password, new_password, new_password_confirmation },
-  token
+  token,
+  lang = 'ar'
 ) => {
   if (!token) {
     throw new Error("No authentication token provided");
@@ -189,6 +198,7 @@ export const changePassword = async (
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
+        "Accept-Language": lang,
       },
       body: JSON.stringify({
         current_password: current_password.trim(),
@@ -198,18 +208,10 @@ export const changePassword = async (
     });
     const payload = await res.json();
     if (!res.ok) {
-      const message =
-        (typeof payload === "object" && payload?.message) ||
-        (typeof payload === "string"
-          ? `Server error (${res.status}): ${payload
-              .substring(0, 180)
-              .replace(/\n/g, " ")}`
-          : `Failed to update profile (Status: ${res.status})`);
-      throw new Error(
-        typeof message === "string" ? message : JSON.stringify(message)
-      );
+      const message = getErrorMessage(payload, lang);
+      throw new Error(message);
     }
-    return payload.data || payload;
+    return payload;
   } catch (error) {
     console.error("Error updating password:", error);
     throw error;
