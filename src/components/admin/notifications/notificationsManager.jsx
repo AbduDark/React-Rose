@@ -4,6 +4,7 @@ import { FiPlus, FiBell, FiUsers, FiBarChart2, FiEye, FiTrash2 } from "react-ico
 import { getNotificationsStatistics, getAllNotifications } from "../../../api/notifications";
 import CreateNotification from "./Createnotifications";
 import Pagination from "../../common/Pagination";
+import ConfirmDialog from "../../common/ConfirmDialog";
 
 const NotificationsManager = () => {
   const { t } = useTranslation();
@@ -15,6 +16,8 @@ const NotificationsManager = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [showNotificationsList, setShowNotificationsList] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false, notificationId: null });
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -128,14 +131,11 @@ const NotificationsManager = () => {
     }
   };
 
-  const handleDeleteNotification = async (notificationId) => {
-    if (!window.confirm(t("notifications.delete") + "?")) {
-      return;
-    }
-
+  const handleDeleteNotification = async () => {
+    setDeleteLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${import.meta.env.VITE_API_BASE}/notifications/${notificationId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE}/notifications/${deleteConfirm.notificationId}`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -149,9 +149,12 @@ const NotificationsManager = () => {
 
       fetchNotifications();
       fetchData();
+      setDeleteConfirm({ isOpen: false, notificationId: null });
     } catch (err) {
       console.error("Error deleting notification:", err);
       setError(t("notifications.errorDeleting"));
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -367,7 +370,7 @@ const NotificationsManager = () => {
                         </div>
                       </div>
                       <button
-                        onClick={() => handleDeleteNotification(notification.id)}
+                        onClick={() => setDeleteConfirm({ isOpen: true, notificationId: notification.id })}
                         className="p-2 text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded-lg transition-colors"
                         title={t("notifications.delete")}
                       >
@@ -397,6 +400,19 @@ const NotificationsManager = () => {
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
         onNotificationSent={handleNotificationSent}
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={deleteConfirm.isOpen}
+        onClose={() => setDeleteConfirm({ isOpen: false, notificationId: null })}
+        onConfirm={handleDeleteNotification}
+        title={t("notifications.delete")}
+        message={t("notifications.confirmDelete") || "هل أنت متأكد من حذف هذا الإشعار؟"}
+        confirmText={t("common.delete") || "حذف"}
+        cancelText={t("common.cancel")}
+        type="danger"
+        isLoading={deleteLoading}
       />
     </div>
   );

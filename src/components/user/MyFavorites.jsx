@@ -7,6 +7,7 @@ import {
 } from "../../api/favorites";
 import { useAuth } from "../../context/AuthContext";
 import { FiHeart, FiBook } from "react-icons/fi";
+import ConfirmDialog from "../common/ConfirmDialog";
 
 const MyFavorites = () => {
   const { t } = useTranslation();
@@ -16,6 +17,7 @@ const MyFavorites = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [actionLoading, setActionLoading] = useState(null);
+  const [removeConfirm, setRemoveConfirm] = useState({ isOpen: false, courseId: null });
 
   useEffect(() => {
     if (!token) {
@@ -47,15 +49,13 @@ const MyFavorites = () => {
     });
   };
 
-  const handleRemoveFromFavorites = async (courseId) => {
-    if (!window.confirm(t("favorites.confirmRemove") || "هل تريد إزالة هذا الكورس من المفضلة؟")) {
-      return;
-    }
-
+  const handleRemoveFromFavorites = async () => {
+    const courseId = removeConfirm.courseId;
     setActionLoading(courseId);
     try {
       await removeFromFavorites(token, courseId);
       setFavorites(prev => prev.filter(fav => fav.course_id !== courseId));
+      setRemoveConfirm({ isOpen: false, courseId: null });
     } catch (err) {
       setError(err.message || t("common.error"));
       const data = await getFavoriteSubscriptions(token);
@@ -115,7 +115,7 @@ const MyFavorites = () => {
                 className="bg-white shadow-md rounded-xl p-6 hover:shadow-lg transition-all duration-300 border border-gray-100 relative"
               >
                 <button
-                  onClick={() => handleRemoveFromFavorites(fav.course_id)}
+                  onClick={() => setRemoveConfirm({ isOpen: true, courseId: fav.course_id })}
                   disabled={actionLoading === fav.course_id}
                   className="absolute top-4 right-4 text-red-500 hover:text-red-700 transition-colors disabled:opacity-50"
                   title={t("favorites.removeFromFavorites") || "إزالة من المفضلة"}
@@ -224,6 +224,19 @@ const MyFavorites = () => {
           </div>
         )}
       </div>
+
+      {/* Remove Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={removeConfirm.isOpen}
+        onClose={() => setRemoveConfirm({ isOpen: false, courseId: null })}
+        onConfirm={handleRemoveFromFavorites}
+        title={t("favorites.removeFromFavorites") || "إزالة من المفضلة"}
+        message={t("favorites.confirmRemove") || "هل تريد إزالة هذا الكورس من المفضلة؟"}
+        confirmText={t("common.remove") || "إزالة"}
+        cancelText={t("common.cancel")}
+        type="warning"
+        isLoading={actionLoading === removeConfirm.courseId}
+      />
     </div>
   );
 };
