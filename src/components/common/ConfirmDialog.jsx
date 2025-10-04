@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { FiAlertTriangle, FiInfo, FiCheckCircle, FiX } from "react-icons/fi";
@@ -63,11 +62,11 @@ const ConfirmDialog = ({
           <div className="mx-auto mb-4 flex items-center justify-center">
             {getIcon()}
           </div>
-          
+
           <h3 className="text-xl font-bold text-white mb-2">
             {title}
           </h3>
-          
+
           <p className="text-gray-300 text-sm">
             {message}
           </p>
@@ -81,7 +80,7 @@ const ConfirmDialog = ({
           >
             {cancelText || t("common.cancel")}
           </button>
-          
+
           <button
             onClick={onConfirm}
             disabled={isLoading}

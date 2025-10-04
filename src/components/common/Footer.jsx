@@ -15,9 +15,11 @@ import {
 import { HiAcademicCap } from "react-icons/hi";
 import Logo from "../../assets/images/Rose_Logo.png";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../../context/ThemeContext";
 
 const Footer = () => {
   const { t, i18n } = useTranslation("common");
+  const { isDark } = useTheme();
 
   return (
     <footer
