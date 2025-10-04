@@ -16,13 +16,28 @@ function Register() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [passwordValidation, setPasswordValidation] = useState({
+    minLength: false,
+    hasLowercase: false,
+    hasUppercase: false,
+  });
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
     if (error) setError("");
+
+    // Real-time password validation
+    if (name === "password") {
+      setPasswordValidation({
+        minLength: value.length >= 8 && /^[a-zA-Z0-9]+$/.test(value),
+        hasLowercase: /[a-z]/.test(value),
+        hasUppercase: /[A-Z]/.test(value),
+      });
+    }
   };
 
   const validateForm = () => {
@@ -149,6 +164,24 @@ function Register() {
               required
             />
           </div>
+
+          {/* Password Validation Feedback */}
+          {formData.password && (
+            <div className="mt-2 space-y-1 text-sm">
+              <div className={`flex items-center gap-2 ${passwordValidation.minLength ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`}>
+                <span>{passwordValidation.minLength ? '✅' : '○'}</span>
+                <span>At least 8 characters (letters and numbers only)</span>
+              </div>
+              <div className={`flex items-center gap-2 ${passwordValidation.hasLowercase ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`}>
+                <span>{passwordValidation.hasLowercase ? '✅' : '○'}</span>
+                <span>At least one lowercase letter</span>
+              </div>
+              <div className={`flex items-center gap-2 ${passwordValidation.hasUppercase ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`}>
+                <span>{passwordValidation.hasUppercase ? '✅' : '○'}</span>
+                <span>At least one uppercase letter</span>
+              </div>
+            </div>
+          )}
 
           <div className="relative h-[50px] w-full mt-[20px] rounded-md">
             <input
