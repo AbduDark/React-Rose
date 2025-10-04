@@ -17,6 +17,8 @@ function Register() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [showPasswordValidation, setShowPasswordValidation] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordValidation, setPasswordValidation] = useState({
     minLength: false,
     hasLowercase: false,
@@ -184,16 +186,20 @@ function Register() {
 
           <div className="relative h-[50px] w-full mt-[20px] rounded-md">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               name="password"
               value={formData.password}
               onChange={handleChange}
               onFocus={() => setShowPasswordValidation(true)}
               onBlur={() => setShowPasswordValidation(false)}
               placeholder={t("auth.register.createPassword")}
-              className="password h-full w-full text-base font-normal rounded-md outline-none px-[15px] border border-solid border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary dark:focus:border-primary transition-colors"
+              className="password h-full w-full text-base font-normal rounded-md outline-none px-[15px] pr-[45px] border border-solid border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary dark:focus:border-primary transition-colors"
               required
             />
+            <i 
+              className={`bx ${showPassword ? 'bx-show' : 'bx-hide'} eye-icon absolute top-1/2 right-[10px] transform -translate-y-1/2 text-[18px] text-gray-500 dark:text-gray-400 cursor-pointer p-[5px] hover:text-primary transition-colors`}
+              onClick={() => setShowPassword(!showPassword)}
+            ></i>
           </div>
 
           {/* Password Validation Feedback */}
@@ -219,14 +225,18 @@ function Register() {
 
           <div className="relative h-[50px] w-full mt-[20px] rounded-md">
             <input
-              type="password"
+              type={showConfirmPassword ? "text" : "password"}
               name="password_confirmation"
               value={formData.password_confirmation}
               onChange={handleChange}
               placeholder={t("auth.register.confirmPassword")}
-              className="password h-full w-full text-base font-normal rounded-md outline-none px-[15px] border border-solid border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary dark:focus:border-primary transition-colors"
+              className="password h-full w-full text-base font-normal rounded-md outline-none px-[15px] pr-[45px] border border-solid border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary dark:focus:border-primary transition-colors"
               required
             />
+            <i 
+              className={`bx ${showConfirmPassword ? 'bx-show' : 'bx-hide'} eye-icon absolute top-1/2 right-[10px] transform -translate-y-1/2 text-[18px] text-gray-500 dark:text-gray-400 cursor-pointer p-[5px] hover:text-primary transition-colors`}
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            ></i>
           </div>
 
           {/* Password Match Indicator */}

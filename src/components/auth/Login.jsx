@@ -9,6 +9,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,11 +45,14 @@ const Login = () => {
             <input
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder={t("auth.login.password")}
-              className="password h-full w-full text-base font-normal rounded-md outline-none px-[15px] border border-solid border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary dark:focus:border-primary transition-colors"
+              className="password h-full w-full text-base font-normal rounded-md outline-none px-[15px] pr-[45px] border border-solid border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary dark:focus:border-primary transition-colors"
             />
-            <i className="bx bx-hide eye-icon absolute top-1/2 right-[10px] transform -translate-y-1/2 text-[18px] text-[#8b8b8b] cursor-pointer p-[5px]"></i>
+            <i 
+              className={`bx ${showPassword ? 'bx-show' : 'bx-hide'} eye-icon absolute top-1/2 right-[10px] transform -translate-y-1/2 text-[18px] text-gray-500 dark:text-gray-400 cursor-pointer p-[5px] hover:text-primary transition-colors`}
+              onClick={() => setShowPassword(!showPassword)}
+            ></i>
           </div>
 
           <div className="text-center mt-[10px]">
