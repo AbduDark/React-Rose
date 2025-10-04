@@ -4,14 +4,15 @@ Rose Academy is a learning management system (LMS) built for Egyptian high schoo
 
 # Recent Changes
 
-**Date**: October 3, 2025
+**Date**: October 4, 2025
 
-**Replit Environment Setup Completed**:
+**Replit Environment Setup Completed (GitHub Import)**:
 - Installed all Node.js dependencies (429 packages)
-- Configured Vite dev server for Replit environment (already set to 0.0.0.0:5000 with allowedHosts: true)
+- Fixed Vite dev server configuration for Replit environment (updated host from 127.0.0.1 to 0.0.0.0:5000 with allowedHosts: true)
+- Cleaned up .gitignore file (removed vite.config.js entry to ensure config is committed)
 - Verified frontend runs successfully with i18next internationalization working
-- Configured deployment for Replit Autoscale (builds with `npm run build`, serves with Vite preview)
-- Note: Backend API at port 8000 is not included in this repository - expected to be deployed separately
+- Configured deployment for Replit Autoscale (builds with `npm run build`, serves with `npx vite preview --host 0.0.0.0`)
+- Note: Backend API proxies to https://api.rose-academy.com - external deployment
 
 **Current Status**: Frontend is fully functional and ready for development. The app displays correctly in both Arabic (default) and English with working navigation, i18n translations, and proper RTL/LTR layout support.
 
