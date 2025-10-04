@@ -20,6 +20,7 @@ function Register() {
     minLength: false,
     hasLowercase: false,
     hasUppercase: false,
+    passwordsMatch: false,
   });
 
   const handleChange = (e) => {
@@ -36,7 +37,16 @@ function Register() {
         minLength: value.length >= 8 && /^[a-zA-Z0-9]+$/.test(value),
         hasLowercase: /[a-z]/.test(value),
         hasUppercase: /[A-Z]/.test(value),
+        passwordsMatch: value === formData.password_confirmation && value !== "",
       });
+    }
+    
+    // Check password confirmation match
+    if (name === "password_confirmation") {
+      setPasswordValidation(prev => ({
+        ...prev,
+        passwordsMatch: value === formData.password && value !== "",
+      }));
     }
   };
 
@@ -57,8 +67,16 @@ function Register() {
       setError(t("auth.register.validation.passwordRequired"));
       return false;
     }
-    if (formData.password.length < 6) {
-      setError(t("auth.register.validation.passwordLength"));
+    if (formData.password.length < 8 || !/^[a-zA-Z0-9]+$/.test(formData.password)) {
+      setError("Password must be at least 8 characters and contain only letters and numbers");
+      return false;
+    }
+    if (!/[a-z]/.test(formData.password)) {
+      setError("Password must contain at least one lowercase letter");
+      return false;
+    }
+    if (!/[A-Z]/.test(formData.password)) {
+      setError("Password must contain at least one uppercase letter");
       return false;
     }
     if (formData.password !== formData.password_confirmation) {
@@ -167,19 +185,28 @@ function Register() {
 
           {/* Password Validation Feedback */}
           {formData.password && (
-            <div className="mt-2 space-y-1 text-sm">
-              <div className={`flex items-center gap-2 ${passwordValidation.minLength ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`}>
-                <span>{passwordValidation.minLength ? '✅' : '○'}</span>
+            <div className="mt-2 space-y-1 text-sm bg-gray-50 dark:bg-gray-800 p-3 rounded-md border border-gray-200 dark:border-gray-600">
+              <div className="font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {t("auth.register.passwordRequirements") || "Password Requirements:"}
+              </div>
+              <div className={`flex items-center gap-2 transition-colors ${passwordValidation.minLength ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`}>
+                <span className="text-lg">{passwordValidation.minLength ? '✅' : '○'}</span>
                 <span>At least 8 characters (letters and numbers only)</span>
               </div>
-              <div className={`flex items-center gap-2 ${passwordValidation.hasLowercase ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`}>
-                <span>{passwordValidation.hasLowercase ? '✅' : '○'}</span>
+              <div className={`flex items-center gap-2 transition-colors ${passwordValidation.hasLowercase ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`}>
+                <span className="text-lg">{passwordValidation.hasLowercase ? '✅' : '○'}</span>
                 <span>At least one lowercase letter</span>
               </div>
-              <div className={`flex items-center gap-2 ${passwordValidation.hasUppercase ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`}>
-                <span>{passwordValidation.hasUppercase ? '✅' : '○'}</span>
+              <div className={`flex items-center gap-2 transition-colors ${passwordValidation.hasUppercase ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`}>
+                <span className="text-lg">{passwordValidation.hasUppercase ? '✅' : '○'}</span>
                 <span>At least one uppercase letter</span>
               </div>
+              {formData.password_confirmation && (
+                <div className={`flex items-center gap-2 transition-colors ${passwordValidation.passwordsMatch ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}`}>
+                  <span className="text-lg">{passwordValidation.passwordsMatch ? '✅' : '✗'}</span>
+                  <span>{passwordValidation.passwordsMatch ? 'Passwords match' : 'Passwords do not match'}</span>
+                </div>
+              )}
             </div>
           )}
 
