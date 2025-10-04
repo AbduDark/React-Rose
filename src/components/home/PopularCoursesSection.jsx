@@ -17,11 +17,11 @@ const PopularCoursesSection = () => {
       {/* Section head */}
       <div className="container mx-auto px-4">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
-          <h1 className="text-3xl font-bold mb-4 sm:mb-0">
+          <h1 className="text-3xl font-bold mb-4 sm:mb-0 text-gray-900 dark:text-white">
             {t("popularCourses.title")}
           </h1>
         </div>
-        <p className="text-lg text-gray-500 mb-8">
+        <p className="text-lg text-gray-500 dark:text-gray-400 mb-8">
           {t("popularCourses.subtitle")}
         </p>
       </div>

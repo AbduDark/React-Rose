@@ -12,7 +12,7 @@ const IntroSection = () => {
   return (
     <section
       id="intro-section"
-      className={`w-full pt-16 bg-gradient-to-r from-secondary to-primary ${
+      className={`w-full pt-16 bg-gradient-to-r from-secondary to-primary dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 ${
         i18n.language === "ar" ? "font-arabic" : "font-['Heebo']"
       }`}
       dir={i18n.language === "ar" ? "rtl" : "ltr"}
@@ -94,6 +94,7 @@ const IntroSection = () => {
       >
         <path
           fill="#FFFFFF"
+          className="dark:fill-gray-900"
           fillOpacity="1"
           d="M0,256L48,240C96,224,192,192,288,154.7C384,117,480,75,576,96C672,117,768,203,864,197.3C960,192,1056,96,1152,69.3C1248,43,1344,85,1392,106.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
         ></path>

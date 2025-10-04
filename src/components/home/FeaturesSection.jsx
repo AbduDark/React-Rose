@@ -37,7 +37,7 @@ const FeaturesSection = () => {
 
   return (
     <section
-      className={`py-20 bg-gray-50 ${
+      className={`py-20 bg-gray-50 dark:bg-gray-800 ${
         i18n.language === "ar" ? "font-arabic" : "font-['Heebo']"
       }`}
       dir={i18n.language === "ar" ? "rtl" : "ltr"}
@@ -48,10 +48,10 @@ const FeaturesSection = () => {
             i18n.language === "ar" ? "text-right" : "text-left"
           }`}
         >
-          <h2 className="text-4xl font-bold mb-4 leading-tight">
+          <h2 className="text-4xl font-bold mb-4 leading-tight text-gray-900 dark:text-white">
             {t("features.title")}
           </h2>
-          <p className="text-lg text-gray-600">{t("features.subtitle")}</p>
+          <p className="text-lg text-gray-600 dark:text-gray-300">{t("features.subtitle")}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -60,18 +60,18 @@ const FeaturesSection = () => {
               key={feature.id}
               className={`${feature.offset} transition-all duration-300 hover:-translate-y-2`}
             >
-              <div className="bg-white p-8 rounded-lg shadow-md h-full hover:shadow-lg transition-shadow duration-300 relative overflow-hidden group">
+              <div className="bg-white dark:bg-gray-700 p-8 rounded-lg shadow-md h-full hover:shadow-lg transition-shadow duration-300 relative overflow-hidden group">
                 {/* Gradient background overlay on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-purple-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                 <div className="relative z-10">
                   <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white mb-6">
                     {feature.icon}
                   </div>
-                  <h4 className="text-xl font-bold mb-4 text-gray-800 group-hover:text-gray-900 transition-colors">
+                  <h4 className="text-xl font-bold mb-4 text-gray-800 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-100 transition-colors">
                     {feature.title}
                   </h4>
-                  <p className="text-gray-600 group-hover:text-gray-700 transition-colors">
+                  <p className="text-gray-600 dark:text-gray-300 group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors">
                     {feature.description}
                   </p>
                 </div>

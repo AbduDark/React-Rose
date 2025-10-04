@@ -3,18 +3,11 @@ import Login from "../components/auth/Login";
 import Register from "../components/auth/Register";
 import ForgotPassword from "../components/auth/ForgotPassword";
 import VerifyEmail from "../components/auth/VerifyEmail";
-import Background from "../assets/images/Background.webp";
 import ResetPassword from "../components/auth/ResetPassword";
 
 function AuthPage() {
   return (
-    <div
-      className="flex flex-col items-center justify-center min-h-screen bg-gray-100"
-      style={{
-        backgroundImage: `url(${Background})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-800 transition-colors duration-300"
     >
       <Routes>
         <Route path="login" element={<Login />} />

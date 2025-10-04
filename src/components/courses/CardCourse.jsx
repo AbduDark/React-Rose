@@ -106,13 +106,13 @@ function CardCourse() {
             <div
               key={course.id}
               onClick={() => handleCourseClick(course.id)}
-              className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 hover:-translate-y-1 cursor-pointer relative"
+              className="bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow-md hover:shadow-xl dark:shadow-gray-900 transition-all duration-300 hover:-translate-y-1 cursor-pointer relative border border-transparent dark:border-gray-600"
             >
               <button
                 onClick={(e) => handleToggleFavorite(e, course.id)}
                 disabled={favoriteLoading[course.id]}
-                className={`absolute top-3 right-3 z-10 p-2 rounded-full bg-white/90 hover:bg-white transition-all ${
-                  token && favoriteCourseIds.includes(course.id) ? "text-red-500" : "text-gray-400"
+                className={`absolute top-3 right-3 z-10 p-2 rounded-full bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-800 transition-all ${
+                  token && favoriteCourseIds.includes(course.id) ? "text-red-500" : "text-gray-400 dark:text-gray-300"
                 } ${favoriteLoading[course.id] ? "opacity-50" : ""}`}
                 title={token && favoriteCourseIds.includes(course.id) ? t("favorites.removeFromFavorites") || "إزالة من المفضلة" : t("favorites.addToFavorites") || "إضافة للمفضلة"}
               >
@@ -125,27 +125,27 @@ function CardCourse() {
               />
               <div className="p-6">
                 <div className="flex justify-between items-center mb-4">
-                  <span className="bg-pink-100 text-pink-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                  <span className="bg-pink-100 dark:bg-pink-900/30 text-pink-800 dark:text-pink-300 text-xs font-medium px-2.5 py-0.5 rounded">
                     {course.level}
                   </span>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
                     {course.language}
                   </span>
                 </div>
-                <h3 className="text-xl font-bold mb-2">{course.title}</h3>
+                <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">{course.title}</h3>
                 <div className="flex items-center mb-3">
                   {renderStars(course.avg_rating)}
-                  <span className="text-gray-600 text-sm ml-2">
+                  <span className="text-gray-600 dark:text-gray-300 text-sm ml-2">
                     {course.avg_rating ? `${course.avg_rating}/5` : ""}
                   </span>
                 </div>
-                <p className="text-gray-600 mb-4 line-clamp-3">
+                <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
                   {course.description}
                 </p>
-                <div className="flex justify-between text-sm text-gray-500">
+                <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400">
                   <span className="flex items-center">
                     <FaClock
-                      className={`text-red-500 ${
+                      className={`text-red-500 dark:text-red-400 ${
                         i18next.language === "ar" ? "ml-1" : "mr-1"
                       }`}
                     />
@@ -155,7 +155,7 @@ function CardCourse() {
                     {course.lessons_count} {t("cardCourse.lessons")}
                   </span>
                 </div>
-                <div className="text-xs text-gray-400 mt-2">
+                <div className="text-xs text-gray-400 dark:text-gray-500 mt-2">
                   {t("cardCourse.instructor")}: {course.instructor_name}
                 </div>
               </div>

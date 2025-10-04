@@ -77,7 +77,7 @@ const ReviewSection = () => {
 
   return (
     <section
-      className={`py-16 bg-gradient-to-b from-gray-50 to-white ${
+      className={`py-16 bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 ${
         i18n.language === "ar" ? "font-arabic" : "font-['Heebo']"
       }`}
       dir={i18n.language === "ar" ? "ltr" : "ltr"}
@@ -85,10 +85,10 @@ const ReviewSection = () => {
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-black to-gray-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-black to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
             {t("reviewSection.title")}
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             {t("reviewSection.subtitle")}
           </p>
         </div>
@@ -114,25 +114,25 @@ const ReviewSection = () => {
                   key={review.id}
                   className="w-full flex-shrink-0 px-4 select-none"
                 >
-                  <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                  <div className="bg-white dark:bg-gray-700 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
                     <div className="flex items-center mb-6">
                       <img
                         src={review.avatar}
-                        className="w-16 h-16 rounded-full shadow-md border-2 border-primary/20 p-1 mr-4"
+                        className="w-16 h-16 rounded-full shadow-md border-2 border-primary/20 dark:border-primary/40 p-1 mr-4"
                         alt={review.name}
                       />
                       <div>
-                        <h4 className="text-xl text-gray-900 font-bold">
+                        <h4 className="text-xl text-gray-900 dark:text-white font-bold">
                           {review.name}
                         </h4>
-                        <h5 className="text-primary font-medium">
+                        <h5 className="text-primary dark:text-primary font-medium">
                           {review.role}
                         </h5>
                       </div>
                     </div>
 
-                    <p className="text-gray-700 text-lg mb-6 italic">
-                      <FaQuoteLeft className="text-primary/20 text-3xl mb-2" />
+                    <p className="text-gray-700 dark:text-gray-300 text-lg mb-6 italic">
+                      <FaQuoteLeft className="text-primary/20 dark:text-primary/40 text-3xl mb-2" />
                       {review.text}
                     </p>
 
@@ -140,7 +140,7 @@ const ReviewSection = () => {
                       <div className="flex mr-2">
                         {renderStars(review.rating)}
                       </div>
-                      <span className="text-gray-800 font-medium">
+                      <span className="text-gray-800 dark:text-gray-200 font-medium">
                         {review.rating}/5
                       </span>
                     </div>
@@ -153,14 +153,14 @@ const ReviewSection = () => {
           {/* Navigation Arrows - Hide on mobile */}
           <button
             onClick={prevReview}
-            className="hidden md:block absolute -left-4 top-1/2 transform -translate-y-1/2 z-10 p-3 bg-white shadow-lg rounded-full text-primary hover:scale-110 transition-all duration-300"
+            className="hidden md:block absolute -left-4 top-1/2 transform -translate-y-1/2 z-10 p-3 bg-white dark:bg-gray-700 shadow-lg rounded-full text-primary dark:text-primary hover:scale-110 transition-all duration-300"
           >
             <FaChevronLeft />
           </button>
 
           <button
             onClick={nextReview}
-            className="hidden md:block absolute -right-4 top-1/2 transform -translate-y-1/2 z-10 p-3 bg-white shadow-lg rounded-full text-primary hover:scale-110 transition-all duration-300"
+            className="hidden md:block absolute -right-4 top-1/2 transform -translate-y-1/2 z-10 p-3 bg-white dark:bg-gray-700 shadow-lg rounded-full text-primary dark:text-primary hover:scale-110 transition-all duration-300"
           >
             <FaChevronRight />
           </button>
@@ -173,8 +173,8 @@ const ReviewSection = () => {
                 onClick={() => goToReview(index)}
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
                   activeIndex === index
-                    ? "w-6 bg-black"
-                    : "bg-gray-300 hover:bg-primary/50"
+                    ? "w-6 bg-primary dark:bg-primary"
+                    : "bg-gray-300 dark:bg-gray-600 hover:bg-primary/50 dark:hover:bg-primary/50"
                 }`}
               />
             ))}

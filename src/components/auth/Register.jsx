@@ -79,22 +79,22 @@ function Register() {
 
   if (success) {
     return (
-      <div className="absolute max-w-[400px] md:max-w-[430px] w-full p-[30px] rounded-md bg-white/30">
+      <div className="max-w-[400px] md:max-w-[430px] w-full p-[30px] rounded-lg bg-white dark:bg-gray-700 shadow-xl border border-gray-200 dark:border-gray-600">
         <div className="w-full text-center">
-          <div className="text-green-600 text-6xl mb-4">✓</div>
-          <header className="text-[28px] font-semibold text-[#232836] mb-4">
+          <div className="text-green-600 dark:text-green-400 text-6xl mb-4">✓</div>
+          <header className="text-[28px] font-semibold text-gray-800 dark:text-white mb-4">
             {t("auth.register.success.title")}
           </header>
-          <p className="text-gray-600 mb-4">
+          <p className="text-gray-600 dark:text-gray-300 mb-4">
             {t("auth.register.success.description")}
           </p>
-          <div className="text-sm text-gray-500 mb-2">
+          <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
             {t("auth.register.success.note")}
           </div>
-          <div className="text-sm text-gray-500">
+          <div className="text-sm text-gray-500 dark:text-gray-400">
             <Link
               to="/auth/login"
-              className="text-[#0171d3] cursor-pointer no-underline hover:underline login-link"
+              className="text-primary dark:text-primary cursor-pointer no-underline hover:underline login-link font-semibold"
             >
               {t("auth.register.success.goToLogin")}
             </Link>
@@ -105,9 +105,9 @@ function Register() {
   }
 
   return (
-    <div className="absolute max-w-[400px] md:max-w-[430px] w-full p-[30px] rounded-md bg-white/30">
+    <div className="max-w-[400px] md:max-w-[430px] w-full p-[30px] rounded-lg bg-white dark:bg-gray-700 shadow-xl border border-gray-200 dark:border-gray-600">
       <div className="w-full">
-        <header className="text-[28px] font-semibold text-[#232836] text-center">
+        <header className="text-[28px] font-semibold text-gray-800 dark:text-white text-center">
           {t("auth.register.title")}
         </header>
         {error && (
@@ -121,7 +121,7 @@ function Register() {
               value={formData.name}
               onChange={handleChange}
               placeholder={t("auth.register.fullName")}
-              className="h-full w-full text-base font-normal rounded-md outline-none px-[15px] border border-solid border-[#CACACA] focus:border-b-2"
+              className="h-full w-full text-base font-normal rounded-md outline-none px-[15px] border border-solid border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary dark:focus:border-primary transition-colors"
               required
             />
           </div>
@@ -133,7 +133,7 @@ function Register() {
               value={formData.email}
               onChange={handleChange}
               placeholder={t("auth.register.email")}
-              className="h-full w-full text-base font-normal rounded-md outline-none px-[15px] border border-solid border-[#CACACA] focus:border-b-2"
+              className="h-full w-full text-base font-normal rounded-md outline-none px-[15px] border border-solid border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary dark:focus:border-primary transition-colors"
               required
             />
           </div>
@@ -145,7 +145,7 @@ function Register() {
               value={formData.password}
               onChange={handleChange}
               placeholder={t("auth.register.createPassword")}
-              className="password h-full w-full text-base font-normal rounded-md outline-none px-[15px] border border-solid border-[#CACACA] focus:border-b-2"
+              className="password h-full w-full text-base font-normal rounded-md outline-none px-[15px] border border-solid border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary dark:focus:border-primary transition-colors"
               required
             />
           </div>
@@ -157,7 +157,7 @@ function Register() {
               value={formData.password_confirmation}
               onChange={handleChange}
               placeholder={t("auth.register.confirmPassword")}
-              className="password h-full w-full text-base font-normal rounded-md outline-none px-[15px] border border-solid border-[#CACACA] focus:border-b-2"
+              className="password h-full w-full text-base font-normal rounded-md outline-none px-[15px] border border-solid border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary dark:focus:border-primary transition-colors"
               required
             />
           </div>
@@ -169,36 +169,36 @@ function Register() {
               value={formData.phone}
               onChange={handleChange}
               placeholder={t("auth.register.phone")}
-              className="h-full w-full text-base font-normal rounded-md outline-none px-[15px] border border-solid border-[#CACACA] focus:border-b-2"
+              className="h-full w-full text-base font-normal rounded-md outline-none px-[15px] border border-solid border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary dark:focus:border-primary transition-colors"
               required
             />
           </div>
 
           <div className="flex items-center gap-4 mt-[20px]">
-            <label className="text-base font-normal text-[#232836]">
+            <label className="text-base font-normal text-gray-700 dark:text-gray-300">
               {t("auth.register.gender")}:
             </label>
             <div className="flex gap-4">
-              <label className="flex items-center gap-2">
+              <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                 <input
                   type="radio"
                   name="gender"
                   value="male"
                   checked={formData.gender === "male"}
                   onChange={handleChange}
-                  className="accent-[#0171d3]"
+                  className="accent-primary"
                   required
                 />
                 {t("auth.register.male")}
               </label>
-              <label className="flex items-center gap-2">
+              <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                 <input
                   type="radio"
                   name="gender"
                   value="female"
                   checked={formData.gender === "female"}
                   onChange={handleChange}
-                  className="accent-[#0171d3]"
+                  className="accent-primary"
                   required
                 />
                 {t("auth.register.female")}
@@ -212,8 +212,8 @@ function Register() {
               disabled={loading}
               className={`h-full w-full border-none text-base font-normal rounded-md text-white transition-all duration-300 ease-in-out cursor-pointer ${
                 loading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-[#0171d3] hover:bg-[#016dcb]"
+                  ? "bg-gray-400 dark:bg-gray-600 cursor-not-allowed"
+                  : "bg-gradient-to-r from-primary to-secondary hover:shadow-lg"
               }`}
             >
               {loading
@@ -224,11 +224,11 @@ function Register() {
         </form>
 
         <div className="text-center mt-[10px]">
-          <span className="text-sm font-normal text-[#232836]">
+          <span className="text-sm font-normal text-gray-700 dark:text-gray-300">
             {t("auth.register.alreadyHaveAccount")}{" "}
             <Link
               to="/auth/login"
-              className="text-[#0171d3] cursor-pointer no-underline hover:underline login-link"
+              className="text-primary dark:text-primary cursor-pointer no-underline hover:underline login-link font-semibold"
             >
               {t("auth.register.login")}
             </Link>

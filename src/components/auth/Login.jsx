@@ -24,9 +24,9 @@ const Login = () => {
   };
 
   return (
-    <div className="md:max-w-[430px] max-w-[400px] w-full p-[30px] rounded-md bg-white/30 backdrop-blur-md shadow-lg">
+    <div className="md:max-w-[430px] max-w-[400px] w-full p-[30px] rounded-lg bg-white dark:bg-gray-700 shadow-xl border border-gray-200 dark:border-gray-600">
       <div className="w-full">
-        <header className="text-[28px] font-semibold text-[#232836] text-center">
+        <header className="text-[28px] font-semibold text-gray-800 dark:text-white text-center">
           {t("auth.login.title")}
         </header>
         <form className="mt-[30px]" onSubmit={handleSubmit}>
@@ -36,7 +36,7 @@ const Login = () => {
               onChange={(e) => setEmail(e.target.value)}
               type="email"
               placeholder={t("auth.login.email")}
-              className="h-full w-full text-base font-normal rounded-md outline-none px-[15px] border border-solid border-[#CACACA] focus:border-b-2"
+              className="h-full w-full text-base font-normal rounded-md outline-none px-[15px] border border-solid border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary dark:focus:border-primary transition-colors"
             />
           </div>
 
@@ -46,7 +46,7 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
               type="password"
               placeholder={t("auth.login.password")}
-              className="password h-full w-full text-base font-normal rounded-md outline-none px-[15px] border border-solid border-[#CACACA] focus:border-b-2"
+              className="password h-full w-full text-base font-normal rounded-md outline-none px-[15px] border border-solid border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary dark:focus:border-primary transition-colors"
             />
             <i className="bx bx-hide eye-icon absolute top-1/2 right-[10px] transform -translate-y-1/2 text-[18px] text-[#8b8b8b] cursor-pointer p-[5px]"></i>
           </div>
@@ -67,7 +67,7 @@ const Login = () => {
           <div className="relative h-[50px] w-full mt-[20px] rounded-md">
             <button
               type="submit"
-              className="h-full w-full border-none text-base font-normal rounded-md text-white bg-[#0171d3] transition-all duration-300 ease-in-out cursor-pointer hover:bg-[#016dcb]"
+              className="h-full w-full border-none text-base font-normal rounded-md text-white bg-gradient-to-r from-primary to-secondary hover:shadow-lg transition-all duration-300 ease-in-out cursor-pointer"
             >
               {t("auth.login.loginButton")}
             </button>
@@ -75,11 +75,11 @@ const Login = () => {
         </form>
 
         <div className="text-center mt-[10px]">
-          <span className="text-sm font-normal text-[#232836]">
+          <span className="text-sm font-normal text-gray-700 dark:text-gray-300">
             {t("auth.login.noAccount")}{" "}
             <Link
               to="/auth/register"
-              className="text-[#0171d3] cursor-pointer no-underline hover:underline signup-link"
+              className="text-primary dark:text-primary cursor-pointer no-underline hover:underline signup-link font-semibold"
             >
               {t("auth.login.signup")}
             </Link>
