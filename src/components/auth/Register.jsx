@@ -16,6 +16,7 @@ function Register() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [showPasswordValidation, setShowPasswordValidation] = useState(false);
   const [passwordValidation, setPasswordValidation] = useState({
     minLength: false,
     hasLowercase: false,
@@ -25,6 +26,12 @@ function Register() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    
+    // Limit phone number to 11 digits
+    if (name === "phone" && value.length > 11) {
+      return;
+    }
+    
     setFormData({
       ...formData,
       [name]: value,
@@ -61,6 +68,10 @@ function Register() {
     }
     if (!formData.email.includes("@")) {
       setError(t("auth.register.validation.validEmail"));
+      return false;
+    }
+    if (!formData.phone || formData.phone.length < 11) {
+      setError("Phone number must be exactly 11 digits");
       return false;
     }
     if (!formData.password) {
@@ -177,6 +188,8 @@ function Register() {
               name="password"
               value={formData.password}
               onChange={handleChange}
+              onFocus={() => setShowPasswordValidation(true)}
+              onBlur={() => setShowPasswordValidation(false)}
               placeholder={t("auth.register.createPassword")}
               className="password h-full w-full text-base font-normal rounded-md outline-none px-[15px] border border-solid border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary dark:focus:border-primary transition-colors"
               required
@@ -184,7 +197,7 @@ function Register() {
           </div>
 
           {/* Password Validation Feedback */}
-          {formData.password && (
+          {formData.password && showPasswordValidation && (
             <div className="mt-2 space-y-1 text-sm bg-gray-50 dark:bg-gray-800 p-3 rounded-md border border-gray-200 dark:border-gray-600">
               <div className="font-medium text-gray-700 dark:text-gray-300 mb-2">
                 {t("auth.register.passwordRequirements") || "Password Requirements:"}
@@ -201,12 +214,6 @@ function Register() {
                 <span className="text-lg">{passwordValidation.hasUppercase ? '✅' : '○'}</span>
                 <span>At least one uppercase letter</span>
               </div>
-              {formData.password_confirmation && (
-                <div className={`flex items-center gap-2 transition-colors ${passwordValidation.passwordsMatch ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}`}>
-                  <span className="text-lg">{passwordValidation.passwordsMatch ? '✅' : '✗'}</span>
-                  <span>{passwordValidation.passwordsMatch ? 'Passwords match' : 'Passwords do not match'}</span>
-                </div>
-              )}
             </div>
           )}
 
@@ -222,10 +229,21 @@ function Register() {
             />
           </div>
 
+          {/* Password Match Indicator */}
+          {formData.password_confirmation && (
+            <div className="mt-2">
+              <div className={`flex items-center gap-2 text-sm transition-colors ${passwordValidation.passwordsMatch ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}`}>
+                <span className="text-lg">{passwordValidation.passwordsMatch ? '✅' : '✗'}</span>
+                <span>{passwordValidation.passwordsMatch ? 'Passwords match' : 'Passwords do not match'}</span>
+              </div>
+            </div>
+          )}
+
           <div className="relative h-[50px] w-full mt-[20px] rounded-md">
             <input
-              type="phone"
+              type="tel"
               name="phone"
+              maxLength="11"
               value={formData.phone}
               onChange={handleChange}
               placeholder={t("auth.register.phone")}
