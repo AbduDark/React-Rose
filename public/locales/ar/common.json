@@ -89,6 +89,16 @@
       "fetchFailed": "فشل في جلب الاشتراكات. حاول مرة أخرى."
     }
   },
+  "favorites": {
+    "title": "المفضلة",
+    "noFavorites": "لا توجد كورسات مفضلة بعد",
+    "addToFavorites": "إضافة للمفضلة",
+    "removeFromFavorites": "إزالة من المفضلة",
+    "confirmRemove": "هل تريد إزالة هذا الكورس من المفضلة؟",
+    "removedSuccess": "تم إزالة الكورس من المفضلة بنجاح",
+    "addedSuccess": "تم إضافة الكورس للمفضلة بنجاح",
+    "viewCourse": "عرض الكورس"
+  },
   "common": {
     "home": "الرئيسية",
     "about": "حول",

@@ -89,6 +89,16 @@
       "fetchFailed": "Failed to fetch subscriptions. Please try again."
     }
   },
+  "favorites": {
+    "title": "Favorites",
+    "noFavorites": "No favorite courses yet",
+    "addToFavorites": "Add to Favorites",
+    "removeFromFavorites": "Remove from Favorites",
+    "confirmRemove": "Do you want to remove this course from favorites?",
+    "removedSuccess": "Course removed from favorites successfully",
+    "addedSuccess": "Course added to favorites successfully",
+    "viewCourse": "View Course"
+  },
   "common": {
     "loading": "Loading...",
     "error": "An error occurred",

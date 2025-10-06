@@ -126,14 +126,14 @@ function EnrollCourse() {
   return (
     <div>
       {/* COURSE CARD */}
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden mb-6 transition-colors">
         <img src={course.image_url || ImageNotFound} alt="Course Thumbnail" className="w-full" />
-        <div className="p-4">
+        <div className="p-4 dark:bg-gray-800">
           {enrollError && (
-            <p className="text-red-500 text-sm mb-3">{enrollError}</p>
+            <p className="text-red-500 dark:text-red-400 text-sm mb-3">{enrollError}</p>
           )}
           {enrollSuccess && (
-            <p className="text-green-500 text-sm mb-3">
+            <p className="text-green-500 dark:text-green-400 text-sm mb-3">
               {t("enrollCourse.enrollSuccess")}
             </p>
           )}
@@ -166,13 +166,13 @@ function EnrollCourse() {
 
           {/* Payment Instructions */}
           {showSubscriptionForm && (
-            <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <h4 className="font-semibold text-blue-800 mb-3">
+            <div className="mb-4 p-4 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg transition-colors">
+              <h4 className="font-semibold text-blue-800 dark:text-blue-300 mb-3">
                 تعليمات الدفع
               </h4>
-              <div className="text-blue-700 text-sm space-y-2">
-                <p>يرجى تحويل مبلغ <strong>{course.price} جنيه</strong> إلى الرقم التالي:</p>
-                <p className="font-bold text-lg">01008187344</p>
+              <div className="text-blue-700 dark:text-blue-300 text-sm space-y-2">
+                <p>يرجى تحويل مبلغ <strong className="dark:text-blue-200">{course.price} جنيه</strong> إلى الرقم التالي:</p>
+                <p className="font-bold text-lg dark:text-blue-200">01008187344</p>
                 <p>بعد التحويل، خذ لقطة شاشة للدفع واملأ الفورم التالي:</p>
               </div>
             </div>
@@ -180,13 +180,13 @@ function EnrollCourse() {
 
           {/* Subscription Form */}
           {showSubscriptionForm && (
-            <div className="mb-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
-              <h4 className="font-semibold text-gray-800 mb-3">
+            <div className="mb-4 p-4 bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-lg transition-colors">
+              <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-3">
                 {t("enrollCourse.subscriptionDetails")}
               </h4>
               <div className="space-y-3">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     {t("enrollCourse.vodafoneNumber")}
                   </label>
                   <input
@@ -194,13 +194,13 @@ function EnrollCourse() {
                     name="vodafone_number"
                     value={subscriptionData.vodafone_number}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-gray-800 dark:text-gray-100 transition-colors"
                     placeholder={t("enrollCourse.vodafonePlaceholder")}
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     {t("enrollCourse.amount")}
                   </label>
                   <input
@@ -208,14 +208,14 @@ function EnrollCourse() {
                     name="amount"
                     value={course.price || subscriptionData.amount}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 bg-gray-100"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 bg-gray-100 dark:bg-gray-700 dark:text-gray-100 transition-colors"
                     placeholder={t("enrollCourse.amountPlaceholder")}
                     readOnly
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     {t("enrollCourse.parentPhone")}
                   </label>
                   <input
@@ -223,20 +223,20 @@ function EnrollCourse() {
                     name="parent_phone"
                     value={subscriptionData.parent_phone}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-gray-800 dark:text-gray-100 transition-colors"
                     placeholder={t("enrollCourse.parentPhonePlaceholder")}
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     {t("enrollCourse.studentInfo")}
                   </label>
                   <textarea
                     name="student_info"
                     value={subscriptionData.student_info}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-gray-100 dark:bg-gray-800 transition-colors"
                     placeholder={t("enrollCourse.studentInfoPlaceholder")}
                     rows="3"
                   />
@@ -244,7 +244,7 @@ function EnrollCourse() {
 
                 {/* Payment Proof Upload */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     {t("enrollCourse.paymentProof")} *
                   </label>
                   <input
@@ -253,9 +253,9 @@ function EnrollCourse() {
                     onChange={handleInputChange}
                     accept="image/*"
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-gray-100 dark:bg-gray-800 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900 file:text-blue-700 dark:file:text-blue-300 hover:file:bg-blue-100 dark:hover:file:bg-blue-800 transition-colors"
                   />
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                     {t("enrollCourse.paymentProofHint")}
                   </p>
                 </div>
@@ -267,7 +267,7 @@ function EnrollCourse() {
             <button
               onClick={handleEnroll}
               disabled={enrolling}
-              className="mb-3 w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg flex items-center justify-center"
+              className="mb-3 w-full bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 text-white py-3 px-4 rounded-lg flex items-center justify-center transition-colors disabled:opacity-50"
             >
               <FaGraduationCap
                 className={`${i18next.language === "ar" ? "ml-2" : "mr-2"}`}
@@ -281,7 +281,7 @@ function EnrollCourse() {
           {!subscriptionStatus?.subscription?.is_active ? (
             <button
               onClick={() => setShowSubscriptionForm(!showSubscriptionForm)}
-              className="w-full bg-pink-600 hover:bg-pink-700 text-white py-3 px-4 rounded-lg flex items-center justify-center"
+              className="w-full bg-pink-600 hover:bg-pink-700 dark:bg-pink-500 dark:hover:bg-pink-600 text-white py-3 px-4 rounded-lg flex items-center justify-center transition-colors"
             >
               <FaGraduationCap
                 className={`${i18next.language === "ar" ? "ml-2" : "mr-2"}`}
@@ -295,48 +295,48 @@ function EnrollCourse() {
       </div>
 
       {/* COURSE DETAILS */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <h3 className="text-lg font-bold mb-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-colors">
+        <h3 className="text-lg font-bold mb-4 dark:text-gray-100">
           {t("enrollCourse.courseIncludes")}
         </h3>
         <ul className="space-y-3">
           <li className="flex justify-between items-center py-2">
             <div className="flex items-center">
               <FaMoneyCheck
-                className={`text-pink-600 ${
+                className={`text-pink-600 dark:text-pink-400 ${
                   i18next.language === "ar" ? "ml-3" : "mr-3"
                 }`}
               />
-              <span>{t("enrollCourse.price")}</span>
+              <span className="dark:text-gray-200">{t("enrollCourse.price")}</span>
             </div>
-            <span className="text-gray-500">{course.price}</span>
+            <span className="text-gray-500 dark:text-gray-400">{course.price}</span>
           </li>
           <li className="flex justify-between items-center py-2">
             <div className="flex items-center">
               <FaBook
-                className={`text-pink-600 ${
+                className={`text-pink-600 dark:text-pink-400 ${
                   i18next.language === "ar" ? "ml-3" : "mr-3"
                 }`}
               />
-              <span>{t("enrollCourse.episodes")}</span>
+              <span className="dark:text-gray-200">{t("enrollCourse.episodes")}</span>
             </div>
-            <span className="text-gray-500">{course.lessons_count}</span>
+            <span className="text-gray-500 dark:text-gray-400">{course.lessons_count}</span>
           </li>
-          <li className="border-t border-gray-100"></li>
+          <li className="border-t border-gray-100 dark:border-gray-700"></li>
           <li className="flex justify-between items-center py-2">
             <div className="flex items-center">
               <FaClock
-                className={`text-pink-600 ${
+                className={`text-pink-600 dark:text-pink-400 ${
                   i18next.language === "ar" ? "ml-3" : "mr-3"
                 }`}
               />
-              <span>{t("enrollCourse.date")}</span>
+              <span className="dark:text-gray-200">{t("enrollCourse.date")}</span>
             </div>
-            <span className="text-gray-500">
+            <span className="text-gray-500 dark:text-gray-400">
               {course.created_at.split("T")[0]}
             </span>
           </li>
-          <li className="border-t border-gray-100"></li>
+          <li className="border-t border-gray-100 dark:border-gray-700"></li>
         </ul>
       </div>
     </div>
