@@ -167,13 +167,13 @@ function EnrollCourse() {
           {/* Payment Instructions */}
           {showSubscriptionForm && (
             <div className="mb-4 p-4 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg transition-colors">
-              <h4 className="font-semibold text-blue-800 dark:text-blue-300 mb-3">
+              <h4 className="font-semibold text-blue-800 dark:text-blue-200 mb-3 transition-colors">
                 تعليمات الدفع
               </h4>
-              <div className="text-blue-700 dark:text-blue-300 text-sm space-y-2">
-                <p>يرجى تحويل مبلغ <strong className="dark:text-blue-200">{course.price} جنيه</strong> إلى الرقم التالي:</p>
-                <p className="font-bold text-lg dark:text-blue-200">01008187344</p>
-                <p>بعد التحويل، خذ لقطة شاشة للدفع واملأ الفورم التالي:</p>
+              <div className="text-blue-700 dark:text-blue-300 text-sm space-y-2 transition-colors">
+                <p>يرجى تحويل مبلغ <strong className="dark:text-blue-100">{course.price} جنيه</strong> إلى الرقم التالي:</p>
+                <p className="font-bold text-lg dark:text-blue-100 transition-colors">01008187344</p>
+                <p className="dark:text-blue-300">بعد التحويل، خذ لقطة شاشة للدفع واملأ الفورم التالي:</p>
               </div>
             </div>
           )}
@@ -267,7 +267,7 @@ function EnrollCourse() {
             <button
               onClick={handleEnroll}
               disabled={enrolling}
-              className="mb-3 w-full bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 text-white py-3 px-4 rounded-lg flex items-center justify-center transition-colors disabled:opacity-50"
+              className="mb-3 w-full bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white dark:text-gray-100 py-3 px-4 rounded-lg flex items-center justify-center transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg dark:shadow-green-900/50"
             >
               <FaGraduationCap
                 className={`${i18next.language === "ar" ? "ml-2" : "mr-2"}`}
@@ -281,7 +281,7 @@ function EnrollCourse() {
           {!subscriptionStatus?.subscription?.is_active ? (
             <button
               onClick={() => setShowSubscriptionForm(!showSubscriptionForm)}
-              className="w-full bg-pink-600 hover:bg-pink-700 dark:bg-pink-500 dark:hover:bg-pink-600 text-white py-3 px-4 rounded-lg flex items-center justify-center transition-colors"
+              className="w-full bg-pink-600 hover:bg-pink-700 dark:bg-pink-600 dark:hover:bg-pink-700 text-white dark:text-gray-100 py-3 px-4 rounded-lg flex items-center justify-center transition-all duration-200 shadow-md hover:shadow-lg dark:shadow-pink-900/50"
             >
               <FaGraduationCap
                 className={`${i18next.language === "ar" ? "ml-2" : "mr-2"}`}
@@ -295,48 +295,48 @@ function EnrollCourse() {
       </div>
 
       {/* COURSE DETAILS */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-colors">
-        <h3 className="text-lg font-bold mb-4 dark:text-gray-100">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-colors border border-gray-100 dark:border-gray-700">
+        <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100 transition-colors">
           {t("enrollCourse.courseIncludes")}
         </h3>
         <ul className="space-y-3">
-          <li className="flex justify-between items-center py-2">
+          <li className="flex justify-between items-center py-2 transition-colors">
             <div className="flex items-center">
               <FaMoneyCheck
-                className={`text-pink-600 dark:text-pink-400 ${
+                className={`text-pink-600 dark:text-pink-400 transition-colors ${
                   i18next.language === "ar" ? "ml-3" : "mr-3"
                 }`}
               />
-              <span className="dark:text-gray-200">{t("enrollCourse.price")}</span>
+              <span className="text-gray-700 dark:text-gray-200 transition-colors">{t("enrollCourse.price")}</span>
             </div>
-            <span className="text-gray-500 dark:text-gray-400">{course.price}</span>
+            <span className="text-gray-600 dark:text-gray-300 font-semibold transition-colors">{course.price}</span>
           </li>
-          <li className="flex justify-between items-center py-2">
+          <li className="flex justify-between items-center py-2 transition-colors">
             <div className="flex items-center">
               <FaBook
-                className={`text-pink-600 dark:text-pink-400 ${
+                className={`text-pink-600 dark:text-pink-400 transition-colors ${
                   i18next.language === "ar" ? "ml-3" : "mr-3"
                 }`}
               />
-              <span className="dark:text-gray-200">{t("enrollCourse.episodes")}</span>
+              <span className="text-gray-700 dark:text-gray-200 transition-colors">{t("enrollCourse.episodes")}</span>
             </div>
-            <span className="text-gray-500 dark:text-gray-400">{course.lessons_count}</span>
+            <span className="text-gray-600 dark:text-gray-300 font-semibold transition-colors">{course.lessons_count}</span>
           </li>
-          <li className="border-t border-gray-100 dark:border-gray-700"></li>
-          <li className="flex justify-between items-center py-2">
+          <li className="border-t border-gray-100 dark:border-gray-700 transition-colors"></li>
+          <li className="flex justify-between items-center py-2 transition-colors">
             <div className="flex items-center">
               <FaClock
-                className={`text-pink-600 dark:text-pink-400 ${
+                className={`text-pink-600 dark:text-pink-400 transition-colors ${
                   i18next.language === "ar" ? "ml-3" : "mr-3"
                 }`}
               />
-              <span className="dark:text-gray-200">{t("enrollCourse.date")}</span>
+              <span className="text-gray-700 dark:text-gray-200 transition-colors">{t("enrollCourse.date")}</span>
             </div>
-            <span className="text-gray-500 dark:text-gray-400">
+            <span className="text-gray-600 dark:text-gray-300 font-semibold transition-colors">
               {course.created_at.split("T")[0]}
             </span>
           </li>
-          <li className="border-t border-gray-100 dark:border-gray-700"></li>
+          <li className="border-t border-gray-100 dark:border-gray-700 transition-colors"></li>
         </ul>
       </div>
     </div>
