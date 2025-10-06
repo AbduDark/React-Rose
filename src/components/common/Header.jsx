@@ -119,43 +119,78 @@ const Header = () => {
           </div>
 
           <div className="hidden md:flex md:items-center md:flex-1 md:justify-between md:ml-10">
-            <ul
-              className={`flex space-x-2 ${
-                i18n.language === "ar" ? "flex-row-reverse space-x-reverse" : ""
-              }`}
-            >
-              <li>
-                <Link
-                  className={getActiveLinkClasses(isActiveLink("/"))}
-                  to="/"
-                >
-                  {t("header.home")}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className={getActiveLinkClasses(isActiveLink("/courses"))}
-                  to="/courses"
-                >
-                  {t("header.courses")}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className={getActiveLinkClasses(isActiveLink("/about"))}
-                  to="/about"
-                >
-                  {t("header.about")}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className={getActiveLinkClasses(isActiveLink("/contact"))}
-                  to="/contact"
-                >
-                  {t("header.contact")}
-                </Link>
-              </li>
+            <ul className={`flex space-x-2 ${i18n.language === "ar" ? "flex-row-reverse space-x-reverse" : ""}`} dir="ltr">
+              {i18n.language === "ar" ? (
+                <>
+                  <li>
+                    <Link
+                      className={getActiveLinkClasses(isActiveLink("/"))}
+                      to="/"
+                    >
+                      {t("header.home")}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className={getActiveLinkClasses(isActiveLink("/courses"))}
+                      to="/courses"
+                    >
+                      {t("header.courses")}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className={getActiveLinkClasses(isActiveLink("/contact"))}
+                      to="/contact"
+                    >
+                      {t("header.contact")}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className={getActiveLinkClasses(isActiveLink("/about"))}
+                      to="/about"
+                    >
+                      {t("header.about")}
+                    </Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <Link
+                      className={getActiveLinkClasses(isActiveLink("/"))}
+                      to="/"
+                    >
+                      {t("header.home")}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className={getActiveLinkClasses(isActiveLink("/courses"))}
+                      to="/courses"
+                    >
+                      {t("header.courses")}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className={getActiveLinkClasses(isActiveLink("/contact"))}
+                      to="/contact"
+                    >
+                      {t("header.contact")}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className={getActiveLinkClasses(isActiveLink("/about"))}
+                      to="/about"
+                    >
+                      {t("header.about")}
+                    </Link>
+                  </li>
+                </>
+              )}
             </ul>
 
             <div className="flex items-center space-x-4">
@@ -285,18 +320,18 @@ const Header = () => {
                 {t("header.courses")}
               </Link>
               <Link
-                to="/about"
-                className={getActiveMobileLinkClasses(isActiveLink("/about"))}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {t("header.about")}
-              </Link>
-              <Link
                 to="/contact"
                 className={getActiveMobileLinkClasses(isActiveLink("/contact"))}
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t("header.contact")}
+              </Link>
+              <Link
+                to="/about"
+                className={getActiveMobileLinkClasses(isActiveLink("/about"))}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {t("header.about")}
               </Link>
 
               <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-700">
