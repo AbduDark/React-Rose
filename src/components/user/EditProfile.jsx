@@ -109,14 +109,14 @@ const EditProfile = ({ profile: initialProfile, onUpdate }) => {
   if (!editMode) {
     return (
       <div className="mx-auto w-full p-4">
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <div className="p-4 sm:p-6 border-b border-gray-200 flex justify-between items-center">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transition-colors">
+          <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">
               {t("userProfile.studentProfile")}
             </h2>
             <button
               onClick={() => setEditMode(true)}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              className="flex items-center px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
             >
               <FaSave
                 className={`${i18n.language === "ar" ? "ml-2" : "mr-2"}`}
@@ -128,40 +128,40 @@ const EditProfile = ({ profile: initialProfile, onUpdate }) => {
 
           <div className="p-4 sm:p-6">
             {error && (
-              <div className="mb-6 p-3 bg-red-100 text-red-700 rounded-md">
+              <div className="mb-6 p-3 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-md transition-colors">
                 {error}
               </div>
             )}
             {success && (
-              <div className="mb-6 p-3 bg-green-100 text-green-700 rounded-md">
+              <div className="mb-6 p-3 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-200 rounded-md transition-colors">
                 {typeof success === 'string' ? success : t("userProfile.profileUpdated")}
               </div>
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div className="col-span-1">
-                <p className="text-sm font-medium text-gray-500">
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                   {t("userProfile.name")}
                 </p>
-                <p className="text-gray-800 mt-1">{initialProfile?.name || formData.name || "N/A"}</p>
+                <p className="text-gray-800 dark:text-gray-200 mt-1">{initialProfile?.name || formData.name || "N/A"}</p>
               </div>
               <div className="col-span-1">
-                <p className="text-sm font-medium text-gray-500">
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                   {t("userProfile.email")}
                 </p>
-                <p className="text-gray-800 mt-1">{initialProfile?.email || "N/A"}</p>
+                <p className="text-gray-800 dark:text-gray-200 mt-1">{initialProfile?.email || "N/A"}</p>
               </div>
               <div className="col-span-1">
-                <p className="text-sm font-medium text-gray-500">
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                   {t("userProfile.phone")}
                 </p>
-                <p className="text-gray-800 mt-1">{initialProfile?.phone || formData.phone || "N/A"}</p>
+                <p className="text-gray-800 dark:text-gray-200 mt-1">{initialProfile?.phone || formData.phone || "N/A"}</p>
               </div>
               <div className="col-span-1">
-                <p className="text-sm font-medium text-gray-500">
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                   {t("userProfile.gender")}
                 </p>
-                <p className="text-gray-800 mt-1">
+                <p className="text-gray-800 dark:text-gray-200 mt-1">
                   {initialProfile?.gender === "male" 
                     ? t("userProfile.male") 
                     : initialProfile?.gender === "female" 
@@ -178,14 +178,14 @@ const EditProfile = ({ profile: initialProfile, onUpdate }) => {
 
   return (
     <div className="mx-auto w-full p-4">
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="p-4 sm:p-6 border-b border-gray-200 flex justify-between items-center">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transition-colors">
+        <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">
             {t("userProfile.editStudentProfile")}
           </h2>
           <button
             onClick={handleCancel}
-            className="flex items-center px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
+            className="flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
           >
             {t("userProfile.cancel")}
           </button>
@@ -193,12 +193,12 @@ const EditProfile = ({ profile: initialProfile, onUpdate }) => {
 
         <div className="p-4 sm:p-6">
           {success && (
-            <div className="mb-6 p-3 bg-green-100 text-green-700 rounded-md">
+            <div className="mb-6 p-3 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-200 rounded-md transition-colors">
               {typeof success === 'string' ? success : t("userProfile.profileUpdated")}
             </div>
           )}
           {error && (
-            <div className="mb-6 p-3 bg-red-100 text-red-700 rounded-md">
+            <div className="mb-6 p-3 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-md transition-colors">
               {error}
             </div>
           )}
@@ -206,7 +206,7 @@ const EditProfile = ({ profile: initialProfile, onUpdate }) => {
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div className="col-span-1 md:col-span-2">
-                <p className="text-sm font-medium text-gray-500 mb-2">
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
                   {t("userProfile.profilePicture")}
                 </p>
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
@@ -226,7 +226,7 @@ const EditProfile = ({ profile: initialProfile, onUpdate }) => {
                       </button>
                     )}
                   </div>
-                  <label className="flex items-center px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors cursor-pointer">
+                  <label className="flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer">
                     <FaCloudUploadAlt
                       className={`${
                         i18n.language === "ar" ? "ml-2" : "mr-2"
@@ -245,7 +245,7 @@ const EditProfile = ({ profile: initialProfile, onUpdate }) => {
                 </div>
               </div>
               <div className="col-span-1">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   {t("userProfile.name")}
                 </label>
                 <input
@@ -255,11 +255,11 @@ const EditProfile = ({ profile: initialProfile, onUpdate }) => {
                   onChange={handleChange}
                   required
                   disabled={loading}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 />
               </div>
               <div className="col-span-1">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   {t("userProfile.phone")}
                 </label>
                 <input
@@ -268,14 +268,14 @@ const EditProfile = ({ profile: initialProfile, onUpdate }) => {
                   value={formData.phone}
                   onChange={handleChange}
                   disabled={loading}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 />
               </div>
               <div className="col-span-1 md:col-span-2 mt-4">
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full flex justify-center items-center px-4 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
+                  className="w-full flex justify-center items-center px-4 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors disabled:opacity-50"
                 >
                   {loading ? (
                     <div className="flex items-center">

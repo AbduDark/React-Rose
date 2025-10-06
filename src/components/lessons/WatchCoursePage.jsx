@@ -125,8 +125,8 @@ const WatchCoursePage = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-50">
-        <p className="text-lg font-medium text-primary">
+      <div className="flex items-center justify-center h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+        <p className="text-lg font-medium text-primary dark:text-primary-light">
           {t("lessons.videoPlayer.loading")}
         </p>
       </div>
@@ -135,23 +135,23 @@ const WatchCoursePage = () => {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-50">
-        <p className="text-lg font-medium text-red-600">{error}</p>
+      <div className="flex items-center justify-center h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+        <p className="text-lg font-medium text-red-600 dark:text-red-400">{error}</p>
       </div>
     );
   }
 
   if (!isPurchased) {
     return (
-      <div className="flex flex-col items-center justify-center bg-gray-50 px-4 py-12 min-h-screen">
+      <div className="flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 py-12 min-h-screen transition-colors">
         <div className="max-w-md text-center">
-          <h1 className="text-3xl font-bold mb-4 text-primary">
+          <h1 className="text-3xl font-bold mb-4 text-primary dark:text-primary-light">
             {t("lessons.title")}
           </h1>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-600 dark:text-gray-300 mb-6">
             {t("overviewCourse.subscribeToView")}
           </p>
-          <button className="bg-primary text-white px-4 py-2 rounded-md hover:bg-secondary">
+          <button className="bg-primary hover:bg-secondary text-white px-4 py-2 rounded-md transition-colors">
             {t("enrollCourse.enrollNow")}
           </button>
         </div>
@@ -160,24 +160,24 @@ const WatchCoursePage = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 transition-colors">
       <div
         dir="ltr"
-        className="flex items-center justify-between p-4 border-b bg-white"
+        className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-colors"
       >
         <div className="flex items-center gap-4">
           <button
-            className="p-2 rounded-full hover:bg-gray-100"
+            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             onClick={() => navigate(-1)}
           >
-            <FaChevronLeft className="h-5 w-5 text-primary" />
+            <FaChevronLeft className="h-5 w-5 text-primary dark:text-primary-light" />
           </button>
           <div>
-            <h1 className="text-lg font-semibold text-primary">
+            <h1 className="text-lg font-semibold text-primary dark:text-primary-light">
               {t("lessons.title")} #{courseId}
             </h1>
             {currentLesson && (
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 <span className="font-medium">{currentLesson.title}</span>
               </p>
             )}
@@ -187,7 +187,7 @@ const WatchCoursePage = () => {
 
       <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">
         {/* Sidebar */}
-        <div className="lg:w-80 bg-white border-l p-4 overflow-auto">
+        <div className="lg:w-80 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 p-4 overflow-auto transition-colors">
           <div className="space-y-4">
             <Sidebar
               lessons={lessons}
@@ -209,8 +209,8 @@ const WatchCoursePage = () => {
               onVideoEnd={handleVideoEnd}
             />
           ) : (
-            <div className="w-full flex-1 bg-gray-100 rounded-lg flex items-center justify-center">
-              <p className="text-gray-500 text-lg font-medium">
+            <div className="w-full flex-1 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center transition-colors">
+              <p className="text-gray-500 dark:text-gray-400 text-lg font-medium">
                 {t("lessons.videoPlayer.noLesson")}
               </p>
             </div>

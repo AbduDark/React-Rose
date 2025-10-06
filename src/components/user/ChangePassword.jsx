@@ -81,14 +81,14 @@ const ChangePassword = () => {
 
   return (
     <div className="mx-auto w-full p-4">
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="p-4 sm:p-6 border-b border-gray-200 flex justify-between items-center">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transition-colors">
+        <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">
             {t("changePassword.title")}
           </h2>
           <button
             onClick={handleCancel}
-            className="flex items-center px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
+            className="flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             disabled={loading}
           >
             <FaTimes
@@ -101,12 +101,12 @@ const ChangePassword = () => {
 
         <div className="p-4 sm:p-6">
           {success && (
-            <div className="mb-6 p-3 bg-green-100 text-green-700 rounded-md">
+            <div className="mb-6 p-3 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-200 rounded-md transition-colors">
               {typeof success === 'string' ? success : t("changePassword.passwordChanged")}
             </div>
           )}
           {error && (
-            <div className="mb-6 p-3 bg-red-100 text-red-700 rounded-md">
+            <div className="mb-6 p-3 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-md transition-colors">
               {error}
             </div>
           )}
@@ -114,7 +114,7 @@ const ChangePassword = () => {
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div className="col-span-1">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   {t("changePassword.currentPassword")}
                 </label>
                 <input
@@ -124,11 +124,11 @@ const ChangePassword = () => {
                   onChange={handleChange}
                   required
                   disabled={loading}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 />
               </div>
               <div className="col-span-1">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   {t("changePassword.newPassword")}
                 </label>
                 <input
@@ -138,11 +138,11 @@ const ChangePassword = () => {
                   onChange={handleChange}
                   required
                   disabled={loading}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 />
               </div>
               <div className="col-span-1">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   {t("changePassword.confirmNewPassword")}
                 </label>
                 <input
@@ -152,14 +152,14 @@ const ChangePassword = () => {
                   onChange={handleChange}
                   required
                   disabled={loading}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 />
               </div>
               <div className="col-span-1 md:col-span-2 mt-4">
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full flex justify-center items-center px-4 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
+                  className="w-full flex justify-center items-center px-4 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors disabled:opacity-50"
                 >
                   {loading ? (
                     <div className="flex items-center">

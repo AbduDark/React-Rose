@@ -7,7 +7,7 @@ const CoursesPage = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="bg-blue-50/10 min-h-screen">
+    <div className="bg-blue-50/10 dark:bg-gray-900 min-h-screen transition-colors">
       {/* Page Header */}
       <HeaderAllCourses />
       {/* Courses Section */}
@@ -16,7 +16,7 @@ const CoursesPage = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 1440 320"
-        className="w-full"
+        className="w-full dark:opacity-10"
       >
         <path
           fill="#ffffff"

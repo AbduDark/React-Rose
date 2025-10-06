@@ -132,25 +132,25 @@ const MySubscriptions = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 font-sans">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 font-sans transition-colors">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-2xl font-extrabold text-gray-900 mb-10 text-center">
+        <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white mb-10 text-center">
           {t("mySubscriptions.title")}
         </h2>
 
         {success && (
-          <div className="mb-8 p-4 bg-green-100 text-green-800 rounded-lg text-center">
+          <div className="mb-8 p-4 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-lg text-center transition-colors">
             {success}
           </div>
         )}
         
         {error && (
-          <div className="mb-8 p-4 bg-red-100 text-red-800 rounded-lg text-center">
+          <div className="mb-8 p-4 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 rounded-lg text-center transition-colors">
             {error}
             {error.includes("log in") && (
               <Link
                 to="/auth/login"
-                className="ml-2 text-indigo-600 hover:underline"
+                className="ml-2 text-indigo-600 dark:text-indigo-400 hover:underline"
               >
                 {t("auth.login.loginButton")}
               </Link>
@@ -160,12 +160,12 @@ const MySubscriptions = () => {
 
         {loading && !error ? (
           <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-indigo-600 transition-all duration-300"></div>
+            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-indigo-600 dark:border-indigo-400 transition-all duration-300"></div>
           </div>
         ) : subscriptions.length === 0 && !error ? (
-          <div className="text-center py-16 bg-white rounded-lg shadow-md">
+          <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-lg shadow-md transition-colors">
             <svg
-              className="mx-auto h-16 w-16 text-gray-400"
+              className="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -179,13 +179,13 @@ const MySubscriptions = () => {
                 d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
               />
             </svg>
-            <p className="mt-4 text-xl text-gray-600 font-medium">
+            <p className="mt-4 text-xl text-gray-600 dark:text-gray-300 font-medium">
               {t("mySubscriptions.noSubscriptions")}.{" "}
               {t("mySubscriptions.explore")}
             </p>
             <Link
               to="/courses"
-              className="mt-6 inline-block bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-200 text-sm font-semibold"
+              className="mt-6 inline-block bg-indigo-600 dark:bg-indigo-500 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors duration-200 text-sm font-semibold"
             >
               {t("mySubscriptions.explore")}
             </Link>
@@ -195,7 +195,7 @@ const MySubscriptions = () => {
             {subscriptions.map((sub) => (
               <div
                 key={sub.id}
-                className="bg-white shadow-md rounded-xl p-6 hover:shadow-lg transition-all duration-300 border border-gray-100"
+                className="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6 hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700"
               >
                 <div className="mb-4">
                   <div
@@ -215,14 +215,14 @@ const MySubscriptions = () => {
                     )}
                   </div>
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold text-gray-900">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                       {sub.course?.title || t("cardCourse.error")}
                     </h3>
                     <span
                       className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
                         sub.is_active
-                          ? "bg-green-100 text-green-800"
-                          : "bg-gray-100 text-gray-800"
+                          ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200"
+                          : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
                       }`}
                     >
                       {sub.status
@@ -232,7 +232,7 @@ const MySubscriptions = () => {
                     </span>
                   </div>
                 </div>
-                <div className="space-y-2 text-gray-600">
+                <div className="space-y-2 text-gray-600 dark:text-gray-300">
                   <p>
                     <span className="font-medium">
                       {t("mySubscriptions.instructor")}:
@@ -278,7 +278,7 @@ const MySubscriptions = () => {
                 <div className="mt-6 space-y-2">
                   <Link
                     to={`/courses/${sub.course_id}/lessons/`}
-                    className="inline-block w-full text-center bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-200 text-sm font-semibold"
+                    className="inline-block w-full text-center bg-indigo-600 dark:bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors duration-200 text-sm font-semibold"
                   >
                     {t("mySubscriptions.viewCourse")}
                   </Link>
@@ -302,7 +302,7 @@ const MySubscriptions = () => {
                           setError(null);
                           setSuccess(null);
                         }}
-                        className="flex-1 bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 text-sm font-semibold"
+                        className="flex-1 bg-green-600 dark:bg-green-500 text-white px-3 py-2 rounded-lg hover:bg-green-700 dark:hover:bg-green-600 transition-colors duration-200 text-sm font-semibold"
                       >
                         {t("mySubscriptions.renew") || "تجديد الاشتراك"}
                       </button>
@@ -310,8 +310,8 @@ const MySubscriptions = () => {
                   </div>
 
                   {showRenewForm === sub.id && (
-                    <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                      <h5 className="font-semibold text-gray-800 mb-2">
+                    <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg transition-colors">
+                      <h5 className="font-semibold text-gray-800 dark:text-white mb-2">
                         {t("mySubscriptions.renewForm") || "تجديد الاشتراك"}
                       </h5>
                       <div className="space-y-2">
@@ -320,7 +320,7 @@ const MySubscriptions = () => {
                           name="vodafone_number"
                           value={renewData.vodafone_number}
                           onChange={handleRenewInputChange}
-                          className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                          className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-colors"
                           placeholder={t("enrollCourse.vodafonePlaceholder") || "رقم فودافون"}
                           required
                         />
@@ -329,12 +329,12 @@ const MySubscriptions = () => {
                           name="parent_phone"
                           value={renewData.parent_phone}
                           onChange={handleRenewInputChange}
-                          className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                          className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-colors"
                           placeholder={t("enrollCourse.parentPhonePlaceholder") || "رقم ولي الأمر"}
                           required
                         />
                         <div>
-                          <label className="block text-xs text-gray-600 mb-1">
+                          <label className="block text-xs text-gray-600 dark:text-gray-300 mb-1">
                             {t("enrollCourse.paymentProof") || "إثبات الدفع"}
                           </label>
                           <input
@@ -343,10 +343,10 @@ const MySubscriptions = () => {
                             onChange={handleRenewInputChange}
                             accept="image/*"
                             required
-                            className="w-full px-2 py-1 border border-gray-300 rounded text-sm file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700"
+                            className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 dark:file:bg-blue-900 file:text-blue-700 dark:file:text-blue-200 transition-colors"
                           />
                           {renewData.payment_proof && (
-                            <p className="text-xs text-green-600 mt-1">
+                            <p className="text-xs text-green-600 dark:text-green-400 mt-1">
                               ✓ {renewData.payment_proof.name}
                             </p>
                           )}
@@ -359,7 +359,7 @@ const MySubscriptions = () => {
                           <button
                             onClick={() => handleRenewSubscription(sub.id)}
                             disabled={actionLoading === sub.id}
-                            className="flex-1 bg-green-600 text-white px-3 py-1 rounded text-sm font-semibold disabled:opacity-50 hover:bg-green-700"
+                            className="flex-1 bg-green-600 dark:bg-green-500 text-white px-3 py-1 rounded text-sm font-semibold disabled:opacity-50 hover:bg-green-700 dark:hover:bg-green-600 transition-colors"
                           >
                             {actionLoading === sub.id
                               ? t("enrollCourse.processing") || "جارٍ المعالجة..."
@@ -371,7 +371,7 @@ const MySubscriptions = () => {
                               setRenewData({ vodafone_number: "", parent_phone: "", payment_proof: null });
                               setError(null);
                             }}
-                            className="flex-1 bg-gray-500 text-white px-3 py-1 rounded text-sm font-semibold hover:bg-gray-600"
+                            className="flex-1 bg-gray-500 dark:bg-gray-600 text-white px-3 py-1 rounded text-sm font-semibold hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors"
                           >
                             {t("common.cancel")}
                           </button>

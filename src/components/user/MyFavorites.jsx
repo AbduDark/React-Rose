@@ -80,28 +80,28 @@ const MyFavorites = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 font-sans">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 font-sans transition-colors">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-center mb-10">
-          <FiHeart className="w-8 h-8 text-red-500 mr-3" />
-          <h2 className="text-2xl font-extrabold text-gray-900">
+          <FiHeart className="w-8 h-8 text-red-500 dark:text-red-400 mr-3" />
+          <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white">
             {t("favorites.title") || "المفضلات"}
           </h2>
         </div>
 
         {success && (
-          <div className="mb-8 p-4 bg-green-100 text-green-800 rounded-lg text-center">
+          <div className="mb-8 p-4 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-lg text-center transition-colors">
             {success}
           </div>
         )}
         
         {error && (
-          <div className="mb-8 p-4 bg-red-100 text-red-800 rounded-lg text-center">
+          <div className="mb-8 p-4 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 rounded-lg text-center transition-colors">
             {error}
             {error.includes("log in") && (
               <Link
                 to="/auth/login"
-                className="ml-2 text-indigo-600 hover:underline"
+                className="ml-2 text-indigo-600 dark:text-indigo-400 hover:underline"
               >
                 {t("auth.login.loginButton")}
               </Link>
@@ -111,17 +111,17 @@ const MyFavorites = () => {
 
         {loading && !error ? (
           <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-indigo-600 transition-all duration-300"></div>
+            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-indigo-600 dark:border-indigo-400 transition-all duration-300"></div>
           </div>
         ) : favorites.length === 0 && !error ? (
-          <div className="text-center py-16 bg-white rounded-lg shadow-md">
-            <FiHeart className="mx-auto h-16 w-16 text-gray-400" />
-            <p className="mt-4 text-xl text-gray-600 font-medium">
+          <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-lg shadow-md transition-colors">
+            <FiHeart className="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500" />
+            <p className="mt-4 text-xl text-gray-600 dark:text-gray-300 font-medium">
               {t("favorites.noFavorites") || "لا توجد كورسات مفضلة بعد"}
             </p>
             <Link
               to="/courses"
-              className="mt-6 inline-block bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-200 text-sm font-semibold"
+              className="mt-6 inline-block bg-indigo-600 dark:bg-indigo-500 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors duration-200 text-sm font-semibold"
             >
               {t("mySubscriptions.explore") || "استكشف الدورات"}
             </Link>
@@ -131,12 +131,12 @@ const MyFavorites = () => {
             {favorites.map((fav) => (
               <div
                 key={fav.id}
-                className="bg-white shadow-md rounded-xl p-6 hover:shadow-lg transition-all duration-300 border border-gray-100 relative"
+                className="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6 hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700 relative"
               >
                 <button
                   onClick={() => setRemoveConfirm({ isOpen: true, courseId: fav.course_id })}
                   disabled={actionLoading === fav.course_id}
-                  className="absolute top-4 right-4 text-red-500 hover:text-red-700 transition-colors disabled:opacity-50"
+                  className="absolute top-4 right-4 text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-600 transition-colors disabled:opacity-50"
                   title={t("favorites.removeFromFavorites") || "إزالة من المفضلة"}
                 >
                   <FiHeart className="w-6 h-6 fill-current" />
@@ -158,14 +158,14 @@ const MyFavorites = () => {
                     )}
                   </div>
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold text-gray-900">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                       {fav.course?.title || t("cardCourse.error")}
                     </h3>
                     <span
                       className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
                         fav.is_active
-                          ? "bg-green-100 text-green-800"
-                          : "bg-gray-100 text-gray-800"
+                          ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200"
+                          : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
                       }`}
                     >
                       {fav.status
@@ -175,7 +175,7 @@ const MyFavorites = () => {
                     </span>
                   </div>
                 </div>
-                <div className="space-y-2 text-gray-600">
+                <div className="space-y-2 text-gray-600 dark:text-gray-300">
                   <p>
                     <span className="font-medium">
                       {t("mySubscriptions.instructor")}:
@@ -225,14 +225,14 @@ const MyFavorites = () => {
                 <div className="mt-6 space-y-2">
                   <Link
                     to={`/courses/${fav.course_id}`}
-                    className="inline-block w-full text-center bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-200 text-sm font-semibold"
+                    className="inline-block w-full text-center bg-indigo-600 dark:bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors duration-200 text-sm font-semibold"
                   >
                     {t("favorites.viewCourse") || "عرض الكورس"}
                   </Link>
                   {fav.status === "approved" && fav.is_active && (
                     <Link
                       to={`/courses/${fav.course_id}/lessons/`}
-                      className="inline-block w-full text-center bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 text-sm font-semibold"
+                      className="inline-block w-full text-center bg-green-600 dark:bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700 dark:hover:bg-green-600 transition-colors duration-200 text-sm font-semibold"
                     >
                       {t("mySubscriptions.viewCourse") || "الدروس"}
                     </Link>
