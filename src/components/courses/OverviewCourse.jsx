@@ -58,13 +58,13 @@ function OverviewCourse() {
   return (
     <div>
       <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">
+        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
           {t("overviewCourse.description")}
         </h2>
-        <p className="text-gray-600">{course.description}</p>
+        <p className="text-gray-600 dark:text-gray-300">{course.description}</p>
       </div>
       <div>
-        <h2 className="text-2xl font-bold mb-4">
+        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
           {t("overviewCourse.curriculum")}
         </h2>
         {subscriptionStatus?.is_active ? (
@@ -74,15 +74,15 @@ function OverviewCourse() {
                 <div
                   key={episode.id}
                   onClick={() => handleEpisodeClick(episode.id, courseId)}
-                  className="p-4 border border-gray-200 rounded-lg hover:border-primary cursor-pointer transition-colors"
+                  className="p-4 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700/50 rounded-lg hover:border-primary dark:hover:border-primary cursor-pointer transition-colors"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="p-2 bg-pink-50 rounded-full text-pink-600">
+                    <div className="p-2 bg-pink-50 dark:bg-pink-900/30 rounded-full text-pink-600 dark:text-pink-400">
                       <FaBook />
                     </div>
                     <div>
-                      <h3 className="font-medium">{episode.title}</h3>
-                      <p className="text-sm text-gray-500">
+                      <h3 className="font-medium text-gray-900 dark:text-gray-100">{episode.title}</h3>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
                         {episode.description}
                       </p>
                     </div>
@@ -91,10 +91,10 @@ function OverviewCourse() {
               ))}
             </div>
           ) : (
-            <p>{t("overviewCourse.noEpisodes")}</p>
+            <p className="text-gray-600 dark:text-gray-300">{t("overviewCourse.noEpisodes")}</p>
           )
         ) : (
-          <p className="text-gray-600">{t("overviewCourse.subscribeToView")}</p>
+          <p className="text-gray-600 dark:text-gray-300">{t("overviewCourse.subscribeToView")}</p>
         )}
       </div>
     </div>

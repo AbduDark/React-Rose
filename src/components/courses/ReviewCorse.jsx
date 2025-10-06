@@ -117,21 +117,21 @@ function ReviewCourse() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6">
+      <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
         {t("reviewCourse.studentReviews")}
       </h2>
       {loading ? (
-        <p>{t("reviewCourse.loadingReviews")}</p>
+        <p className="text-gray-600 dark:text-gray-300">{t("reviewCourse.loadingReviews")}</p>
       ) : reviews && reviews.length > 0 ? (
         <>
           <div dir="ltr" className="mb-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="text-center md:text-left">
-                <h3 className="text-5xl font-bold mb-2">{averageRating}</h3>
+                <h3 className="text-5xl font-bold mb-2 text-gray-900 dark:text-gray-100">{averageRating}</h3>
                 <div className="flex justify-center md:justify-start mb-2">
                   {renderStars(averageRating)}
                 </div>
-                <p className="text-gray-500">
+                <p className="text-gray-500 dark:text-gray-400">
                   {t("reviewCourse.basedOnAverage")}
                 </p>
               </div>
@@ -148,18 +148,18 @@ function ReviewCourse() {
                     <div key={rating} className="mb-3">
                       <div className="flex items-center gap-4">
                         <div className="flex-1">
-                          <div className="w-full bg-gray-200 rounded-full h-1.5">
+                          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
                             <div
-                              className="bg-yellow-400 h-1.5 rounded-full"
+                              className="bg-yellow-400 dark:bg-yellow-500 h-1.5 rounded-full"
                               style={{ width: `${percent}%` }}
                             ></div>
                           </div>
                         </div>
                         <div className="flex items-center">
-                          <span className="text-sm text-gray-500 mr-2">
+                          <span className="text-sm text-gray-500 dark:text-gray-400 mr-2">
                             {rating}
                           </span>
-                          <FaStar className="text-yellow-400 text-sm" />
+                          <FaStar className="text-yellow-400 dark:text-yellow-500 text-sm" />
                         </div>
                       </div>
                     </div>
@@ -169,12 +169,12 @@ function ReviewCourse() {
             </div>
           </div>
 
-          <div className="border-t border-gray-200 my-6"></div>
+          <div className="border-t border-gray-200 dark:border-gray-700 my-6"></div>
 
           <div className="space-y-6">
             {reviews.map((comment) => (
               <div key={comment.id}>
-                <div className="flex pb-6 mb-6 border-b border-gray-100">
+                <div className="flex pb-6 mb-6 border-b border-gray-100 dark:border-gray-700">
                   {comment.user?.image ? (
                     <img
                       src={
@@ -186,20 +186,20 @@ function ReviewCourse() {
                     />
                   ) : (
                     <FaUserCircle
-                      className={`text-2xl ${
+                      className={`text-2xl text-gray-600 dark:text-gray-400 ${
                         i18next.language === "ar" ? "ml-6" : "mr-6"
                       }`}
                     />
                   )}
                   <div>
-                    <h3 className="font-bold">
+                    <h3 className="font-bold text-gray-900 dark:text-gray-100">
                       {comment.user?.name || "User"}
                     </h3>
                     <div className="flex mb-2">
                       {renderStars(comment.rating)}
                     </div>
-                    <p className="text-gray-600 mb-2">{comment.review}</p>
-                    <p className="text-sm text-gray-400">
+                    <p className="text-gray-600 dark:text-gray-300 mb-2">{comment.review}</p>
+                    <p className="text-sm text-gray-400 dark:text-gray-500">
                       {comment.created_at?.split("T")[0]}
                     </p>
                   </div>
@@ -209,23 +209,23 @@ function ReviewCourse() {
           </div>
         </>
       ) : (
-        <p>{t("reviewCourse.noReviews")}</p>
+        <p className="text-gray-600 dark:text-gray-300">{t("reviewCourse.noReviews")}</p>
       )}
 
       <div className="mt-8">
-        <h2 className="text-2xl font-bold mb-4">
+        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
           {t("reviewCourse.leaveReview")}
         </h2>
-        {reviewError && <p className="text-red-500 mb-4">{reviewError}</p>}
+        {reviewError && <p className="text-red-500 dark:text-red-400 mb-4">{reviewError}</p>}
         {reviewSuccess && (
-          <p className="text-green-500 mb-4">
+          <p className="text-green-500 dark:text-green-400 mb-4">
             {t("reviewCourse.reviewSubmitted")}
           </p>
         )}
         <form onSubmit={handleReviewSubmit} className="mt-4">
           <div className="space-y-4">
-            <div className="p-4 border border-gray-200 rounded-lg">
-              <label className="block text-gray-700 mb-2">
+            <div className="p-4 border border-gray-200 dark:border-gray-700 dark:bg-gray-700/50 rounded-lg">
+              <label className="block text-gray-700 dark:text-gray-200 mb-2">
                 {t("reviewCourse.yourRating")}
               </label>
               <div className="flex">
@@ -237,22 +237,22 @@ function ReviewCourse() {
                     className="text-2xl focus:outline-none"
                   >
                     {star <= reviewRating ? (
-                      <FaStar className="text-yellow-400" />
+                      <FaStar className="text-yellow-400 dark:text-yellow-500" />
                     ) : (
-                      <FaRegStar className="text-yellow-400" />
+                      <FaRegStar className="text-yellow-400 dark:text-yellow-500" />
                     )}
                   </button>
                 ))}
               </div>
             </div>
             <div>
-              <label htmlFor="review-text" className="block text-gray-700 mb-2">
+              <label htmlFor="review-text" className="block text-gray-700 dark:text-gray-200 mb-2">
                 {t("reviewCourse.yourReview")}
               </label>
               <textarea
                 id="review-text"
                 rows="4"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                 value={reviewText}
                 onChange={(e) => setReviewText(e.target.value)}
                 required
@@ -261,7 +261,7 @@ function ReviewCourse() {
             <div>
               <button
                 type="submit"
-                className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-lg flex items-center"
+                className="bg-pink-600 hover:bg-pink-700 dark:bg-pink-500 dark:hover:bg-pink-600 text-white px-6 py-3 rounded-lg flex items-center transition-colors disabled:opacity-50"
                 disabled={!reviewRating || !reviewText}
               >
                 <FaUser
