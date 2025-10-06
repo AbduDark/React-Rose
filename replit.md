@@ -4,6 +4,21 @@ Rose Academy is a learning management system (LMS) built for Egyptian high schoo
 
 # Recent Changes
 
+**Date**: October 6, 2025
+
+**Dark Mode Implementation Completed**:
+- Added complete dark mode support across all remaining pages and components
+- Updated CoursesPage with dark theme (backgrounds, text, decorative SVG)
+- Updated CourseDetailPage with dark theme (cards, tabs, borders, buttons)
+- Updated MySubscriptions component with dark theme (cards, forms, renewal forms, alerts, inputs)
+- Updated MyFavorites component with dark theme (cards, icons, empty states)
+- Updated EditProfile component with dark theme (view and edit modes, forms, file inputs)
+- Updated ChangePassword component with dark theme (forms, inputs, alerts)
+- Updated WatchCoursePage/LessonPage with dark theme (header, sidebar, video player container, comments)
+- All dark mode implementations include smooth transitions via `transition-colors` class
+- Consistent use of Tailwind dark: variants for all UI elements
+- Reviewed and approved by architect
+
 **Date**: October 4, 2025
 
 **Replit Environment Setup Completed (GitHub Import)**:
@@ -14,7 +29,7 @@ Rose Academy is a learning management system (LMS) built for Egyptian high schoo
 - Configured deployment for Replit Autoscale (builds with `npm run build`, serves with `npx vite preview --host 0.0.0.0`)
 - Note: Backend API proxies to https://api.rose-academy.com - external deployment
 
-**Current Status**: Frontend is fully functional and ready for development. The app displays correctly in both Arabic (default) and English with working navigation, i18n translations, and proper RTL/LTR layout support.
+**Current Status**: Frontend is fully functional with complete dark mode support across all pages. The app displays correctly in both Arabic (default) and English with working navigation, i18n translations, proper RTL/LTR layout support, and smooth dark/light theme switching.
 
 # User Preferences
 
@@ -32,8 +47,9 @@ Preferred communication style: Simple, everyday language.
 
 **Key Design Decisions**:
 - **Routing**: React Router v7 handles navigation between public pages (home, courses) and protected routes (dashboard, subscriptions, video player)
-- **State Management**: Context API manages authentication, courses, notifications, and user data across components
-- **Styling**: Tailwind CSS with custom configuration for primary colors (#06d4b5ff) and Arabic font support (Cairo)
+- **State Management**: Context API manages authentication, courses, notifications, user data, and theme (dark/light mode) across components
+- **Styling**: Tailwind CSS with custom configuration for primary colors (#06d4b5ff), Arabic font support (Cairo), and dark mode via `dark:` variants
+- **Dark Mode**: Implemented using ThemeContext that applies 'dark' class to html element, enabling Tailwind's dark: variant classes across all components with smooth transitions
 - **Internationalization**: i18next with HTTP backend loads translations dynamically, supports language detection from localStorage
 
 **Directory Structure**:
