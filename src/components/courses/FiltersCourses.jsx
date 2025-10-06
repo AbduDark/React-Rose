@@ -11,14 +11,14 @@ function FiltersCourses() {
   const [page, setPage] = useState(1);
 
   return (
-    <div className="bg-gradient-to-r from-secondary to-primary text-white py-12 px-4">
+    <div className="bg-gradient-to-r from-secondary to-primary dark:from-gray-800 dark:to-gray-900 text-white py-12 px-4 transition-colors">
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">
+          <h1 className="text-3xl md:text-4xl font-bold mb-4 dark:text-gray-100">
             {t("coursesPage.pageTitle")}
           </h1>
         </div>
-        <p className="text-lg mt-4 max-w-2xl">
+        <p className="text-lg mt-4 max-w-2xl dark:text-gray-300">
           {t("filtersCourses.description")}
         </p>
 

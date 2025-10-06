@@ -18,15 +18,15 @@ function HeaderAllCourses() {
   return (
     <section
       id="intro-section"
-      className=" w-full pt-16 bg-gradient-to-r from-secondary to-primary"
+      className=" w-full pt-16 bg-gradient-to-r from-secondary to-primary dark:from-gray-800 dark:to-gray-900 transition-colors"
     >
       <div className="container mx-auto px-4">
         <div className="flex flex-col lg:flex-row j justify-between items-center text-white">
           <div className="w-full lg:w-1/2 mb-12 lg:mb-0 font-['Heebo']">
-            <h1 className="text-4xl mb-5 md:text-5xl text-white font-bold">
+            <h1 className="text-4xl mb-5 md:text-5xl text-white dark:text-gray-100 font-bold">
               {title}
             </h1>
-            <p className="text-xl sm:text-2xl font-medium mb-6 text-gray-100">
+            <p className="text-xl sm:text-2xl font-medium mb-6 text-gray-100 dark:text-gray-300">
               {subtitle}
             </p>
           </div>
