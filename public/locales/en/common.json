@@ -91,13 +91,10 @@
   },
   "favorites": {
     "title": "Favorites",
-    "noFavorites": "No favorite courses yet",
+    "noFavorites": "No favorite courses",
     "addToFavorites": "Add to Favorites",
     "removeFromFavorites": "Remove from Favorites",
-    "confirmRemove": "Do you want to remove this course from favorites?",
-    "removedSuccess": "Course removed from favorites successfully",
-    "addedSuccess": "Course added to favorites successfully",
-    "viewCourse": "View Course"
+    "confirmRemove": "Are you sure you want to remove this course from favorites?"
   },
   "common": {
     "loading": "Loading...",

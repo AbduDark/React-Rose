@@ -126,9 +126,9 @@ function EnrollCourse() {
   return (
     <div>
       {/* COURSE CARD */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden mb-6 transition-colors">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-900/50 overflow-hidden mb-6 transition-colors border border-transparent dark:border-gray-700">
         <img src={course.image_url || ImageNotFound} alt="Course Thumbnail" className="w-full" />
-        <div className="p-4 dark:bg-gray-800">
+        <div className="p-4 dark:bg-gray-800 transition-colors">
           {enrollError && (
             <p className="text-red-500 dark:text-red-400 text-sm mb-3">{enrollError}</p>
           )}
@@ -267,7 +267,7 @@ function EnrollCourse() {
             <button
               onClick={handleEnroll}
               disabled={enrolling}
-              className="mb-3 w-full bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white dark:text-gray-100 py-3 px-4 rounded-lg flex items-center justify-center transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg dark:shadow-green-900/50"
+              className="mb-3 w-full bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 text-white py-3 px-4 rounded-lg flex items-center justify-center transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg dark:shadow-green-900/50"
             >
               <FaGraduationCap
                 className={`${i18next.language === "ar" ? "ml-2" : "mr-2"}`}
@@ -281,7 +281,7 @@ function EnrollCourse() {
           {!subscriptionStatus?.subscription?.is_active ? (
             <button
               onClick={() => setShowSubscriptionForm(!showSubscriptionForm)}
-              className="w-full bg-pink-600 hover:bg-pink-700 dark:bg-pink-600 dark:hover:bg-pink-700 text-white dark:text-gray-100 py-3 px-4 rounded-lg flex items-center justify-center transition-all duration-200 shadow-md hover:shadow-lg dark:shadow-pink-900/50"
+              className="w-full bg-pink-600 hover:bg-pink-700 dark:bg-pink-500 dark:hover:bg-pink-600 text-white py-3 px-4 rounded-lg flex items-center justify-center transition-all duration-200 shadow-md hover:shadow-lg dark:shadow-pink-900/50"
             >
               <FaGraduationCap
                 className={`${i18next.language === "ar" ? "ml-2" : "mr-2"}`}
@@ -295,7 +295,7 @@ function EnrollCourse() {
       </div>
 
       {/* COURSE DETAILS */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-colors border border-gray-100 dark:border-gray-700">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-900/50 p-6 transition-colors border border-gray-100 dark:border-gray-700">
         <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100 transition-colors">
           {t("enrollCourse.courseIncludes")}
         </h3>
