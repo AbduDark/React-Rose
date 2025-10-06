@@ -108,7 +108,7 @@ const StudentDashboardPage = () => {
 
   if (error) {
     return (
-      <div className="text-center my-9 text-red-600">
+      <div className="text-center my-9 text-red-600 dark:text-red-400">
         <p>{error}</p>
       </div>
     );
@@ -117,7 +117,7 @@ const StudentDashboardPage = () => {
   if (!profile) {
     return (
       <div className="container mx-auto px-4">
-        <p className="text-gray-500">{t("studentDashboard.noProfileData")}</p>
+        <p className="text-gray-500 dark:text-gray-400">{t("studentDashboard.noProfileData")}</p>
       </div>
     );
   }
@@ -155,7 +155,7 @@ const StudentDashboardPage = () => {
               <div className="flex-1 min-w-0">
                 <div className="flex flex-col md:flex-row md:items-center justify-between">
                   <div>
-                    <h2 className="text-3xl font-bold mt-2 md:mt-0 bg-clip-text text-transparent bg-gradient-to-r from-black to-gray-800">
+                    <h2 className="text-3xl font-bold mt-2 md:mt-0 bg-clip-text text-transparent bg-gradient-to-r from-black to-gray-800 dark:from-white dark:to-gray-200">
                       {profile.name || "User"}
                     </h2>
                   </div>
@@ -218,7 +218,7 @@ const StudentDashboardPage = () => {
             </div>
           )}
           <div className={`px-2 ${menuOpen ? "w-full md:w-3/4" : "w-full"}`}>
-            {ActiveComponent || <p>{t("studentDashboard.selectTabToView")}</p>}
+            {ActiveComponent || <p className="text-gray-700 dark:text-gray-300">{t("studentDashboard.selectTabToView")}</p>}
           </div>
         </div>
       </div>

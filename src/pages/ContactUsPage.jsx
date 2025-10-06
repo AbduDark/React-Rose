@@ -7,7 +7,7 @@ const ContactUsPage = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="relative">
+    <div className="relative bg-gray-50 dark:bg-gray-900 transition-colors">
       {/* Heading */}
       <div
         className="relative z-0 pt-8 pb-48 md:pt-12 md:pb-64 bg-gradient-to-r from-secondary to-primary"
@@ -29,11 +29,11 @@ const ContactUsPage = () => {
       {/* Content */}
       <div className="relative -mt-20 md:-mt-52 mb-40">
         <div className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-lg p-6 md:p-8 shadow-md shadow-gray-200">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 md:p-8 shadow-md shadow-gray-200 dark:shadow-gray-900 transition-colors">
             <div className="flex justify-center flex-col md:flex-row">
               <div className="md:col-span-1">
                 <div>
-                  <h2 className="text-2xl font-semibold text-gray-800 flex items-center border-b pb-2 mb-4">
+                  <h2 className="text-2xl font-semibold text-gray-800 dark:text-white flex items-center border-b dark:border-gray-700 pb-2 mb-4">
                     <svg
                       className={`w-6 h-6 text-secondary ${
                         i18next.language === "ar" ? "ml-2" : "mr-2"
@@ -61,7 +61,7 @@ const ContactUsPage = () => {
                   <ul className="space-y-2">
                     <li className="flex items-start">
                       <span
-                        className={`bg-indigo-50 text-secondary rounded-full p-2 ${
+                        className={`bg-indigo-50 dark:bg-gray-700 text-secondary dark:text-primary rounded-full p-2 ${
                           i18next.language === "ar" ? "ml-3" : "mr-3"
                         }`}
                       >
@@ -81,21 +81,21 @@ const ContactUsPage = () => {
                         </svg>
                       </span>
                       <div>
-                        <h3 className="text-lg font-semibold text-gray-800">
+                        <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
                           {t("contactPage.phone")}
                         </h3>
                         <Link
                           to="tel:+201008187344"
-                          className="text-gray-600 italic hover:underline"
+                          className="text-gray-600 dark:text-gray-300 italic hover:underline"
                         >
                           +201008187344
                         </Link>
                       </div>
                     </li>
-                    <hr className="my-2" />
+                    <hr className="my-2 dark:border-gray-700" />
                     <li className="flex items-start">
                       <span
-                        className={`bg-indigo-50 text-secondary rounded-full p-2 ${
+                        className={`bg-indigo-50 dark:bg-gray-700 text-secondary dark:text-primary rounded-full p-2 ${
                           i18next.language === "ar" ? "ml-3" : "mr-3"
                         }`}
                       >
@@ -116,21 +116,21 @@ const ContactUsPage = () => {
                         </svg>
                       </span>
                       <div>
-                        <h3 className="text-lg font-semibold text-gray-800">
+                        <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
                           {t("contactPage.email")}
                         </h3>
                         <Link
                           to="mailto:rose.academy50@gmail.com"
-                          className="text-gray-600 text-xs md:text-lg italic hover:underline"
+                          className="text-gray-600 dark:text-gray-300 text-xs md:text-lg italic hover:underline"
                         >
                           rose.academy50@gmail.com
                         </Link>
                       </div>
                     </li>
-                    <hr className="my-2" />
+                    <hr className="my-2 dark:border-gray-700" />
                     <li className="flex items-start">
                       <span
-                        className={`bg-indigo-50 text-secondary rounded-full p-2 ${
+                        className={`bg-indigo-50 dark:bg-gray-700 text-secondary dark:text-primary rounded-full p-2 ${
                           i18next.language === "ar" ? "ml-3" : "mr-3"
                         }`}
                       >
@@ -157,12 +157,12 @@ const ContactUsPage = () => {
                         </svg>
                       </span>
                       <div>
-                        <h3 className="text-lg font-semibold text-gray-800">
+                        <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
                           {t("contactPage.location")}
                         </h3>
                         <a
                           href="#"
-                          className="text-gray-600 italic hover:underline"
+                          className="text-gray-600 dark:text-gray-300 italic hover:underline"
                         >
                           Elgharbia, Egypt
                         </a>
