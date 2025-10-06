@@ -66,7 +66,7 @@ const Header = () => {
 
   return (
     <nav
-      dir="ltr"
+      dir={i18n.language === "ar" ? "rtl" : "ltr"}
       className={`sticky top-0 z-50 transition-all duration-300 ${
         isScrolled
           ? "shadow-lg bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg py-2"
