@@ -2,14 +2,17 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useTranslation } from "react-i18next";
+import studyImage from "../../assets/images/study.svg";
 
 const Login = () => {
   const { login } = useAuth();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const isRTL = i18n.language === 'ar';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,107 +28,87 @@ const Login = () => {
   };
 
   return (
-    <div className="md:max-w-[430px] max-w-[400px] w-full p-[30px] rounded-lg bg-white dark:bg-gray-700 shadow-xl border border-gray-200 dark:border-gray-600">
-      <div className="w-full">
-        <header className="text-[28px] font-semibold text-gray-800 dark:text-white text-center">
-          {t("auth.login.title")}
-        </header>
-        <form className="mt-[30px]" onSubmit={handleSubmit}>
-          <div className="relative h-[50px] w-full mt-[20px] rounded-md">
-            <input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              type="email"
-              placeholder={t("auth.login.email")}
-              className="h-full w-full text-base font-normal rounded-md outline-none px-[15px] border border-solid border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary dark:focus:border-primary transition-colors"
-            />
+    <div className="w-full max-w-6xl mx-auto">
+      <div className={`flex flex-col lg:flex-row items-center gap-8 ${isRTL ? 'lg:flex-row-reverse' : ''}`}>
+        {/* Form Section */}
+        <div className="w-full lg:w-1/2">
+          <div className="w-full max-w-[450px] mx-auto p-8 rounded-lg bg-white dark:bg-gray-700 shadow-xl border border-gray-200 dark:border-gray-600">
+            <div className="w-full">
+              <header className="text-3xl font-semibold text-gray-800 dark:text-white text-center mb-8">
+                {t("auth.login.title")}
+              </header>
+              <form className="space-y-5" onSubmit={handleSubmit}>
+                <div className="relative h-12 w-full">
+                  <input
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    type="email"
+                    placeholder={t("auth.login.email")}
+                    className="h-full w-full text-base font-normal rounded-md outline-none px-4 border border-solid border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary dark:focus:border-primary transition-colors"
+                  />
+                </div>
+
+                <div className="relative h-12 w-full">
+                  <input
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    type={showPassword ? "text" : "password"}
+                    placeholder={t("auth.login.password")}
+                    className="password h-full w-full text-base font-normal rounded-md outline-none px-4 pr-12 border border-solid border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary dark:focus:border-primary transition-colors"
+                  />
+                  <i 
+                    className={`bx ${showPassword ? 'bx-show' : 'bx-hide'} eye-icon absolute top-1/2 ${isRTL ? 'left-3' : 'right-3'} transform -translate-y-1/2 text-xl text-gray-500 dark:text-gray-400 cursor-pointer p-1 hover:text-primary transition-colors`}
+                    onClick={() => setShowPassword(!showPassword)}
+                  ></i>
+                </div>
+
+                <div className="text-center">
+                  <Link
+                    to="/auth/forgot-password"
+                    className="text-primary text-sm font-normal no-underline hover:underline"
+                  >
+                    {t("auth.login.forgotPassword")}
+                  </Link>
+                </div>
+
+                {error && (
+                  <div className="mt-4 text-red-500 text-sm text-center">{error}</div>
+                )}
+
+                <div className="relative h-12 w-full">
+                  <button
+                    type="submit"
+                    className="h-full w-full border-none text-base font-medium rounded-md text-white bg-gradient-to-r from-primary to-secondary hover:shadow-lg transition-all duration-300 ease-in-out cursor-pointer"
+                  >
+                    {t("auth.login.loginButton")}
+                  </button>
+                </div>
+              </form>
+
+              <div className="text-center mt-6">
+                <span className="text-sm font-normal text-gray-700 dark:text-gray-300">
+                  {t("auth.login.noAccount")}{" "}
+                  <Link
+                    to="/auth/register"
+                    className="text-primary dark:text-primary cursor-pointer no-underline hover:underline signup-link font-semibold"
+                  >
+                    {t("auth.login.signup")}
+                  </Link>
+                </span>
+              </div>
+            </div>
           </div>
+        </div>
 
-          <div className="relative h-[50px] w-full mt-[20px] rounded-md">
-            <input
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              type={showPassword ? "text" : "password"}
-              placeholder={t("auth.login.password")}
-              className="password h-full w-full text-base font-normal rounded-md outline-none px-[15px] pr-[45px] border border-solid border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary dark:focus:border-primary transition-colors"
-            />
-            <i 
-              className={`bx ${showPassword ? 'bx-show' : 'bx-hide'} eye-icon absolute top-1/2 right-[10px] transform -translate-y-1/2 text-[18px] text-gray-500 dark:text-gray-400 cursor-pointer p-[5px] hover:text-primary transition-colors`}
-              onClick={() => setShowPassword(!showPassword)}
-            ></i>
-          </div>
-
-          <div className="text-center mt-[10px]">
-            <Link
-              to="/auth/forgot-password"
-              className="text-[#0171d3] text-sm font-normal no-underline hover:underline"
-            >
-              {t("auth.login.forgotPassword")}
-            </Link>
-          </div>
-
-          {error && (
-            <div className="mt-4 text-red-500 text-sm text-center">{error}</div>
-          )}
-
-          <div className="relative h-[50px] w-full mt-[20px] rounded-md">
-            <button
-              type="submit"
-              className="h-full w-full border-none text-base font-normal rounded-md text-white bg-gradient-to-r from-primary to-secondary hover:shadow-lg transition-all duration-300 ease-in-out cursor-pointer"
-            >
-              {t("auth.login.loginButton")}
-            </button>
-          </div>
-        </form>
-
-        <div className="text-center mt-[10px]">
-          <span className="text-sm font-normal text-gray-700 dark:text-gray-300">
-            {t("auth.login.noAccount")}{" "}
-            <Link
-              to="/auth/register"
-              className="text-primary dark:text-primary cursor-pointer no-underline hover:underline signup-link font-semibold"
-            >
-              {t("auth.login.signup")}
-            </Link>
-          </span>
+        {/* Image Section */}
+        <div className="w-full lg:w-1/2 hidden lg:flex items-center justify-center">
+          <img 
+            src={studyImage} 
+            alt="Login illustration" 
+            className="w-full max-w-md h-auto"
+          />
         </div>
       </div>
-
-      {/* <div className="relative h-[1px] w-full my-[36px] bg-[#d4d4d4]">
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white text-[#8b8b8b] px-[15px]">
-          {t("auth.login.or")}
-        </div>
-      </div>
-
-      <div className="w-full">
-        <a
-          href="#"
-          className="flex items-center justify-center text-white bg-[#4267b2] h-[50px] w-full rounded-md relative"
-        >
-          <img
-            src={facebookImg}
-            alt="facebookImg"
-            className="absolute top-1/2 left-[15px] transform -translate-y-1/2 h-[20px] w-[20px] object-cover"
-          />
-          <span>{t("auth.login.loginWithFacebook")}</span>
-        </a>
-      </div>
-
-      <div className="w-full mt-4">
-        <a
-          href="#"
-          className="flex items-center justify-center border border-solid border-[#CACACA] h-[50px] w-full rounded-md relative"
-        >
-          <img
-            src={GoogleImg}
-            alt="GoogleImg"
-            className="absolute top-1/2 left-[15px] transform -translate-y-1/2 h-[20px] w-[20px] object-cover"
-          />
-          <span className="font-medium opacity-60 text-[#232836]">
-            {t("auth.login.loginWithGoogle")}
-          </span>
-        </a>
-      </div> */}
     </div>
   );
 };
