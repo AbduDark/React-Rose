@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { FaStar, FaStarHalfAlt, FaRegStar, FaClock } from "react-icons/fa";
 import { FiHeart } from "react-icons/fi";
@@ -88,6 +89,28 @@ function CardCourse() {
     return stars;
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    },
+  };
+
   if (loading) return <Loader />;
   if (error)
     return (
@@ -99,29 +122,39 @@ function CardCourse() {
   return (
     <>
       <div className="container mx-auto py-12 px-4">
-        <div
+        <motion.div
           className={`grid grid-cols-1 md:grid-cols-3 3xl:grid-cols-4 gap-6`}
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
         >
-          {courses.map((course) => (
-            <div
+          {courses.map((course, index) => (
+            <motion.div
               key={course.id}
+              variants={cardVariants}
+              whileHover={{ y: -8, scale: 1.02 }}
+              transition={{ duration: 0.3 }}
               onClick={() => handleCourseClick(course.id)}
-              className="bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow-md hover:shadow-xl dark:shadow-gray-900 transition-all duration-300 hover:-translate-y-1 cursor-pointer relative border border-transparent dark:border-gray-600"
+              className="bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow-md hover:shadow-xl dark:shadow-gray-900 cursor-pointer relative border border-transparent dark:border-gray-600"
             >
-              <button
+              <motion.button
                 onClick={(e) => handleToggleFavorite(e, course.id)}
                 disabled={favoriteLoading[course.id]}
+                whileHover={{ scale: 1.15 }}
+                whileTap={{ scale: 0.9 }}
                 className={`absolute top-3 right-3 z-10 p-2 rounded-full bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-800 transition-all ${
                   token && favoriteCourseIds.includes(course.id) ? "text-red-500" : "text-gray-400 dark:text-gray-300"
                 } ${favoriteLoading[course.id] ? "opacity-50" : ""}`}
                 title={token && favoriteCourseIds.includes(course.id) ? t("favorites.removeFromFavorites") || "إزالة من المفضلة" : t("favorites.addToFavorites") || "إضافة للمفضلة"}
               >
                 <FiHeart className={`w-5 h-5 ${token && favoriteCourseIds.includes(course.id) ? "fill-current" : ""}`} />
-              </button>
-              <img
+              </motion.button>
+              <motion.img
                 src={course.image_url || ImageNotFound}
                 alt={course.title}
                 className="w-full h-48 object-cover"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
               />
               <div className="p-6">
                 <div className="flex justify-between items-center mb-4">
@@ -159,9 +192,9 @@ function CardCourse() {
                   {t("cardCourse.instructor")}: {course.instructor_name}
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
       {location.pathname === "/courses" && meta && meta.last_page > 1 && (
         <Pagination page={page} setPage={setPage} pageCount={meta.last_page} />
