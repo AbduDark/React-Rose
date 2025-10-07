@@ -59,6 +59,7 @@
     "quickLinks": "Quick Links",
     "home": "Home",
     "courses": "Courses",
+    "about": "About",
     "contact": "Contact",
     "contactInfo": "Contact Info",
     "email": "Email",
@@ -320,13 +321,7 @@
         "description": "Your account has been created. Please check your email and click the activation link to verify your account.",
         "note": "You will be able to log in after verifying your email.",
         "goToLogin": "Go to Login"
-      },
-      "passwordRequirements": "Password Requirements:",
-      "minLength": "At least 8 characters (letters and numbers only)",
-      "hasLowercase": "At least one lowercase letter",
-      "hasUppercase": "At least one uppercase letter",
-      "passwordsMatch": "Passwords match",
-      "passwordsDoNotMatch": "Passwords do not match"
+      }
     },
     "forgotPassword": {
       "title": "Forgot Password",
@@ -814,7 +809,8 @@
       "active": "active",
       "approved": "approved",
       "progressOverview": "Progress Overview",
-      "activeCourses": "Active courses",
+      "activeCourses": "Active Courses",
+      "activeSubscriptions": "Active Subscriptions",
       "approvedSubscriptions": "Approved Subscriptions",
       "total": "total",
       "quickStatistics": "Quick Statistics",
@@ -826,8 +822,10 @@
       "courseActivity": "Course Activity",
       "subscriptionRate": "Subscription Rate",
       "monthlyGrowthRate": "Monthly growth rate",
+      "activeCourses": "Active courses",
       "userSubscriptionRate": "User subscription rate",
-      "subscriptionStatus": "Subscription Status"
+      "subscriptionStatus": "Subscription Status",
+      "courseActivity": "Course Activity"
     },
     "coursesManager": {
       "title": "Course Management",

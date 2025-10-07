@@ -59,6 +59,7 @@
     "quickLinks": "روابط سريعة",
     "home": "الرئيسية",
     "courses": "الدورات",
+    "about": "حول",
     "contact": "اتصل بنا",
     "contactInfo": "معلومات الاتصال",
     "email": "البريد الإلكتروني",
@@ -336,13 +337,7 @@
         "description": "تم إنشاء حسابك. يرجى التحقق من بريدك الإلكتروني والنقر على رابط التفعيل للتحقق من حسابك.",
         "note": "ستتمكن من تسجيل الدخول بعد التحقق من بريدك الإلكتروني.",
         "goToLogin": "الذهاب لتسجيل الدخول"
-      },
-      "passwordRequirements": "متطلبات كلمة المرور:",
-      "minLength": "على الأقل 8 أحرف (حروف وأرقام فقط)",
-      "hasLowercase": "على الأقل حرف صغير واحد",
-      "hasUppercase": "على الأقل حرف كبير واحد",
-      "passwordsMatch": "كلمات المرور متطابقة",
-      "passwordsDoNotMatch": "كلمات المرور غير متطابقة"
+      }
     },
     "forgotPassword": {
       "title": "نسيت كلمة المرور",
@@ -835,6 +830,7 @@
       "approved": "موافق عليه",
       "progressOverview": "نظرة عامة على التقدم",
       "activeCourses": "الدورات النشطة",
+      "activeSubscriptions": "الاشتراكات النشطة",
       "approvedSubscriptions": "الاشتراكات الموافق عليها",
       "total": "إجمالي",
       "quickStatistics": "إحصائيات سريعة",
@@ -846,8 +842,10 @@
       "courseActivity": "نشاط الدورات",
       "subscriptionRate": "معدل الاشتراك",
       "monthlyGrowthRate": "معدل النمو الشهري",
+      "activeCourses": "الدورات النشطة",
       "userSubscriptionRate": "معدل اشتراك المستخدمين",
-      "subscriptionStatus": "حالة الاشتراك"
+      "subscriptionStatus": "حالة الاشتراك",
+      "courseActivity": "نشاط الدورات"
     },
     "coursesManager": {
       "title": "إدارة الدورات",

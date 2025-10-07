@@ -29,32 +29,48 @@ const Login = () => {
 
   const FormSection = () => (
     <div className="w-full lg:w-1/2">
-      <div className="w-full max-w-[450px] mx-auto p-8 rounded-lg bg-white dark:bg-gray-700 shadow-xl border border-gray-200 dark:border-gray-600">
+      <div className="w-full max-w-[480px] mx-auto p-10 rounded-2xl bg-white dark:bg-gray-700 shadow-2xl border border-gray-200 dark:border-gray-600 transition-all duration-300 hover:shadow-3xl">
         <div className="w-full">
-          <header className="text-3xl font-semibold text-gray-800 dark:text-white text-center mb-8">
+          <header className="text-3xl font-bold text-gray-800 dark:text-white text-center mb-2">
             {t("auth.login.title")}
           </header>
+          <p className="text-center text-gray-500 dark:text-gray-400 text-sm mb-8">
+            {t("auth.login.noAccount")}{" "}
+            <Link
+              to="/auth/register"
+              className="text-primary dark:text-primary font-semibold hover:underline"
+            >
+              {t("auth.login.signup")}
+            </Link>
+          </p>
+
+          {error && (
+            <div className="mb-6 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+              <p className="text-red-600 dark:text-red-400 text-sm text-center">{error}</p>
+            </div>
+          )}
+
           <form className="space-y-5" onSubmit={handleSubmit}>
-            <div className="relative h-12 w-full">
+            <div className="relative">
               <input
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 type="email"
                 placeholder={t("auth.login.email")}
-                className="h-full w-full text-base font-normal rounded-md outline-none px-4 border border-solid border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary dark:focus:border-primary transition-colors"
+                className="h-12 w-full text-base font-normal rounded-lg outline-none px-4 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:border-primary transition-all"
               />
             </div>
 
-            <div className="relative h-12 w-full">
+            <div className="relative">
               <input
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 type={showPassword ? "text" : "password"}
                 placeholder={t("auth.login.password")}
-                className="password h-full w-full text-base font-normal rounded-md outline-none px-4 pr-12 border border-solid border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary dark:focus:border-primary transition-colors"
+                className="h-12 w-full text-base font-normal rounded-lg outline-none px-4 pr-12 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:border-primary transition-all"
               />
               <i 
-                className={`bx ${showPassword ? 'bx-show' : 'bx-hide'} eye-icon absolute top-1/2 ${isRTL ? 'left-3' : 'right-3'} transform -translate-y-1/2 text-xl text-gray-500 dark:text-gray-400 cursor-pointer p-1 hover:text-primary transition-colors`}
+                className={`bx ${showPassword ? 'bx-show' : 'bx-hide'} absolute top-1/2 ${isRTL ? 'left-3' : 'right-3'} transform -translate-y-1/2 text-xl text-gray-500 dark:text-gray-400 cursor-pointer p-1 hover:text-primary transition-colors`}
                 onClick={() => setShowPassword(!showPassword)}
               ></i>
             </div>
@@ -62,37 +78,21 @@ const Login = () => {
             <div className="text-center">
               <Link
                 to="/auth/forgot-password"
-                className="text-primary text-sm font-normal no-underline hover:underline"
+                className="text-primary text-sm font-medium hover:underline transition-all"
               >
                 {t("auth.login.forgotPassword")}
               </Link>
             </div>
 
-            {error && (
-              <div className="mt-4 text-red-500 text-sm text-center">{error}</div>
-            )}
-
-            <div className="relative h-12 w-full">
+            <div className="relative pt-2">
               <button
                 type="submit"
-                className="h-full w-full border-none text-base font-medium rounded-md text-white bg-gradient-to-r from-primary to-secondary hover:shadow-lg transition-all duration-300 ease-in-out cursor-pointer"
+                className="h-12 w-full border-none text-base font-semibold rounded-lg text-white bg-gradient-to-r from-primary to-secondary hover:shadow-lg transition-all duration-300 ease-in-out hover:scale-[1.02] active:scale-[0.98]"
               >
                 {t("auth.login.loginButton")}
               </button>
             </div>
           </form>
-
-          <div className="text-center mt-6">
-            <span className="text-sm font-normal text-gray-700 dark:text-gray-300">
-              {t("auth.login.noAccount")}{" "}
-              <Link
-                to="/auth/register"
-                className="text-primary dark:text-primary cursor-pointer no-underline hover:underline signup-link font-semibold"
-              >
-                {t("auth.login.signup")}
-              </Link>
-            </span>
-          </div>
         </div>
       </div>
     </div>
@@ -100,11 +100,14 @@ const Login = () => {
 
   const ImageSection = () => (
     <div className="w-full lg:w-1/2 hidden lg:flex items-center justify-center">
-      <img 
-        src={studyImage} 
-        alt="Login illustration" 
-        className="w-full max-w-md h-auto"
-      />
+      <div className="relative">
+        <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full blur-3xl"></div>
+        <img 
+          src={studyImage} 
+          alt="Login illustration" 
+          className="relative w-full max-w-lg h-auto drop-shadow-2xl"
+        />
+      </div>
     </div>
   );
 
