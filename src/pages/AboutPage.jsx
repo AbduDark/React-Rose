@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import AboutImg from "../assets/images/Background.webp";
+import AboutImg from "../assets/images/study.svg";
 
 const AboutPage = () => {
   const { t } = useTranslation();

@@ -13,7 +13,7 @@ import {
   FaGithub,
 } from "react-icons/fa";
 import { HiAcademicCap } from "react-icons/hi";
-import Logo from "../../assets/images/Rose_Logo.png";
+import Logo from "../../assets/images/Rose_Logo.svg";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../../context/ThemeContext";
 

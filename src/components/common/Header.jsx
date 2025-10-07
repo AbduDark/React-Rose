@@ -5,7 +5,7 @@ import { MdSubscriptions } from "react-icons/md";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
 import { IoNotificationsSharp } from "react-icons/io5";
 import { Link, useLocation } from "react-router-dom";
-import Logo from "../../assets/images/Rose_Logo.png";
+import Logo from "../../assets/images/Rose_Logo.svg";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useNotifications } from "../../context/NotificationContext";
 import { useTheme } from "../../context/ThemeContext";
@@ -82,16 +82,18 @@ const Header = () => {
               to="/"
             >
               <img 
-                src={Logo} 
-                alt="Logo" 
-                className={`transition-all duration-300 ${
-                  isScrolled ? "h-9" : "h-11"
-                }`} 
-              />
+  src={Logo} 
+  alt="Logo" 
+  className={`transition-all duration-300 ${
+    isScrolled 
+      ? "h-9 md:h-10 lg:h-12" 
+      : "h-11 md:h-12 lg:h-14"
+  }`} 
+/>
               <h4 className={`font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent transition-all duration-300 ${
                 isScrolled ? "text-lg" : "text-xl"
               }`}>
-                Rose
+                Rose Academy
               </h4>
             </Link>
           </div>
