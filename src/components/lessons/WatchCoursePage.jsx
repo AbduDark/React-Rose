@@ -12,7 +12,7 @@ const WatchCoursePage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { courseId, lessonId } = useParams();
-  const { token } = useAuth();
+  const { token, user } = useAuth();
 
   const [lessons, setLessons] = useState([]);
   const [currentLessonId, setCurrentLessonId] = useState(null);
@@ -71,14 +71,54 @@ const WatchCoursePage = () => {
     load();
   }, [courseId, lessonId, navigate, token, t]);
 
+  // Filter lessons based on user gender and target_gender
+  const filteredLessons = useMemo(() => {
+    if (!user || !user.gender) {
+      return lessons;
+    }
+
+    return lessons.filter((lesson) => {
+      const targetGender = lesson.target_gender;
+
+      // Show lessons with "both" to everyone
+      if (targetGender === "both") {
+        return true;
+      }
+
+      // Show lessons that match the user's gender
+      // male lessons for male users, female lessons for female users
+      return targetGender === user.gender;
+    });
+  }, [lessons, user]);
+
   const currentLesson = useMemo(() => {
-    const lesson = lessons.find((l) => l.id === Number(currentLessonId));
+    const lesson = filteredLessons.find((l) => l.id === Number(currentLessonId));
     if (!lesson || !lesson.has_video) {
       console.warn("Current lesson is invalid or has no video:", lesson);
       return null;
     }
     return lesson;
-  }, [lessons, currentLessonId]);
+  }, [filteredLessons, currentLessonId]);
+
+  // Ensure current lesson is available after filtering
+  useEffect(() => {
+    if (filteredLessons.length > 0 && currentLessonId) {
+      const isCurrentLessonAvailable = filteredLessons.some(
+        (l) => l.id === currentLessonId
+      );
+      
+      if (!isCurrentLessonAvailable) {
+        // If current lesson is filtered out, select the first available lesson with video
+        const firstAvailableLesson = filteredLessons.find((l) => l.has_video);
+        if (firstAvailableLesson) {
+          setCurrentLessonId(firstAvailableLesson.id);
+          navigate(`/courses/${courseId}/lessons/${firstAvailableLesson.id}`, {
+            replace: true,
+          });
+        }
+      }
+    }
+  }, [filteredLessons, currentLessonId, courseId, navigate]);
 
   // Handle lesson selection
   const handleLessonSelect = (lesson) => {
@@ -95,7 +135,7 @@ const WatchCoursePage = () => {
   // Handle video end
   const handleVideoEnd = () => {
     setIsVideoPlaying(false);
-    const allLessons = lessons.filter((l) => l.has_video);
+    const allLessons = filteredLessons.filter((l) => l.has_video);
     const currentIndex = allLessons.findIndex((l) => l.id === currentLessonId);
     if (currentIndex < allLessons.length - 1) {
       const nextLesson = allLessons[currentIndex + 1];
@@ -105,7 +145,7 @@ const WatchCoursePage = () => {
 
   // Handle play next
   const handlePlayNext = () => {
-    const allLessons = lessons.filter((l) => l.has_video);
+    const allLessons = filteredLessons.filter((l) => l.has_video);
     const currentIndex = allLessons.findIndex((l) => l.id === currentLessonId);
     if (currentIndex < allLessons.length - 1) {
       const nextLesson = allLessons[currentIndex + 1];
@@ -115,7 +155,7 @@ const WatchCoursePage = () => {
 
   // Handle play previous
   const handlePlayPrevious = () => {
-    const allLessons = lessons.filter((l) => l.has_video);
+    const allLessons = filteredLessons.filter((l) => l.has_video);
     const currentIndex = allLessons.findIndex((l) => l.id === currentLessonId);
     if (currentIndex > 0) {
       const previousLesson = allLessons[currentIndex - 1];
@@ -190,7 +230,7 @@ const WatchCoursePage = () => {
         <div className="lg:w-80 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 p-4 overflow-auto transition-colors">
           <div className="space-y-4">
             <Sidebar
-              lessons={lessons}
+              lessons={filteredLessons}
               currentLessonId={currentLessonId}
               onSelectLesson={handleLessonSelect}
             />
