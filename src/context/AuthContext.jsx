@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { login, logout } from "../api/auth";
 import { useNavigate } from "react-router-dom";
+import { getDeviceIdentifier, getDeviceInfo } from "../utils/deviceIdentifier";
 
 const AuthContext = createContext();
 export const useAuth = () => {
@@ -17,10 +18,15 @@ export const AuthProvider = ({ children }) => {
     JSON.parse(localStorage.getItem("user"))
   );
   const [token, setToken] = useState(() => localStorage.getItem("token"));
+  const [sessionExpired, setSessionExpired] = useState(false);
 
   const handleLogin = async (email, password) => {
     try {
-      const data = await login(email, password);
+      // Get device identifier and info
+      const deviceId = getDeviceIdentifier();
+      const deviceInfo = getDeviceInfo();
+      
+      const data = await login(email, password, deviceId, deviceInfo);
       setUser(data.data.user);
       setToken(data.data.token);
       localStorage.setItem("user", JSON.stringify(data.data.user));
@@ -48,11 +54,56 @@ export const AuthProvider = ({ children }) => {
     navigate("/auth/login");
   };
 
+  const handleSessionExpired = () => {
+    setSessionExpired(true);
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    
+    // Show notification and redirect after delay
+    setTimeout(() => {
+      navigate("/auth/login");
+    }, 100);
+  };
+
+  // Setup global auth interceptor
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      if (token) {
+        handleSessionExpired();
+      }
+    };
+
+    // Intercept unauthorized responses
+    const originalFetch = window.fetch;
+    window.fetch = async (...args) => {
+      const response = await originalFetch(...args);
+      
+      if (response.status === 401) {
+        const url = args[0];
+        const API_BASE = import.meta.env.VITE_API_BASE;
+        
+        // Only trigger on API calls, not on login
+        if (typeof url === 'string' && url.includes(API_BASE) && !url.includes('/auth/login')) {
+          handleUnauthorized();
+        }
+      }
+      
+      return response;
+    };
+
+    return () => {
+      window.fetch = originalFetch;
+    };
+  }, [token, navigate]);
+
   const value = {
     user,
     token,
     login: handleLogin,
     logout: handleLogout,
+    sessionExpired,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

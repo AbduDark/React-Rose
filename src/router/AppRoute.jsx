@@ -1,7 +1,7 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import { AuthProvider } from "../context/AuthContext";
+import { AuthProvider, useAuth } from "../context/AuthContext";
 import { NotificationProvider } from "../context/NotificationContext";
 import { ThemeProvider } from "../context/ThemeContext";
 import Header from "../components/common/Header";
@@ -9,6 +9,7 @@ import Footer from "../components/common/Footer";
 import ScrollToTop from "./ScrollToTop";
 import Loader from "../components/common/Loader";
 import PageTransition from "../components/common/PageTransition";
+import SessionExpiredModal from "../components/common/SessionExpiredModal";
 
 const HomePage = lazy(() => import("../pages/HomePage"));
 const CoursesPage = lazy(() => import("../pages/CoursesPage"));
@@ -26,12 +27,29 @@ const PrivateRoute = lazy(() => import("../router/PrivateRoute"));
 
 function AnimatedRoutes() {
   const location = useLocation();
+  const { sessionExpired } = useAuth();
+  const [showSessionModal, setShowSessionModal] = useState(false);
+
+  useEffect(() => {
+    if (sessionExpired) {
+      setShowSessionModal(true);
+    }
+  }, [sessionExpired]);
+
+  const handleCloseModal = () => {
+    setShowSessionModal(false);
+    window.location.href = '/auth/login';
+  };
 
   const Layout = ({ children }) => (
     <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
       <Header />
       <main className="flex-grow">{children}</main>
       <Footer />
+      <SessionExpiredModal 
+        isOpen={showSessionModal} 
+        onClose={handleCloseModal} 
+      />
     </div>
   );
 

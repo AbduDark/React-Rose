@@ -12,11 +12,21 @@ const getErrorMessage = (payload, currentLang = 'ar') => {
   }
   return 'An error occurred';
 };
-export const login = async (email, password) => {
+export const login = async (email, password, deviceId = null, deviceInfo = null) => {
+  const body = { email, password };
+  
+  // Add device information if available
+  if (deviceId) {
+    body.device_id = deviceId;
+  }
+  if (deviceInfo) {
+    body.device_info = deviceInfo;
+  }
+  
   const res = await fetch(`${API_BASE}/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify(body),
   });
 
   const data = await res.json();
