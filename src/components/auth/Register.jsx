@@ -126,197 +126,6 @@ function Register() {
     }
   };
 
-  const FormSection = () => (
-    <div className="w-full lg:w-1/2">
-      <div className="w-full max-w-[480px] mx-auto p-10 rounded-2xl bg-white dark:bg-gray-700 shadow-2xl border border-gray-200 dark:border-gray-600 transition-all duration-300 hover:shadow-3xl">
-        <div className="w-full">
-          <header className="text-3xl font-bold text-gray-800 dark:text-white text-center mb-2">
-            {t("auth.register.title")}
-          </header>
-          <p className="text-center text-gray-500 dark:text-gray-400 text-sm mb-6">
-            {t("auth.register.alreadyHaveAccount")}{" "}
-            <Link
-              to="/auth/login"
-              className="text-primary dark:text-primary font-semibold hover:underline"
-            >
-              {t("auth.register.login")}
-            </Link>
-          </p>
-          
-          {error && (
-            <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-              <p className="text-red-600 dark:text-red-400 text-sm text-center">{error}</p>
-            </div>
-          )}
-
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <div className="relative">
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder={t("auth.register.fullName")}
-                className="h-12 w-full text-base font-normal rounded-lg outline-none px-4 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:border-primary transition-all"
-                required
-              />
-            </div>
-
-            <div className="relative">
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder={t("auth.register.email")}
-                className="h-12 w-full text-base font-normal rounded-lg outline-none px-4 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:border-primary transition-all"
-                required
-              />
-            </div>
-
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                onFocus={() => setShowPasswordValidation(true)}
-                onBlur={() => setShowPasswordValidation(false)}
-                placeholder={t("auth.register.createPassword")}
-                className="h-12 w-full text-base font-normal rounded-lg outline-none px-4 pr-12 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:border-primary transition-all"
-                required
-              />
-              <i 
-                className={`bx ${showPassword ? 'bx-show' : 'bx-hide'} absolute top-1/2 ${isRTL ? 'left-3' : 'right-3'} transform -translate-y-1/2 text-xl text-gray-500 dark:text-gray-400 cursor-pointer p-1 hover:text-primary transition-colors`}
-                onClick={() => setShowPassword(!showPassword)}
-              ></i>
-            </div>
-
-            {/* Password Validation Feedback */}
-            {formData.password && showPasswordValidation && (
-              <div className="space-y-2 text-sm bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
-                <div className="font-semibold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-2">
-                  <i className="bx bx-check-shield text-primary text-lg"></i>
-                  {t("auth.register.passwordRequirements")}
-                </div>
-                <div className={`flex items-center gap-2 transition-all ${passwordValidation.minLength ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`}>
-                  <span className="text-base">{passwordValidation.minLength ? '✅' : '○'}</span>
-                  <span>{t("auth.register.minLength")}</span>
-                </div>
-                <div className={`flex items-center gap-2 transition-all ${passwordValidation.hasLowercase ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`}>
-                  <span className="text-base">{passwordValidation.hasLowercase ? '✅' : '○'}</span>
-                  <span>{t("auth.register.hasLowercase")}</span>
-                </div>
-                <div className={`flex items-center gap-2 transition-all ${passwordValidation.hasUppercase ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`}>
-                  <span className="text-base">{passwordValidation.hasUppercase ? '✅' : '○'}</span>
-                  <span>{t("auth.register.hasUppercase")}</span>
-                </div>
-              </div>
-            )}
-
-            <div className="relative">
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                name="password_confirmation"
-                value={formData.password_confirmation}
-                onChange={handleChange}
-                placeholder={t("auth.register.confirmPassword")}
-                className="h-12 w-full text-base font-normal rounded-lg outline-none px-4 pr-12 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:border-primary transition-all"
-                required
-              />
-              <i 
-                className={`bx ${showConfirmPassword ? 'bx-show' : 'bx-hide'} absolute top-1/2 ${isRTL ? 'left-3' : 'right-3'} transform -translate-y-1/2 text-xl text-gray-500 dark:text-gray-400 cursor-pointer p-1 hover:text-primary transition-colors`}
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              ></i>
-            </div>
-
-            {/* Password Match Indicator */}
-            {formData.password_confirmation && (
-              <div className={`flex items-center gap-2 text-sm px-3 py-2 rounded-lg transition-all ${passwordValidation.passwordsMatch ? 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400' : 'bg-red-50 dark:bg-red-900/20 text-red-500 dark:text-red-400'}`}>
-                <span className="text-base">{passwordValidation.passwordsMatch ? '✅' : '✗'}</span>
-                <span className="font-medium">{passwordValidation.passwordsMatch ? t("auth.register.passwordsMatch") : t("auth.register.passwordsDoNotMatch")}</span>
-              </div>
-            )}
-
-            <div className="relative">
-              <input
-                type="tel"
-                name="phone"
-                maxLength="11"
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder={t("auth.register.phone")}
-                className="h-12 w-full text-base font-normal rounded-lg outline-none px-4 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:border-primary transition-all"
-                required
-              />
-            </div>
-
-            <div className="flex items-center gap-4 px-2">
-              <label className="text-base font-medium text-gray-700 dark:text-gray-300">
-                {t("auth.register.gender")}:
-              </label>
-              <div className="flex gap-6">
-                <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="male"
-                    checked={formData.gender === "male"}
-                    onChange={handleChange}
-                    className="accent-primary w-4 h-4"
-                    required
-                  />
-                  <span>{t("auth.register.male")}</span>
-                </label>
-                <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="female"
-                    checked={formData.gender === "female"}
-                    onChange={handleChange}
-                    className="accent-primary w-4 h-4"
-                    required
-                  />
-                  <span>{t("auth.register.female")}</span>
-                </label>
-              </div>
-            </div>
-
-            <div className="relative pt-2">
-              <button
-                type="submit"
-                disabled={loading}
-                className={`h-12 w-full border-none text-base font-semibold rounded-lg text-white transition-all duration-300 ease-in-out ${
-                  loading
-                    ? "bg-gray-400 dark:bg-gray-600 cursor-not-allowed"
-                    : "bg-gradient-to-r from-primary to-secondary hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
-                }`}
-              >
-                {loading
-                  ? t("auth.register.creatingAccount")
-                  : t("auth.register.signupButton")}
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  );
-
-  const ImageSection = () => (
-    <div className="w-full lg:w-1/2 hidden lg:flex items-center justify-center">
-      <div className="relative">
-        <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full blur-3xl"></div>
-        <img 
-          src={studyImage} 
-          alt="Registration illustration" 
-          className="relative w-full max-w-lg h-auto drop-shadow-2xl"
-        />
-      </div>
-    </div>
-  );
-
   if (success) {
     return (
       <div className="w-full max-w-6xl mx-auto">
@@ -345,7 +154,16 @@ function Register() {
               </div>
             </div>
           </div>
-          <ImageSection />
+          <div className="w-full lg:w-1/2 hidden lg:flex items-center justify-center">
+            <div className="relative">
+              <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full blur-3xl"></div>
+              <img 
+                src={studyImage} 
+                alt="Registration illustration" 
+                className="relative w-full max-w-lg h-auto drop-shadow-2xl"
+              />
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -354,8 +172,190 @@ function Register() {
   return (
     <div className="w-full max-w-6xl mx-auto">
       <div className="flex flex-col lg:flex-row items-center gap-8">
-        <FormSection />
-        <ImageSection />
+        <div className="w-full lg:w-1/2">
+          <div className="w-full max-w-[480px] mx-auto p-10 rounded-2xl bg-white dark:bg-gray-700 shadow-2xl border border-gray-200 dark:border-gray-600 transition-all duration-300 hover:shadow-3xl">
+            <div className="w-full">
+              <header className="text-3xl font-bold text-gray-800 dark:text-white text-center mb-2">
+                {t("auth.register.title")}
+              </header>
+              <p className="text-center text-gray-500 dark:text-gray-400 text-sm mb-6">
+                {t("auth.register.alreadyHaveAccount")}{" "}
+                <Link
+                  to="/auth/login"
+                  className="text-primary dark:text-primary font-semibold hover:underline"
+                >
+                  {t("auth.register.login")}
+                </Link>
+              </p>
+              
+              {error && (
+                <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                  <p className="text-red-600 dark:text-red-400 text-sm text-center">{error}</p>
+                </div>
+              )}
+
+              <form className="space-y-4" onSubmit={handleSubmit}>
+                <div className="relative">
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder={t("auth.register.fullName")}
+                    className="h-12 w-full text-base font-normal rounded-lg outline-none px-4 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:border-primary transition-all"
+                    required
+                  />
+                </div>
+
+                <div className="relative">
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder={t("auth.register.email")}
+                    className="h-12 w-full text-base font-normal rounded-lg outline-none px-4 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:border-primary transition-all"
+                    required
+                  />
+                </div>
+
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    onFocus={() => setShowPasswordValidation(true)}
+                    onBlur={() => setShowPasswordValidation(false)}
+                    placeholder={t("auth.register.createPassword")}
+                    className="h-12 w-full text-base font-normal rounded-lg outline-none px-4 pr-12 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:border-primary transition-all"
+                    required
+                  />
+                  <i 
+                    className={`bx ${showPassword ? 'bx-show' : 'bx-hide'} absolute top-1/2 ${isRTL ? 'left-3' : 'right-3'} transform -translate-y-1/2 text-xl text-gray-500 dark:text-gray-400 cursor-pointer p-1 hover:text-primary transition-colors`}
+                    onClick={() => setShowPassword(!showPassword)}
+                  ></i>
+                </div>
+
+                {formData.password && showPasswordValidation && (
+                  <div className="space-y-2 text-sm bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+                    <div className="font-semibold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-2">
+                      <i className="bx bx-check-shield text-primary text-lg"></i>
+                      {t("auth.register.passwordRequirements")}
+                    </div>
+                    <div className={`flex items-center gap-2 transition-all ${passwordValidation.minLength ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`}>
+                      <span className="text-base">{passwordValidation.minLength ? '✅' : '○'}</span>
+                      <span>{t("auth.register.minLength")}</span>
+                    </div>
+                    <div className={`flex items-center gap-2 transition-all ${passwordValidation.hasLowercase ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`}>
+                      <span className="text-base">{passwordValidation.hasLowercase ? '✅' : '○'}</span>
+                      <span>{t("auth.register.hasLowercase")}</span>
+                    </div>
+                    <div className={`flex items-center gap-2 transition-all ${passwordValidation.hasUppercase ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`}>
+                      <span className="text-base">{passwordValidation.hasUppercase ? '✅' : '○'}</span>
+                      <span>{t("auth.register.hasUppercase")}</span>
+                    </div>
+                  </div>
+                )}
+
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="password_confirmation"
+                    value={formData.password_confirmation}
+                    onChange={handleChange}
+                    placeholder={t("auth.register.confirmPassword")}
+                    className="h-12 w-full text-base font-normal rounded-lg outline-none px-4 pr-12 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:border-primary transition-all"
+                    required
+                  />
+                  <i 
+                    className={`bx ${showConfirmPassword ? 'bx-show' : 'bx-hide'} absolute top-1/2 ${isRTL ? 'left-3' : 'right-3'} transform -translate-y-1/2 text-xl text-gray-500 dark:text-gray-400 cursor-pointer p-1 hover:text-primary transition-colors`}
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  ></i>
+                </div>
+
+                {formData.password_confirmation && (
+                  <div className={`flex items-center gap-2 text-sm px-3 py-2 rounded-lg transition-all ${passwordValidation.passwordsMatch ? 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400' : 'bg-red-50 dark:bg-red-900/20 text-red-500 dark:text-red-400'}`}>
+                    <span className="text-base">{passwordValidation.passwordsMatch ? '✅' : '✗'}</span>
+                    <span className="font-medium">{passwordValidation.passwordsMatch ? t("auth.register.passwordsMatch") : t("auth.register.passwordsDoNotMatch")}</span>
+                  </div>
+                )}
+
+                <div className="relative">
+                  <input
+                    type="tel"
+                    name="phone"
+                    maxLength="11"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder={t("auth.register.phone")}
+                    className="h-12 w-full text-base font-normal rounded-lg outline-none px-4 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:border-primary transition-all"
+                    required
+                  />
+                </div>
+
+                <div className="flex items-center gap-4 px-2">
+                  <label className="text-base font-medium text-gray-700 dark:text-gray-300">
+                    {t("auth.register.gender")}:
+                  </label>
+                  <div className="flex gap-6">
+                    <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="gender"
+                        value="male"
+                        checked={formData.gender === "male"}
+                        onChange={handleChange}
+                        className="accent-primary w-4 h-4"
+                        required
+                      />
+                      <span>{t("auth.register.male")}</span>
+                    </label>
+                    <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="gender"
+                        value="female"
+                        checked={formData.gender === "female"}
+                        onChange={handleChange}
+                        className="accent-primary w-4 h-4"
+                        required
+                      />
+                      <span>{t("auth.register.female")}</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div className="relative pt-2">
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className={`h-12 w-full border-none text-base font-semibold rounded-lg text-white transition-all duration-300 ease-in-out ${
+                      loading
+                        ? "bg-gray-400 dark:bg-gray-600 cursor-not-allowed"
+                        : "bg-gradient-to-r from-primary to-secondary hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+                    }`}
+                  >
+                    {loading
+                      ? t("auth.register.creatingAccount")
+                      : t("auth.register.signupButton")}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div className="w-full lg:w-1/2 hidden lg:flex items-center justify-center">
+          <div className="relative">
+            <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full blur-3xl"></div>
+            <img 
+              src={studyImage} 
+              alt="Registration illustration" 
+              className="relative w-full max-w-lg h-auto drop-shadow-2xl"
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
