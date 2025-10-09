@@ -32,8 +32,14 @@ function Register() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     
-    // Limit phone number to 11 digits
-    if (name === "phone" && value.length > 11) {
+    // Handle phone number - only allow numbers and limit to 11 digits
+    if (name === "phone") {
+      const numericValue = value.replace(/\D/g, '').slice(0, 11);
+      setFormData({
+        ...formData,
+        [name]: numericValue,
+      });
+      if (error) setError("");
       return;
     }
     
@@ -75,8 +81,12 @@ function Register() {
       setError(t("auth.register.validation.validEmail"));
       return false;
     }
-    if (!formData.phone || formData.phone.length < 11) {
-      setError("Phone number must be exactly 11 digits");
+    if (!formData.phone || formData.phone.length !== 11) {
+      setError("رقم الهاتف يجب أن يتكون من 11 رقم");
+      return false;
+    }
+    if (!formData.phone.startsWith("01")) {
+      setError("رقم الهاتف يجب أن يبدأ بـ 01");
       return false;
     }
     if (!formData.password) {
@@ -288,10 +298,15 @@ function Register() {
                     maxLength="11"
                     value={formData.phone}
                     onChange={handleChange}
-                    placeholder={t("auth.register.phone")}
+                    placeholder="01xxxxxxxxx"
                     className="h-12 w-full text-base font-normal rounded-lg outline-none px-4 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:border-primary transition-all"
                     required
                   />
+                  {formData.phone && formData.phone.length === 11 && formData.phone.startsWith("01") && (
+                    <p className="mt-1 text-sm text-green-500 dark:text-green-400 flex items-center gap-1">
+                      ✓ رقم صحيح
+                    </p>
+                  )}
                 </div>
 
                 <div className="flex items-center gap-4 px-2">

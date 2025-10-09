@@ -18,6 +18,7 @@ const EditProfile = ({ profile: initialProfile, onUpdate }) => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [editMode, setEditMode] = useState(false);
+  const [phoneError, setPhoneError] = useState("");
 
   useEffect(() => {
     if (initialProfile) {
@@ -47,12 +48,34 @@ const EditProfile = ({ profile: initialProfile, onUpdate }) => {
     setFormData((prev) => ({ ...prev, image: null }));
   };
 
+  const validatePhoneNumber = (phone) => {
+    if (!phone) return "";
+    if (phone.length !== 11) return "رقم الهاتف يجب أن يتكون من 11 رقم";
+    if (!phone.startsWith("01")) return "رقم الهاتف يجب أن يبدأ بـ 01";
+    if (!/^\d+$/.test(phone)) return "رقم الهاتف يجب أن يحتوي على أرقام فقط";
+    return "";
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    
+    if (name === "phone") {
+      // Only allow numbers and limit to 11 digits
+      const numericValue = value.replace(/\D/g, '').slice(0, 11);
+      setFormData((prev) => ({
+        ...prev,
+        [name]: numericValue,
+      }));
+      
+      // Validate on change
+      const error = validatePhoneNumber(numericValue);
+      setPhoneError(error);
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -61,6 +84,17 @@ const EditProfile = ({ profile: initialProfile, onUpdate }) => {
       setError(t("userProfile.validation.nameRequired"));
       return;
     }
+    
+    // Validate phone if provided
+    if (formData.phone) {
+      const phoneValidationError = validatePhoneNumber(formData.phone);
+      if (phoneValidationError) {
+        setPhoneError(phoneValidationError);
+        setError(phoneValidationError);
+        return;
+      }
+    }
+    
     setLoading(true);
     setError(null);
     setSuccess(null);
@@ -268,8 +302,22 @@ const EditProfile = ({ profile: initialProfile, onUpdate }) => {
                   value={formData.phone}
                   onChange={handleChange}
                   disabled={loading}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  placeholder="01xxxxxxxxx"
+                  maxLength="11"
+                  className={`w-full px-3 py-2 border ${
+                    phoneError 
+                      ? 'border-red-500 dark:border-red-400' 
+                      : 'border-gray-300 dark:border-gray-600'
+                  } rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500 transition-colors`}
                 />
+                {phoneError && (
+                  <p className="mt-1 text-sm text-red-500 dark:text-red-400">{phoneError}</p>
+                )}
+                {formData.phone && !phoneError && (
+                  <p className="mt-1 text-sm text-green-500 dark:text-green-400 flex items-center gap-1">
+                    ✓ رقم صحيح
+                  </p>
+                )}
               </div>
               <div className="col-span-1 md:col-span-2 mt-4">
                 <button
