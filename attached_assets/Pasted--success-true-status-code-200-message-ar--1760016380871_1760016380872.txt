@@ -1,0 +1,56 @@
+{
+    "success": true,
+    "status_code": 200,
+    "message": {
+        "ar": "تم جلب الدروس المجانية فقط. يجب الاشتراك في الدورة للوصول لجميع الدروس",
+        "en": "تم جلب الدروس المجانية فقط. يجب الاشتراك في الدورة للوصول لجميع الدروس"
+    },
+    "data": {
+        "course": {
+            "id": 1,
+            "title": "الكيمياء العضوية - الشهر الاول",
+            "description": "استعد لتغوص في سلسلة من التجارب الذهنية والمختبرية، حيث ستتعلم كيف تصنع الجزيئات، تفسر سلوكها، وتفك شيفرة أسرارها المدهشة. الكيمياء العضوية ستجعلك ترى العالم من منظور جديد، حيث كل شيء حولك عبارة عن تفاعل كيميائي صغير ينتظر أن تُكتشفه!",
+            "image": "uploads/courses/1759575710_68e0fe9eb26bd.jpg",
+            "price": "100.00",
+            "level": "beginner",
+            "is_active": true,
+            "duration_hours": 0,
+            "requirements": null,
+            "instructor_name": "أ.روز",
+            "language": "ar",
+            "grade": "الثاني",
+            "created_at": "2025-10-04T11:01:50.000000Z",
+            "updated_at": "2025-10-04T11:01:50.000000Z",
+            "image_url": "https://api.rose-academy.com/uploads/courses/1759575710_68e0fe9eb26bd.jpg"
+        },
+        "lessons": [
+            {
+                "id": 1,
+                "course_id": 1,
+                "title": "الدرس الاول",
+                "description": "اول درس",
+                "content": "شسيشسيسشي",
+                "video_url": "https://api.rose-academy.com/storage/videos/lesson_1_1759581157.mp4",
+                "video_path": "videos/lesson_1_1759581157.mp4",
+                "video_status": "ready",
+                "video_duration": 10,
+                "video_size": 250465,
+                "hls_dir": null,
+                "hls_master": null,
+                "hls_key_path": null,
+                "target_gender": "both",
+                "order": 1,
+                "duration_minutes": 0,
+                "is_free": true,
+                "created_at": "2025-10-04T11:37:25.000000Z",
+                "updated_at": "2025-10-04T12:32:37.000000Z",
+                "video_duration_formatted": "00:10",
+                "video_size_formatted": "244.59 KB",
+                "can_access": true,
+                "has_video": true
+            }
+        ],
+        "user_subscribed": false,
+        "subscription_info": null
+    }
+}
