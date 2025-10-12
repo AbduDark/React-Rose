@@ -15,7 +15,10 @@ function DeleteCourse({ course, onCourseDeleted, isOpen, onClose }) {
     setIsLoading(true);
     setError("");
 
-    console.log("Token in DeleteCourse:", token ? "Token exists" : "No token");
+    console.log("=== DELETE COURSE START ===");
+    console.log("Course ID:", course.id);
+    console.log("Token exists:", token ? "Yes" : "No");
+    console.log("Language:", i18next.language);
 
     if (!token) {
       setError("Authentication required");
@@ -24,16 +27,23 @@ function DeleteCourse({ course, onCourseDeleted, isOpen, onClose }) {
     }
 
     try {
-      await deleteAdminCourse(course.id, token, i18next.language);
+      const response = await deleteAdminCourse(course.id, token, i18next.language);
+      console.log("=== DELETE SUCCESS ===");
+      console.log("Response:", response);
+      
       onClose();
       if (onCourseDeleted) {
         onCourseDeleted(course.id);
       }
     } catch (err) {
-      console.error("Delete course error:", err);
+      console.error("=== DELETE ERROR ===");
+      console.error("Error details:", err);
+      console.error("Error message:", err.message);
+      console.error("Error stack:", err.stack);
       setError(err.message || "Failed to delete course");
     } finally {
       setIsLoading(false);
+      console.log("=== DELETE COURSE END ===");
     }
   };
   if (!isOpen || !course) return null;
