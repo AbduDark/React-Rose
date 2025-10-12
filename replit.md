@@ -22,7 +22,17 @@ To prevent unauthorized access and sharing of video content, a multi-layered sec
 
 ## Subscription Workflow
 
-The platform incorporates a multi-step subscription workflow requiring manual approval. Users select a course, submit personal and payment details along with an uploaded payment proof image. Subscriptions are initially set to "pending" status, awaiting administrator review and approval or rejection based on payment verification. Users are notified of the decision, and approved subscribers gain access to course lessons. The system supports `pending`, `approved`, and `rejected` subscription states with backend validation for all submitted data.
+The platform incorporates a multi-step subscription workflow requiring manual approval. Users select a course, submit personal and payment details along with an uploaded payment proof image. Subscriptions are initially set to "pending" status, awaiting administrator review and approval or rejection based on payment verification. Users are notified of the decision, and approved subscribers gain access to course lessons. The system supports `pending`, `approved`, `rejected`, and `expired` subscription states with backend validation for all submitted data.
+
+### Subscription Renewal
+
+Expired or rejected subscriptions can be renewed through an elegant modal-based form (RenewSubscriptionModal component). The renewal process includes:
+- **Egyptian Phone Validation**: Enforces Egyptian mobile format using regex `/^01[0-2,5]{1}[0-9]{8}$/` (starts with 01, total 11 digits) for both payer and parent phone numbers
+- **Payment Proof Upload**: Image upload with live preview
+- **Modal Design**: Smooth animations using Framer Motion with AnimatePresence
+- **User-Friendly Labels**: Changed from "Vodafone number" to "The number you transferred from" for clarity
+- **Auto-Redirect**: After successful submission, users see a success message and are redirected to subscriptions page after 2 seconds
+- **No Auto-Open**: Modal only opens when user clicks the "Renew" button (removed automatic form display)
 
 ## Notification System
 
