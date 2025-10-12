@@ -38,7 +38,15 @@ const MySubscriptions = () => {
       try {
         const currentLang = i18n.language || 'ar';
         const data = await getMySubscriptions(token, currentLang);
-        setSubscriptions(data?.data?.subscriptions || []);
+        const subs = data?.data?.subscriptions || [];
+        setSubscriptions(subs);
+        
+        const firstRejectedOrExpired = subs.find(
+          sub => sub.is_expired || sub.status === "expired" || sub.status === "rejected"
+        );
+        if (firstRejectedOrExpired) {
+          setShowRenewForm(firstRejectedOrExpired.id);
+        }
       } catch (err) {
         setError(err.message || t("mySubscriptions.error.fetchFailed"));
       } finally {
@@ -104,15 +112,15 @@ const MySubscriptions = () => {
       }
 
       const response = await renewSubscription(token, formData, currentLang);
-      const successMsg = typeof response.message === 'object' 
-        ? response.message[currentLang] || response.message.en || response.message.ar 
-        : response.message;
-      setSuccess(successMsg || t("mySubscriptions.renewSuccess"));
+      setSuccess(t("mySubscriptions.renewSuccess"));
       
       setShowRenewForm(null);
       setRenewData({ vodafone_number: "", parent_phone: "", payment_proof: null });
 
-      setTimeout(() => setSuccess(null), 5000);
+      setTimeout(() => {
+        setSuccess(null);
+        navigate("/dashboard/subscriptions");
+      }, 2000);
 
       const data = await getMySubscriptions(token, currentLang);
       setSubscriptions(data?.data?.subscriptions || []);
@@ -325,60 +333,78 @@ const MySubscriptions = () => {
                   </div>
 
                   {showRenewForm === sub.id && (
-                    <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg transition-colors">
-                      <h5 className="font-semibold text-gray-800 dark:text-white mb-2">
-                        {t("mySubscriptions.renewForm") || "تجديد الاشتراك"}
+                    <div className="mt-4 p-4 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 border-2 border-indigo-200 dark:border-indigo-600 rounded-xl shadow-md transition-colors">
+                      <h5 className="font-bold text-indigo-800 dark:text-indigo-200 mb-4 text-lg flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
+                        </svg>
+                        {t("mySubscriptions.renewForm")}
                       </h5>
-                      <div className="space-y-2">
-                        <input
-                          type="tel"
-                          name="vodafone_number"
-                          value={renewData.vodafone_number}
-                          onChange={handleRenewInputChange}
-                          className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-colors"
-                          placeholder={t("enrollCourse.vodafonePlaceholder") || "رقم فودافون"}
-                          required
-                        />
-                        <input
-                          type="tel"
-                          name="parent_phone"
-                          value={renewData.parent_phone}
-                          onChange={handleRenewInputChange}
-                          className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-colors"
-                          placeholder={t("enrollCourse.parentPhonePlaceholder") || "رقم ولي الأمر"}
-                          required
-                        />
+                      <div className="space-y-3">
                         <div>
-                          <label className="block text-xs text-gray-600 dark:text-gray-300 mb-1">
-                            {t("enrollCourse.paymentProof") || "إثبات الدفع"}
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                            {t("enrollCourse.vodafoneNumber")}
                           </label>
                           <input
-                            type="file"
-                            name="payment_proof"
+                            type="tel"
+                            name="vodafone_number"
+                            value={renewData.vodafone_number}
                             onChange={handleRenewInputChange}
-                            accept="image/*"
+                            className="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-800 transition-all"
+                            placeholder={t("enrollCourse.vodafonePlaceholder")}
                             required
-                            className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 dark:file:bg-blue-900 file:text-blue-700 dark:file:text-blue-200 transition-colors"
                           />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                            {t("enrollCourse.parentPhone")}
+                          </label>
+                          <input
+                            type="tel"
+                            name="parent_phone"
+                            value={renewData.parent_phone}
+                            onChange={handleRenewInputChange}
+                            className="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-800 transition-all"
+                            placeholder={t("enrollCourse.parentPhonePlaceholder")}
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                            {t("enrollCourse.paymentProof")}
+                          </label>
+                          <div className="relative">
+                            <input
+                              type="file"
+                              name="payment_proof"
+                              onChange={handleRenewInputChange}
+                              accept="image/*"
+                              required
+                              className="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-100 dark:file:bg-indigo-900 file:text-indigo-700 dark:file:text-indigo-200 hover:file:bg-indigo-200 dark:hover:file:bg-indigo-800 transition-all cursor-pointer"
+                            />
+                          </div>
                           {renewData.payment_proof && (
-                            <p className="text-xs text-green-600 dark:text-green-400 mt-1">
-                              ✓ {renewData.payment_proof.name}
+                            <p className="text-xs text-green-600 dark:text-green-400 mt-2 flex items-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                              </svg>
+                              {renewData.payment_proof.name}
                             </p>
                           )}
                         </div>
                         <div
-                          className={`flex space-x-2 ${
-                            i18next.language === "ar" ? "space-x-reverse" : ""
+                          className={`flex gap-3 pt-2 ${
+                            i18next.language === "ar" ? "flex-row-reverse" : ""
                           }`}
                         >
                           <button
                             onClick={() => handleRenewSubscription(sub.id)}
                             disabled={actionLoading === sub.id}
-                            className="flex-1 bg-green-600 dark:bg-green-500 text-white px-3 py-1 rounded text-sm font-semibold disabled:opacity-50 hover:bg-green-700 dark:hover:bg-green-600 transition-colors"
+                            className="flex-1 bg-gradient-to-r from-green-600 to-green-500 dark:from-green-500 dark:to-green-600 text-white px-4 py-3 rounded-lg text-sm font-bold disabled:opacity-50 hover:from-green-700 hover:to-green-600 dark:hover:from-green-600 dark:hover:to-green-700 transition-all transform hover:scale-105 shadow-md"
                           >
                             {actionLoading === sub.id
-                              ? t("enrollCourse.processing") || "جارٍ المعالجة..."
-                              : t("mySubscriptions.confirmRenew") || "تأكيد التجديد"}
+                              ? t("enrollCourse.processing")
+                              : t("mySubscriptions.confirmRenew")}
                           </button>
                           <button
                             onClick={() => {
@@ -386,7 +412,7 @@ const MySubscriptions = () => {
                               setRenewData({ vodafone_number: "", parent_phone: "", payment_proof: null });
                               setError(null);
                             }}
-                            className="flex-1 bg-gray-500 dark:bg-gray-600 text-white px-3 py-1 rounded text-sm font-semibold hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors"
+                            className="flex-1 bg-gray-400 dark:bg-gray-600 text-white px-4 py-3 rounded-lg text-sm font-bold hover:bg-gray-500 dark:hover:bg-gray-700 transition-all shadow-md"
                           >
                             {t("common.cancel")}
                           </button>

@@ -83,6 +83,16 @@
     "description": "Description",
     "viewCourse": "View Course",
     "favorites": "Favorites",
+    "approvedStatus": "Approved",
+    "pendingStatus": "Pending",
+    "rejectedStatus": "Rejected",
+    "expiredStatus": "Expired",
+    "pendingApproval": "Under Review",
+    "renew": "Renew Subscription",
+    "renewForm": "Renew Subscription",
+    "confirmRenew": "Confirm Renewal",
+    "renewSuccess": "Your request has been sent to the admin and will be approved soon",
+    "cancelSuccess": "Subscription canceled successfully",
     "error": {
       "login": "Please log in to view your subscriptions.",
       "fetchFailed": "Failed to fetch subscriptions. Please try again."

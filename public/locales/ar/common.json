@@ -83,6 +83,16 @@
     "description": "الوصف",
     "viewCourse": "عرض الدورة",
     "favorites": "المفضلة",
+    "approvedStatus": "موافق عليه",
+    "pendingStatus": "قيد الانتظار",
+    "rejectedStatus": "مرفوض",
+    "expiredStatus": "منتهي",
+    "pendingApproval": "قيد المراجعة",
+    "renew": "تجديد الاشتراك",
+    "renewForm": "تجديد الاشتراك",
+    "confirmRenew": "تأكيد التجديد",
+    "renewSuccess": "تم إرسال طلبك إلى المسؤول وسيتم الموافقة عليه قريباً",
+    "cancelSuccess": "تم إلغاء الاشتراك بنجاح",
     "error": {
       "login": "يرجى تسجيل الدخول لعرض اشتراكاتك.",
       "fetchFailed": "فشل في جلب الاشتراكات. حاول مرة أخرى."
