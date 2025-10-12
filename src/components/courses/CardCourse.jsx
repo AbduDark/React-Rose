@@ -11,7 +11,7 @@ import ImageNotFound from "../../assets/images/ImageNotFound.png";
 import Pagination from "../common/Pagination";
 import { useAuth } from "../../context/AuthContext";
 import { addToFavorites, removeFromFavorites, getFavoriteSubscriptions } from "../../api/favorites";
-import { getSubscriptionStatus } from "../../api/subscriptions";
+import { getMySubscriptions } from "../../api/subscriptions";
 import SubscriptionStatusModal from "../common/SubscriptionStatusModal";
 
 function CardCourse() {
@@ -55,16 +55,19 @@ function CardCourse() {
 
     try {
       const currentLang = i18next.language || 'ar';
-      const response = await getSubscriptionStatus(token, courseId, currentLang);
-      const subscriptionStatus = response?.data?.subscription_status;
+      const response = await getMySubscriptions(token, currentLang);
+      
+      const subscriptions = response?.data?.subscriptions || response?.subscriptions || [];
+      const courseSubscription = subscriptions.find(sub => sub.course_id === courseId);
 
-      if (subscriptionStatus === "not_subscribed") {
+      if (!courseSubscription) {
         navigate(`/courses/${courseId}`);
         return;
       }
 
-      const actualStatus = response?.data?.subscription?.status;
-      const isExpired = response?.data?.is_expired;
+      const actualStatus = courseSubscription.status;
+      const endDate = courseSubscription.end_date;
+      const isExpired = endDate ? new Date(endDate) < new Date() : false;
 
       if (actualStatus === "pending") {
         setSelectedCourseId(courseId);
@@ -74,11 +77,11 @@ function CardCourse() {
         setSelectedCourseId(courseId);
         setModalStatus("rejected");
         setModalOpen(true);
-      } else if (isExpired) {
+      } else if (isExpired && actualStatus === "approved") {
         setSelectedCourseId(courseId);
         setModalStatus("expired");
         setModalOpen(true);
-      } else if (actualStatus === "approved") {
+      } else if (actualStatus === "approved" && !isExpired) {
         navigate(`/courses/${courseId}`);
       } else {
         navigate(`/courses/${courseId}`);
