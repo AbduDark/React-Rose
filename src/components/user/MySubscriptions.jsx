@@ -279,7 +279,7 @@ const MySubscriptions = () => {
                   {/* View Course Button - Only for approved and not expired */}
                   {sub.status === "approved" && !sub.is_expired && (
                     <Link
-                      to={`/watch-course/${sub.course_id}`}
+                      to={`/courses/${sub.course_id}/lessons`}
                       className="inline-block w-full text-center bg-indigo-600 dark:bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors duration-200 text-sm font-semibold"
                     >
                       {t("mySubscriptions.viewCourse")}

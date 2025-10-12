@@ -81,7 +81,7 @@ function CardCourse() {
         setModalStatus("expired");
         setModalOpen(true);
       } else if (actualStatus === "approved" && !isExpired) {
-        navigate(`/watch-course/${courseId}`);
+        navigate(`/courses/${courseId}/lessons`);
       } else {
         navigate(`/courses/${courseId}`);
       }
