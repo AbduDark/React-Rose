@@ -11,15 +11,20 @@ import ImageNotFound from "../../assets/images/ImageNotFound.png";
 import Pagination from "../common/Pagination";
 import { useAuth } from "../../context/AuthContext";
 import { addToFavorites, removeFromFavorites, getFavoriteSubscriptions } from "../../api/favorites";
+import { getSubscriptionStatus } from "../../api/subscriptions";
+import SubscriptionStatusModal from "../common/SubscriptionStatusModal";
 
 function CardCourse() {
   const { t } = useTranslation();
   const { courses, loading, error, page, setPage, meta } = useCourse();
   const navigate = useNavigate();
   const location = useLocation();
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const [favoriteCourseIds, setFavoriteCourseIds] = useState([]);
   const [favoriteLoading, setFavoriteLoading] = useState({});
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalStatus, setModalStatus] = useState(null);
+  const [selectedCourseId, setSelectedCourseId] = useState(null);
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -37,8 +42,51 @@ function CardCourse() {
     fetchFavorites();
   }, [token]);
 
-  const handleCourseClick = (courseId) => {
-    navigate(`/courses/${courseId}`);
+  const handleCourseClick = async (courseId) => {
+    if (!user) {
+      navigate(`/courses/${courseId}`);
+      return;
+    }
+
+    if (user.role !== "student") {
+      navigate(`/courses/${courseId}`);
+      return;
+    }
+
+    try {
+      const currentLang = i18next.language || 'ar';
+      const response = await getSubscriptionStatus(token, courseId, currentLang);
+      const subscriptionStatus = response?.data?.subscription_status;
+
+      if (subscriptionStatus === "not_subscribed") {
+        navigate(`/courses/${courseId}`);
+        return;
+      }
+
+      const actualStatus = response?.data?.subscription?.status;
+      const isExpired = response?.data?.is_expired;
+
+      if (actualStatus === "pending") {
+        setSelectedCourseId(courseId);
+        setModalStatus("pending");
+        setModalOpen(true);
+      } else if (actualStatus === "rejected") {
+        setSelectedCourseId(courseId);
+        setModalStatus("rejected");
+        setModalOpen(true);
+      } else if (isExpired) {
+        setSelectedCourseId(courseId);
+        setModalStatus("expired");
+        setModalOpen(true);
+      } else if (actualStatus === "approved") {
+        navigate(`/courses/${courseId}`);
+      } else {
+        navigate(`/courses/${courseId}`);
+      }
+    } catch (error) {
+      console.error("Error checking subscription status:", error);
+      navigate(`/courses/${courseId}`);
+    }
   };
 
   const handleToggleFavorite = async (e, courseId) => {
@@ -121,6 +169,12 @@ function CardCourse() {
 
   return (
     <>
+      <SubscriptionStatusModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        status={modalStatus}
+        courseId={selectedCourseId}
+      />
       <div className="container mx-auto py-12 px-4">
         <motion.div
           className={`grid grid-cols-1 md:grid-cols-3 3xl:grid-cols-4 gap-6`}

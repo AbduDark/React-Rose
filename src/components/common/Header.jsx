@@ -198,6 +198,28 @@ const Header = () => {
                 )}
               </AnimatePresence>
             </motion.button>
+
+            {user && (
+              <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                <Link
+                  to="/notifications"
+                  className="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300"
+                  title={t("header.notifications")}
+                >
+                  <IoNotificationsSharp className="w-6 h-6 text-gray-700 dark:text-gray-200" />
+                  {unreadCount > 0 && (
+                    <motion.span
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 500, damping: 15 }}
+                      className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold animate-pulse"
+                    >
+                      {unreadCount > 99 ? "99+" : unreadCount}
+                    </motion.span>
+                  )}
+                </Link>
+              </motion.div>
+            )}
             
             <motion.button
               whileHover={{ scale: 1.1 }}
@@ -342,37 +364,38 @@ const Header = () => {
 
               <LanguageSwitcher />
 
-              <div className="flex items-center space-x-4 text-gray-700 dark:text-gray-200 relative">
-                {user ? (
-                  <>
-                    <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                      <Link
-                        to="/notifications"
-                        className="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300"
-                        title={t("header.notifications")}
+              {user && (
+                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                  <Link
+                    to="/notifications"
+                    className="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 text-gray-700 dark:text-gray-200"
+                    title={t("header.notifications")}
+                  >
+                    <IoNotificationsSharp className="w-6 h-6" />
+                    {unreadCount > 0 && (
+                      <motion.span
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", stiffness: 500, damping: 15 }}
+                        className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold animate-pulse"
                       >
-                        <IoNotificationsSharp className="w-6 h-6" />
-                        {unreadCount > 0 && (
-                          <motion.span
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            transition={{ type: "spring", stiffness: 500, damping: 15 }}
-                            className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold animate-pulse"
-                          >
-                            {unreadCount > 99 ? "99+" : unreadCount}
-                          </motion.span>
-                        )}
-                      </Link>
-                    </motion.div>
-                    <motion.button
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300"
-                      onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
-                    >
-                      <FaCircleUser className="w-6 h-6" />
-                    </motion.button>
-                  </>
+                        {unreadCount > 99 ? "99+" : unreadCount}
+                      </motion.span>
+                    )}
+                  </Link>
+                </motion.div>
+              )}
+
+              <div className="flex items-center text-gray-700 dark:text-gray-200 relative">
+                {user ? (
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300"
+                    onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                  >
+                    <FaCircleUser className="w-6 h-6" />
+                  </motion.button>
                 ) : (
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Link
