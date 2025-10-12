@@ -7,8 +7,7 @@ import {
   renewSubscription,
 } from "../../api/subscriptions";
 import { useAuth } from "../../context/AuthContext";
-import i18next from "i18next";
-import { FiHeart } from "react-icons/fi";
+import RenewSubscriptionModal from "./RenewSubscriptionModal";
 
 const MySubscriptions = () => {
   const { t, i18n } = useTranslation();
@@ -18,13 +17,9 @@ const MySubscriptions = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const [actionLoading, setActionLoading] = useState(null);
-  const [showRenewForm, setShowRenewForm] = useState(null);
-  const [renewData, setRenewData] = useState({
-    vodafone_number: "",
-    parent_phone: "",
-    payment_proof: null,
-  });
+  const [actionLoading, setActionLoading] = useState(false);
+  const [showRenewModal, setShowRenewModal] = useState(false);
+  const [selectedSubscription, setSelectedSubscription] = useState(null);
   
   useEffect(() => {
     if (!token) {
@@ -38,15 +33,7 @@ const MySubscriptions = () => {
       try {
         const currentLang = i18n.language || 'ar';
         const data = await getMySubscriptions(token, currentLang);
-        const subs = data?.data?.subscriptions || [];
-        setSubscriptions(subs);
-        
-        const firstRejectedOrExpired = subs.find(
-          sub => sub.is_expired || sub.status === "expired" || sub.status === "rejected"
-        );
-        if (firstRejectedOrExpired) {
-          setShowRenewForm(firstRejectedOrExpired.id);
-        }
+        setSubscriptions(data?.data?.subscriptions || []);
       } catch (err) {
         setError(err.message || t("mySubscriptions.error.fetchFailed"));
       } finally {
@@ -92,30 +79,30 @@ const MySubscriptions = () => {
     }
   };
 
-  const handleRenewSubscription = async (subscriptionId) => {
-    if (!renewData.vodafone_number || !renewData.parent_phone || !renewData.payment_proof) {
-      setError(t("enrollCourse.fillAllFields") || "الرجاء ملء جميع الحقول");
-      return;
-    }
+  const handleOpenRenewModal = (subscription) => {
+    setSelectedSubscription(subscription);
+    setShowRenewModal(true);
+  };
 
-    setActionLoading(subscriptionId);
+  const handleRenewSubscription = async (formData) => {
+    setActionLoading(true);
     setError(null);
     setSuccess(null);
+    
     try {
       const currentLang = i18n.language || 'ar';
-      const formData = new FormData();
-      formData.append('subscription_id', subscriptionId);
-      formData.append('vodafone_number', renewData.vodafone_number);
-      formData.append('parent_phone', renewData.parent_phone);
-      if (renewData.payment_proof instanceof File) {
-        formData.append('payment_proof', renewData.payment_proof);
+      const submitData = new FormData();
+      submitData.append('subscription_id', selectedSubscription.id);
+      submitData.append('vodafone_number', formData.vodafone_number);
+      submitData.append('parent_phone', formData.parent_phone);
+      if (formData.payment_proof instanceof File) {
+        submitData.append('payment_proof', formData.payment_proof);
       }
 
-      const response = await renewSubscription(token, formData, currentLang);
+      const response = await renewSubscription(token, submitData, currentLang);
       setSuccess(t("mySubscriptions.renewSuccess"));
-      
-      setShowRenewForm(null);
-      setRenewData({ vodafone_number: "", parent_phone: "", payment_proof: null });
+      setShowRenewModal(false);
+      setSelectedSubscription(null);
 
       setTimeout(() => {
         setSuccess(null);
@@ -127,16 +114,8 @@ const MySubscriptions = () => {
     } catch (err) {
       setError(err.message || t("common.error"));
     } finally {
-      setActionLoading(null);
+      setActionLoading(false);
     }
-  };
-
-  const handleRenewInputChange = (e) => {
-    const { name, value, files } = e.target;
-    setRenewData({
-      ...renewData,
-      [name]: files ? files[0] : value,
-    });
   };
 
   return (
@@ -320,112 +299,31 @@ const MySubscriptions = () => {
                     {/* Renew Button - Only for expired or rejected */}
                     {(sub.is_expired || sub.status === "expired" || sub.status === "rejected") && (
                       <button
-                        onClick={() => {
-                          setShowRenewForm(showRenewForm === sub.id ? null : sub.id);
-                          setError(null);
-                          setSuccess(null);
-                        }}
-                        className="flex-1 bg-green-600 dark:bg-green-500 text-white px-3 py-2 rounded-lg hover:bg-green-700 dark:hover:bg-green-600 transition-colors duration-200 text-sm font-semibold"
+                        onClick={() => handleOpenRenewModal(sub)}
+                        className="flex-1 bg-gradient-to-r from-green-600 to-green-500 dark:from-green-500 dark:to-green-600 text-white px-4 py-3 rounded-lg hover:from-green-700 hover:to-green-600 dark:hover:from-green-600 dark:hover:to-green-700 transition-all transform hover:scale-105 shadow-md text-sm font-bold"
                       >
-                        {t("mySubscriptions.renew") || "تجديد الاشتراك"}
+                        {t("mySubscriptions.renew")}
                       </button>
                     )}
                   </div>
-
-                  {showRenewForm === sub.id && (
-                    <div className="mt-4 p-4 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 border-2 border-indigo-200 dark:border-indigo-600 rounded-xl shadow-md transition-colors">
-                      <h5 className="font-bold text-indigo-800 dark:text-indigo-200 mb-4 text-lg flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
-                        </svg>
-                        {t("mySubscriptions.renewForm")}
-                      </h5>
-                      <div className="space-y-3">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
-                            {t("enrollCourse.vodafoneNumber")}
-                          </label>
-                          <input
-                            type="tel"
-                            name="vodafone_number"
-                            value={renewData.vodafone_number}
-                            onChange={handleRenewInputChange}
-                            className="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-800 transition-all"
-                            placeholder={t("enrollCourse.vodafonePlaceholder")}
-                            required
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
-                            {t("enrollCourse.parentPhone")}
-                          </label>
-                          <input
-                            type="tel"
-                            name="parent_phone"
-                            value={renewData.parent_phone}
-                            onChange={handleRenewInputChange}
-                            className="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-800 transition-all"
-                            placeholder={t("enrollCourse.parentPhonePlaceholder")}
-                            required
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
-                            {t("enrollCourse.paymentProof")}
-                          </label>
-                          <div className="relative">
-                            <input
-                              type="file"
-                              name="payment_proof"
-                              onChange={handleRenewInputChange}
-                              accept="image/*"
-                              required
-                              className="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-100 dark:file:bg-indigo-900 file:text-indigo-700 dark:file:text-indigo-200 hover:file:bg-indigo-200 dark:hover:file:bg-indigo-800 transition-all cursor-pointer"
-                            />
-                          </div>
-                          {renewData.payment_proof && (
-                            <p className="text-xs text-green-600 dark:text-green-400 mt-2 flex items-center">
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                              </svg>
-                              {renewData.payment_proof.name}
-                            </p>
-                          )}
-                        </div>
-                        <div
-                          className={`flex gap-3 pt-2 ${
-                            i18next.language === "ar" ? "flex-row-reverse" : ""
-                          }`}
-                        >
-                          <button
-                            onClick={() => handleRenewSubscription(sub.id)}
-                            disabled={actionLoading === sub.id}
-                            className="flex-1 bg-gradient-to-r from-green-600 to-green-500 dark:from-green-500 dark:to-green-600 text-white px-4 py-3 rounded-lg text-sm font-bold disabled:opacity-50 hover:from-green-700 hover:to-green-600 dark:hover:from-green-600 dark:hover:to-green-700 transition-all transform hover:scale-105 shadow-md"
-                          >
-                            {actionLoading === sub.id
-                              ? t("enrollCourse.processing")
-                              : t("mySubscriptions.confirmRenew")}
-                          </button>
-                          <button
-                            onClick={() => {
-                              setShowRenewForm(null);
-                              setRenewData({ vodafone_number: "", parent_phone: "", payment_proof: null });
-                              setError(null);
-                            }}
-                            className="flex-1 bg-gray-400 dark:bg-gray-600 text-white px-4 py-3 rounded-lg text-sm font-bold hover:bg-gray-500 dark:hover:bg-gray-700 transition-all shadow-md"
-                          >
-                            {t("common.cancel")}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
             ))}
           </div>
         )}
       </div>
+
+      {/* Renew Subscription Modal */}
+      <RenewSubscriptionModal
+        isOpen={showRenewModal}
+        onClose={() => {
+          setShowRenewModal(false);
+          setSelectedSubscription(null);
+        }}
+        onSubmit={handleRenewSubscription}
+        loading={actionLoading}
+        courseName={selectedSubscription?.course?.title}
+      />
     </div>
   );
 };

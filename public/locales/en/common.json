@@ -201,6 +201,7 @@
     "subscriptionDetails": "Subscription Details",
     "vodafoneNumber": "Vodafone Number",
     "vodafonePlaceholder": "Enter Vodafone number",
+    "transferPhoneNumber": "Transfer Phone Number",
     "amount": "Amount",
     "amountPlaceholder": "Enter amount",
     "parentPhone": "Parent Phone",
@@ -216,7 +217,15 @@
     "courseIncludes": "This course includes",
     "price": "Price",
     "episodes": "Episodes",
-    "date": "Date"
+    "date": "Date",
+    "fillAllFields": "Please fill all fields"
+  },
+  "validation": {
+    "phoneRequired": "Phone number is required",
+    "parentPhoneRequired": "Parent phone number is required",
+    "invalidPhone": "Phone number must start with 01 and consist of 11 digits",
+    "validPhone": "Valid number",
+    "paymentProofRequired": "Payment proof is required"
   },
   "overviewCourse": {
     "overview": "Overview",

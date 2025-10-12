@@ -217,6 +217,7 @@
     "subscriptionDetails": "تفاصيل الاشتراك",
     "vodafoneNumber": "رقم فودافون",
     "vodafonePlaceholder": "أدخل رقم فودافون",
+    "transferPhoneNumber": "الرقم الذي حولت منه",
     "amount": "المبلغ",
     "amountPlaceholder": "أدخل المبلغ",
     "parentPhone": "هاتف الوالد",
@@ -232,7 +233,15 @@
     "courseIncludes": "تتضمن هذه الدورة",
     "price": "السعر",
     "episodes": "الحلقات",
-    "date": "التاريخ"
+    "date": "التاريخ",
+    "fillAllFields": "الرجاء ملء جميع الحقول"
+  },
+  "validation": {
+    "phoneRequired": "رقم الهاتف مطلوب",
+    "parentPhoneRequired": "رقم ولي الأمر مطلوب",
+    "invalidPhone": "رقم الهاتف يجب أن يبدأ بـ 01 ويتكون من 11 رقم",
+    "validPhone": "رقم صحيح",
+    "paymentProofRequired": "إثبات الدفع مطلوب"
   },
   "overviewCourse": {
     "overview": "نظرة عامة",
