@@ -4,6 +4,22 @@ Rose Academy is a learning management system (LMS) built for Egyptian high schoo
 
 # Recent Changes
 
+**Date**: October 12, 2025
+
+**Header Fixes and Subscription Status Verification**:
+- Fixed notification icon display in mobile view - now appears alongside theme toggle and menu button
+- Separated notification icon from profile icon in desktop view for better spacing and clarity
+- Added subscription status verification when clicking on courses - system now checks user's subscription state before navigation
+- Created SubscriptionStatusModal component to handle different subscription states:
+  - **Expired**: Shows renewal message with contact info (01008187344) and link to renewal page
+  - **Rejected**: Displays rejection message explaining invalid payment proof, provides link to submit new request
+  - **Pending**: Informs user their request is under review with contact info for support
+  - **Approved**: Allows direct navigation to course content
+  - **Not Subscribed**: Redirects to course enrollment page
+- Implemented proper status checking order: pending → rejected → expired → approved to ensure expired subscriptions are caught before allowing access
+- All modals include Arabic messaging with smooth animations using Framer Motion
+- Reviewed and approved by architect with critical fix for expired subscription handling
+
 **Date**: October 7, 2025
 
 **Performance & Animation Enhancements Completed**:
