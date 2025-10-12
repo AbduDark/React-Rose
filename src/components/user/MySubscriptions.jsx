@@ -276,26 +276,41 @@ const MySubscriptions = () => {
                   </p>
                 </div>
                 <div className="mt-6 space-y-2">
-                  <Link
-                    to={`/courses/${sub.course_id}/lessons/`}
-                    className="inline-block w-full text-center bg-indigo-600 dark:bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors duration-200 text-sm font-semibold"
-                  >
-                    {t("mySubscriptions.viewCourse")}
-                  </Link>
+                  {/* View Course Button - Only for approved and not expired */}
+                  {sub.status === "approved" && !sub.is_expired && (
+                    <Link
+                      to={`/watch-course/${sub.course_id}`}
+                      className="inline-block w-full text-center bg-indigo-600 dark:bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors duration-200 text-sm font-semibold"
+                    >
+                      {t("mySubscriptions.viewCourse")}
+                    </Link>
+                  )}
+
+                  {/* Pending Status Message */}
+                  {sub.status === "pending" && (
+                    <div className="w-full text-center bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 px-4 py-2 rounded-lg text-sm font-semibold">
+                      {t("mySubscriptions.pendingApproval") || "قيد المراجعة"}
+                    </div>
+                  )}
+
+                  {/* Rejected Status Message */}
+                  {sub.status === "rejected" && (
+                    <div className="w-full text-center bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 px-4 py-2 rounded-lg text-sm font-semibold">
+                      {t("mySubscriptions.rejectedStatus") || "مرفوض - يرجى تقديم طلب جديد"}
+                    </div>
+                  )}
+
+                  {/* Expired Status Message */}
+                  {(sub.is_expired || sub.status === "expired") && (
+                    <div className="w-full text-center bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 px-4 py-2 rounded-lg text-sm font-semibold">
+                      {t("mySubscriptions.expiredStatus") || "منتهي - يرجى التجديد"}
+                    </div>
+                  )}
 
                   {/* Action Buttons */}
                   <div className="flex space-x-2">
-                    {/* {sub.status === "approved" && sub.is_active && (
-                      <button
-                        onClick={() => handleCancelSubscription(sub.id)}
-                        disabled={actionLoading === sub.id}
-                        className="flex-1 bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-700 transition-colors duration-200 text-sm font-semibold disabled:opacity-50"
-                      >
-                        {actionLoading === sub.id ? "Canceling..." : "Cancel"}
-                      </button>
-                    )} */}
-
-                    {(sub.status === "approved" || sub.status === "expired") && (
+                    {/* Renew Button - Only for expired or rejected */}
+                    {(sub.is_expired || sub.status === "expired" || sub.status === "rejected") && (
                       <button
                         onClick={() => {
                           setShowRenewForm(showRenewForm === sub.id ? null : sub.id);

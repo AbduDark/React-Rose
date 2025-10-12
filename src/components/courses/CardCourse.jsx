@@ -66,8 +66,7 @@ function CardCourse() {
       }
 
       const actualStatus = courseSubscription.status;
-      const endDate = courseSubscription.end_date;
-      const isExpired = endDate ? new Date(endDate) < new Date() : false;
+      const isExpired = courseSubscription.is_expired;
 
       if (actualStatus === "pending") {
         setSelectedCourseId(courseId);
@@ -77,12 +76,12 @@ function CardCourse() {
         setSelectedCourseId(courseId);
         setModalStatus("rejected");
         setModalOpen(true);
-      } else if (isExpired && actualStatus === "approved") {
+      } else if (isExpired || actualStatus === "expired") {
         setSelectedCourseId(courseId);
         setModalStatus("expired");
         setModalOpen(true);
       } else if (actualStatus === "approved" && !isExpired) {
-        navigate(`/courses/${courseId}`);
+        navigate(`/watch-course/${courseId}`);
       } else {
         navigate(`/courses/${courseId}`);
       }
