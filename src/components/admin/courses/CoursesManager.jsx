@@ -109,13 +109,13 @@ const CoursesManager = () => {
   };
 
   const handleCourseCreated = (newCourse) => {
-    setCourses((prev) => [...prev, newCourse]);
+    console.log("Course created:", newCourse);
+    setCourses((prev) => [newCourse, ...prev]);
     setIsCreateModalOpen(false);
-    // Refresh the courses list to show updated data
-    fetchCourses(page);
   };
 
   const handleCourseUpdated = (updatedCourse) => {
+    console.log("Course updated:", updatedCourse);
     setCourses((prev) =>
       prev.map((course) =>
         course.id === updatedCourse.id ? updatedCourse : course
@@ -123,12 +123,10 @@ const CoursesManager = () => {
     );
     setIsEditModalOpen(false);
     setCurrentCourse(null);
-    // Refresh the courses list to show updated data
-    fetchCourses(page);
   };
 
-  // Handle course deletion
   const handleCourseDeleted = (courseId) => {
+    console.log("Course deleted:", courseId);
     setCourses((prev) => prev.filter((course) => course.id !== courseId));
     setIsDeleteModalOpen(false);
     setCourseToDelete(null);
