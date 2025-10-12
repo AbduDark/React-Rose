@@ -241,13 +241,36 @@ const WatchCoursePage = () => {
         <div className="flex flex-col flex-1 p-4 gap-4 overflow-auto">
           {/* Video Player */}
           {currentLesson ? (
-            <VideoPlayer
-              key={currentLessonId} // Force re-render on lesson change
-              lessonId={currentLessonId}
-              lessonData={currentLesson}
-              onLessonChange={handleLessonSelect}
-              onVideoEnd={handleVideoEnd}
-            />
+            <>
+              <VideoPlayer
+                key={currentLessonId} // Force re-render on lesson change
+                lessonId={currentLessonId}
+                lessonData={currentLesson}
+                onLessonChange={handleLessonSelect}
+                onVideoEnd={handleVideoEnd}
+              />
+              
+              {/* Navigation Buttons */}
+              <div className="flex items-center justify-between gap-4 px-2">
+                <button
+                  onClick={handlePlayPrevious}
+                  disabled={filteredLessons.findIndex(l => l.id === currentLessonId) === 0}
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-blue-600 disabled:hover:to-blue-700"
+                >
+                  <FaChevronLeft />
+                  <span className="font-medium">{t("lessons.previous") || "الدرس السابق"}</span>
+                </button>
+                
+                <button
+                  onClick={handlePlayNext}
+                  disabled={filteredLessons.findIndex(l => l.id === currentLessonId) === filteredLessons.filter(l => l.has_video).length - 1}
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-blue-600 disabled:hover:to-blue-700"
+                >
+                  <span className="font-medium">{t("lessons.next") || "الدرس التالي"}</span>
+                  <FaChevronLeft className="rotate-180" />
+                </button>
+              </div>
+            </>
           ) : (
             <div className="w-full flex-1 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center transition-colors">
               <p className="text-gray-500 dark:text-gray-400 text-lg font-medium">

@@ -12,6 +12,7 @@ import {
   FaExclamationTriangle,
   FaShieldAlt,
   FaLock,
+  FaCog,
 } from "react-icons/fa";
 import {
   getLessonDetails,
@@ -48,6 +49,9 @@ const VideoPlayer = ({ lessonId, lessonData, onLessonChange, onVideoEnd }) => {
   const [securityStatus, setSecurityStatus] = useState("initializing");
   const [originalVideoUrl, setOriginalVideoUrl] = useState(null);
   const [showSecurityLogs, setShowSecurityLogs] = useState(false);
+  const [availableQualities, setAvailableQualities] = useState([]);
+  const [currentQuality, setCurrentQuality] = useState('auto');
+  const [showQualityMenu, setShowQualityMenu] = useState(false);
 
   // Handle security violations
   const handleSecurityViolation = useCallback(
@@ -263,8 +267,30 @@ const VideoPlayer = ({ lessonId, lessonData, onLessonChange, onVideoEnd }) => {
           hls.loadSource(secureUrl);
           hls.attachMedia(videoRef.current);
 
-          hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
             console.log("Secure HLS manifest parsed successfully");
+            
+            // Extract available quality levels
+            if (hls.levels && hls.levels.length > 0) {
+              const qualities = hls.levels.map((level, index) => ({
+                index: index,
+                height: level.height,
+                width: level.width,
+                bitrate: level.bitrate,
+                label: level.height ? `${level.height}p` : `${Math.round(level.bitrate / 1000)}kbps`
+              }));
+              
+              // Sort by height (descending)
+              qualities.sort((a, b) => (b.height || 0) - (a.height || 0));
+              
+              setAvailableQualities([
+                { index: -1, label: 'Auto', isAuto: true },
+                ...qualities
+              ]);
+              
+              console.log('Available qualities:', qualities);
+            }
+            
             setError(null);
             setSecurityStatus("ready");
             videoRef.current.play().catch((err) => {
@@ -513,6 +539,37 @@ const VideoPlayer = ({ lessonId, lessonData, onLessonChange, onVideoEnd }) => {
     setControlsTimeout(timeout);
   };
 
+  // Handle quality change
+  const handleQualityChange = useCallback((qualityIndex) => {
+    if (!hlsRef.current) return;
+    
+    const currentTime = videoRef.current?.currentTime || 0;
+    const wasPlaying = isPlaying;
+    
+    if (qualityIndex === -1) {
+      // Auto quality
+      hlsRef.current.currentLevel = -1;
+      setCurrentQuality('auto');
+    } else {
+      // Manual quality selection
+      hlsRef.current.currentLevel = qualityIndex;
+      const selectedQuality = availableQualities.find(q => q.index === qualityIndex);
+      setCurrentQuality(selectedQuality?.label || 'auto');
+    }
+    
+    // Resume playback from the same position
+    setTimeout(() => {
+      if (videoRef.current) {
+        videoRef.current.currentTime = currentTime;
+        if (wasPlaying) {
+          videoRef.current.play();
+        }
+      }
+    }, 100);
+    
+    setShowQualityMenu(false);
+  }, [availableQualities, isPlaying]);
+
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
@@ -618,6 +675,13 @@ const VideoPlayer = ({ lessonId, lessonData, onLessonChange, onVideoEnd }) => {
 
           {/* Video Overlay */}
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300" />
+          
+          {/* Security Watermark - prevents screen recording */}
+          {user && (
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none opacity-10 text-white text-2xl font-bold rotate-[-30deg] whitespace-nowrap">
+              {user.name || user.email} • ID: {user.id}
+            </div>
+          )}
 
           {/* Controls Overlay */}
           <div
@@ -696,6 +760,39 @@ const VideoPlayer = ({ lessonId, lessonData, onLessonChange, onVideoEnd }) => {
                       {lessonDetails.video_duration_formatted} •{" "}
                       {lessonDetails.video_size_formatted}
                     </div>
+                  </div>
+                )}
+
+                {/* Quality Selector */}
+                {availableQualities.length > 1 && (
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowQualityMenu(!showQualityMenu)}
+                      className="flex items-center space-x-1 hover:text-gray-300 transition-colors text-sm"
+                    >
+                      <FaCog size={16} />
+                      <span>{currentQuality}</span>
+                    </button>
+                    
+                    {showQualityMenu && (
+                      <div className="absolute bottom-full right-0 mb-2 bg-gray-800 rounded-lg shadow-lg overflow-hidden min-w-[120px]">
+                        {availableQualities.map((quality) => (
+                          <button
+                            key={quality.index}
+                            onClick={() => handleQualityChange(quality.index)}
+                            className={`w-full px-4 py-2 text-left hover:bg-gray-700 transition-colors text-sm ${
+                              (quality.isAuto && currentQuality === 'auto') || 
+                              (quality.label === currentQuality) 
+                                ? 'bg-gray-700 text-white' 
+                                : 'text-gray-300'
+                            }`}
+                          >
+                            {quality.label}
+                            {quality.isAuto && ' (تلقائي)'}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
 
