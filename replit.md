@@ -1,62 +1,6 @@
 # Overview
 
-Rose Academy is a learning management system (LMS) built for Egyptian high school students. The platform provides video-based courses with a subscription model, featuring a React frontend and Laravel backend API. Students can browse courses, subscribe with payment proof, watch protected video lessons, and track their learning progress. Administrators manage courses, lessons, subscriptions, and user notifications through a comprehensive dashboard.
-
-# Recent Changes
-
-**Date**: October 12, 2025
-
-**Header Fixes and Subscription Status Verification**:
-- Fixed notification icon display in mobile view - now appears alongside theme toggle and menu button
-- Separated notification icon from profile icon in desktop view for better spacing and clarity
-- Added subscription status verification when clicking on courses - system now checks user's subscription state before navigation
-- Created SubscriptionStatusModal component to handle different subscription states:
-  - **Expired**: Shows renewal message with contact info (01008187344) and link to renewal page
-  - **Rejected**: Displays rejection message explaining invalid payment proof, provides link to submit new request
-  - **Pending**: Informs user their request is under review with contact info for support
-  - **Approved**: Allows direct navigation to course content
-  - **Not Subscribed**: Redirects to course enrollment page
-- Implemented proper status checking order: pending → rejected → expired → approved to ensure expired subscriptions are caught before allowing access
-- All modals include Arabic messaging with smooth animations using Framer Motion
-- Reviewed and approved by architect with critical fix for expired subscription handling
-
-**Date**: October 7, 2025
-
-**Performance & Animation Enhancements Completed**:
-- Implemented lazy loading with React.lazy() and Suspense for all pages to reduce initial bundle size
-- Created PageTransition component with Framer Motion for smooth fade/slide animations between pages
-- Added animations to HomePage sections (HeroSection with slide-in effects, FeaturesSection with stagger animations, PopularCoursesSection with fade-in)
-- Enhanced CardCourse component with stagger animations, hover effects, and scale transforms
-- Updated Header with animated dropdowns, mobile menu transitions, and icon swap animations
-- All animations maintain dark mode compatibility and support RTL/LTR layouts
-- Reviewed and approved by architect with no blocking defects
-
-**Date**: October 6, 2025
-
-**Dark Mode Implementation Completed**:
-- Added complete dark mode support across all remaining pages and components
-- Updated CoursesPage with dark theme (backgrounds, text, decorative SVG)
-- Updated CourseDetailPage with dark theme (cards, tabs, borders, buttons)
-- Updated MySubscriptions component with dark theme (cards, forms, renewal forms, alerts, inputs)
-- Updated MyFavorites component with dark theme (cards, icons, empty states)
-- Updated EditProfile component with dark theme (view and edit modes, forms, file inputs)
-- Updated ChangePassword component with dark theme (forms, inputs, alerts)
-- Updated WatchCoursePage/LessonPage with dark theme (header, sidebar, video player container, comments)
-- All dark mode implementations include smooth transitions via `transition-colors` class
-- Consistent use of Tailwind dark: variants for all UI elements
-- Reviewed and approved by architect
-
-**Date**: October 4, 2025
-
-**Replit Environment Setup Completed (GitHub Import)**:
-- Installed all Node.js dependencies (429 packages)
-- Fixed Vite dev server configuration for Replit environment (updated host from 127.0.0.1 to 0.0.0.0:5000 with allowedHosts: true)
-- Cleaned up .gitignore file (removed vite.config.js entry to ensure config is committed)
-- Verified frontend runs successfully with i18next internationalization working
-- Configured deployment for Replit Autoscale (builds with `npm run build`, serves with `npx vite preview --host 0.0.0.0`)
-- Note: Backend API proxies to https://api.rose-academy.com - external deployment
-
-**Current Status**: Frontend is fully functional with complete dark mode support, lazy loading, and smooth animations across all pages. The app displays correctly in both Arabic (default) and English with working navigation, i18n translations, proper RTL/LTR layout support, smooth dark/light theme switching, and optimized performance through code splitting.
+Rose Academy is a learning management system (LMS) designed for Egyptian high school students, offering video-based courses under a subscription model. The platform features a React frontend and a Laravel backend API, enabling students to browse courses, subscribe with payment proof, access protected video lessons, and monitor their learning progress. Administrators utilize a dashboard to manage courses, lessons, subscriptions, and user notifications. The project aims to provide a modern, accessible, and secure educational platform with a focus on an intuitive user experience.
 
 # User Preferences
 
@@ -66,158 +10,54 @@ Preferred communication style: Simple, everyday language.
 
 ## Frontend Architecture
 
-**Technology Stack**: React 19 with Vite build tool, using React Router for navigation and i18next for internationalization (Arabic/English).
-
-**Problem Addressed**: Need for a modern, fast, and accessible educational platform supporting RTL (Arabic) and LTR (English) layouts.
-
-**Solution**: Single-page application (SPA) architecture with component-based design, context API for state management, and Tailwind CSS for styling.
-
-**Key Design Decisions**:
-- **Routing**: React Router v7 handles navigation between public pages (home, courses) and protected routes (dashboard, subscriptions, video player)
-- **State Management**: Context API manages authentication, courses, notifications, user data, and theme (dark/light mode) across components
-- **Styling**: Tailwind CSS with custom configuration for primary colors (#06d4b5ff), Arabic font support (Cairo), and dark mode via `dark:` variants
-- **Dark Mode**: Implemented using ThemeContext that applies 'dark' class to html element, enabling Tailwind's dark: variant classes across all components with smooth transitions
-- **Internationalization**: i18next with HTTP backend loads translations dynamically, supports language detection from localStorage
-
-**Directory Structure**:
-- `/src/api/`: API client functions for backend communication (auth, courses, lessons, subscriptions, notifications, favorites)
-- `/src/components/`: Reusable UI components and page-specific components (admin dashboard, course viewers, subscription forms)
-- `/src/services/`: Business logic services (VideoSecurityService for content protection)
-- `/src/utils/`: Helper functions (subscription formatting, date/price utilities)
-- `/src/config/`: Configuration files (security settings for video protection)
-- `/public/locales/`: Translation JSON files organized by language (ar/en) and namespace (common/translation)
-
-**Pros**: Fast development with hot module replacement, excellent developer experience, component reusability  
-**Cons**: Initial bundle size, requires JavaScript enabled, SEO challenges (mitigated with SSR if needed later)
+The frontend is a Single-Page Application (SPA) built with React 19 and Vite, utilizing React Router for navigation and i18next for internationalization (Arabic/English). It employs a component-based design, Context API for state management (authentication, courses, notifications, user data, theme), and Tailwind CSS for styling, including comprehensive dark mode support and RTL/LTR layouts. Key features include lazy loading for performance, Framer Motion for smooth UI animations, and robust video content protection.
 
 ## Backend Architecture (Laravel API)
 
-**Problem Addressed**: Need for robust API supporting course management, user authentication, subscription workflows, and video content delivery.
-
-**Solution**: RESTful API architecture with Laravel framework, featuring:
-- Token-based authentication (Laravel Sanctum)
-- Resource-based API responses with localized messages (Arabic/English)
-- Admin endpoints for CRUD operations on courses, lessons, subscriptions
-- User endpoints for course browsing, subscription management, lesson access
-
-**Key Endpoints**:
-- **Authentication**: `/api/auth/login`, `/api/auth/register`, `/api/auth/logout`
-- **Courses**: `/api/courses` (public), `/api/admin/courses` (admin CRUD)
-- **Lessons**: `/api/admin/lessons` (admin management), `/api/lessons/{id}` (user access)
-- **Subscriptions**: `/api/subscribe`, `/api/my-subscriptions`, `/api/admin/subscriptions` (approval workflow)
-- **Notifications**: `/api/notifications`, `/api/notifications/unread-count`
-
-**Response Format**: Standardized JSON with `success`, `status_code`, `message` (localized), and `data` fields using `ApiResponseTrait`
-
-**Pros**: Clear separation of concerns, easy to extend, standardized error handling  
-**Cons**: Requires careful management of N+1 queries, caching needed for performance
+The backend is a RESTful API developed with Laravel, providing robust support for course management, user authentication (Laravel Sanctum), subscription workflows, and secure video content delivery. It features token-based authentication, resource-based API responses with localized messages, and dedicated endpoints for administrative CRUD operations on courses, lessons, and subscriptions, as well as user-specific actions. The API is designed for clear separation of concerns and extensibility.
 
 ## Video Content Protection
 
-**Problem Addressed**: Prevent unauthorized downloading and sharing of educational video content.
-
-**Solution**: Multi-layered security approach:
-1. **URL Encryption**: Video URLs encrypted with AES-256 using crypto-js, includes user ID, lesson ID, timestamp, and expiry
-2. **Temporary Tokens**: Session-based tokens with configurable expiry (30 minutes) and maximum view counts
-3. **HLS/DASH Streaming**: Uses hls.js for adaptive streaming with software AES decryption
-4. **Client-Side Protection**: Disables right-click, keyboard shortcuts (F12, Ctrl+S, etc.), and monitors for DevTools
-5. **DOM Mutation Observer**: Detects attempts to modify video player DOM
-
-**Configuration**: Centralized in `/src/config/security.js` with separate encryption, token, streaming, and monitoring settings
-
-**Alternatives Considered**: Server-side DRM (too complex for MVP), simple URL obfuscation (insufficient protection)
-
-**Pros**: Strong deterrent against casual piracy, configurable security levels, works across devices  
-**Cons**: Determined users can still circumvent, performance overhead, requires maintenance
+To prevent unauthorized access and sharing of video content, a multi-layered security approach is implemented. This includes AES-256 encryption of video URLs with embedded user and lesson metadata, temporary session-based tokens, and HLS/DASH streaming with software AES decryption. Client-side protections disable common piracy methods like right-click and keyboard shortcuts, and a DOM Mutation Observer detects attempts to tamper with the video player. Security configurations are centralized for easy management.
 
 ## Subscription Workflow
 
-**Problem Addressed**: Manual approval process for course subscriptions with payment verification.
-
-**Solution**: Multi-step subscription flow:
-1. User selects course and fills subscription form (Vodafone number, parent phone, student info)
-2. User uploads payment proof image (screenshot/photo of transfer)
-3. Subscription created with "pending" status
-4. Admin reviews payment proof in dashboard and approves/rejects
-5. User receives notification of decision
-6. Approved users gain access to course lessons
-
-**Status States**: `pending`, `approved`, `rejected`
-
-**Data Validation**: Backend validates required fields, phone number format, image file type/size
-
-**Pros**: Prevents fraudulent access, flexible payment methods, clear audit trail  
-**Cons**: Manual review creates delay, requires admin availability, scalability concerns with high volume
+The platform incorporates a multi-step subscription workflow requiring manual approval. Users select a course, submit personal and payment details along with an uploaded payment proof image. Subscriptions are initially set to "pending" status, awaiting administrator review and approval or rejection based on payment verification. Users are notified of the decision, and approved subscribers gain access to course lessons. The system supports `pending`, `approved`, and `rejected` subscription states with backend validation for all submitted data.
 
 ## Notification System
 
-**Problem Addressed**: Keep users informed about subscription status changes, new courses, and system announcements.
-
-**Solution**: Server-generated notifications stored in database with real-time count updates:
-- Unread notification badge in header (polls `/api/notifications/unread-count`)
-- Notification center displays paginated list of all notifications
-- Notifications marked as read when viewed
-- Admin can send broadcast notifications to all users
-
-**Context Management**: NotificationContext provides global state for unread count and notification list
-
-**Pros**: Simple implementation, reliable delivery, persistent across sessions  
-**Cons**: Polling creates unnecessary requests, lacks real-time push (websockets would improve)
+A server-generated notification system keeps users informed about subscription status updates, new courses, and system announcements. Notifications are stored in a database, with real-time unread counts displayed in the header. A dedicated notification center allows users to view and manage all their alerts, which are marked as read upon viewing.
 
 # External Dependencies
 
 ## Core Frontend Libraries
 
-- **React 19.1.0**: UI component library with latest concurrent features
-- **React Router DOM 7.7.1**: Client-side routing and navigation
-- **React Player 3.3.1**: Universal video player component supporting multiple formats
-- **hls.js 1.6.12**: HTTP Live Streaming playback for adaptive video delivery
-- **crypto-js 4.2.0**: Client-side encryption/decryption for video URL protection
+- **React 19.1.0**: UI development.
+- **React Router DOM 7.7.1**: Client-side routing.
+- **React Player 3.3.1**: Universal video player.
+- **hls.js 1.6.12**: HTTP Live Streaming playback.
+- **crypto-js 4.2.0**: Client-side encryption.
 
 ## Internationalization
 
-- **i18next 25.3.6**: Core i18n framework for multi-language support
-- **react-i18next 15.6.1**: React bindings for i18next
-- **i18next-browser-languagedetector 8.2.0**: Automatic language detection
-- **i18next-http-backend 3.0.2**: Dynamic translation file loading
+- **i18next 25.3.6**, **react-i18next 15.6.1**: Core i18n framework and React bindings.
+- **i18next-browser-languagedetector 8.2.0**: Automatic language detection.
+- **i18next-http-backend 3.0.2**: Dynamic translation file loading.
 
 ## UI & Styling
 
-- **Tailwind CSS 3.4.17**: Utility-first CSS framework with custom configuration
-- **Framer Motion 12.0.0**: Production-ready animation library for React with declarative API
-- **React Icons 5.5.0**: Icon library (Feather icons primarily used)
-- **PostCSS 8.5.6** & **Autoprefixer 10.4.21**: CSS processing and browser compatibility
-
-## Development Tools
-
-- **Vite 7.0.4**: Fast build tool and dev server with HMR
-- **ESLint 9.32.0**: Code linting with React-specific rules
-- **@vitejs/plugin-react 4.6.0**: Official Vite plugin for React with Fast Refresh
+- **Tailwind CSS 3.4.17**: Utility-first CSS framework.
+- **Framer Motion 12.0.0**: Animation library for React.
+- **React Icons 5.5.0**: Icon library.
 
 ## Backend API (Laravel)
 
-**Base URL**: Proxied through Vite dev server (`/api` → `http://127.0.0.1:8000`)
-
-**Authentication**: Laravel Sanctum token-based auth with Bearer tokens stored in localStorage
-
-**Expected Database**: Relational database (MySQL/PostgreSQL) with tables for:
-- `users`: Authentication and user profiles
-- `courses`: Course metadata (title, description, price, level, language, instructor, grade)
-- `lessons`: Individual video lessons linked to courses
-- `subscriptions`: User course subscriptions with payment proof and approval status
-- `notifications`: System and admin notifications
-- `favorites`: User favorite courses
-
-**File Storage**: Laravel storage for uploaded images (payment proofs, course thumbnails) and videos (lesson content)
+- **Base URL**: Proxied through Vite dev server (`/api` → `http://127.0.0.1:8000`).
+- **Authentication**: Laravel Sanctum for token-based authentication.
+- **Database**: Expected relational database (MySQL/PostgreSQL) with tables for users, courses, lessons, subscriptions, notifications, and favorites.
+- **File Storage**: Laravel storage for uploaded images and videos.
 
 ## Third-Party Integrations
 
-**Payment Method**: Manual verification via Vodafone Cash/mobile money - users upload payment proof screenshots
-
-**Video Hosting**: Self-hosted video files served through Laravel backend with HLS streaming support
-
-**Future Considerations**: 
-- Payment gateway integration (Fawry, Paymob) for automated payment processing
-- CDN integration for video delivery optimization
-- WebSocket server (Pusher/Laravel Echo) for real-time notifications
-- Analytics integration (Google Analytics, Mixpanel) for user behavior tracking
+- **Payment Method**: Manual verification via Vodafone Cash/mobile money (users upload payment proof screenshots).
+- **Video Hosting**: Self-hosted video files delivered via Laravel backend with HLS streaming.
