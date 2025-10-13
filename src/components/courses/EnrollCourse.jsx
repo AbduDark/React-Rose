@@ -6,7 +6,7 @@ import {
   subscribeToCourse,
   getSubscriptionStatus,
 } from "../../api/subscriptions";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import i18next from "i18next";
 import ImageNotFound from "../../assets/images/ImageNotFound.png"
@@ -34,6 +34,7 @@ function EnrollCourse() {
   
   const { courseId } = useParams();
   const { token } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourseAndStatus = async () => {
@@ -134,6 +135,11 @@ function EnrollCourse() {
       } catch (err) {
         console.log("Error refreshing subscription status");
       }
+
+      // التوجيه إلى صفحة الاشتراكات بعد 2 ثانية
+      setTimeout(() => {
+        navigate("/subscriptions");
+      }, 2000);
     } catch (error) {
       console.error("Subscription error:", error);
       setEnrollError(

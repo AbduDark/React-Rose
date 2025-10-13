@@ -213,7 +213,7 @@
   },
   "enrollCourse": {
     "enrollError": "يرجى تسجيل الدخول للانضمام إلى هذه الدورة",
-    "enrollSuccess": "تم الانضمام إلى الدورة بنجاح!",
+    "enrollSuccess": "تم إرسال طلبك بنجاح، انتظر المسؤولون حتى يراجعون طلبك ويوافقون عليه",
     "subscriptionDetails": "تفاصيل الاشتراك",
     "vodafoneNumber": "رقم فودافون",
     "vodafonePlaceholder": "أدخل رقم فودافون",
