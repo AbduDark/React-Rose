@@ -18,6 +18,7 @@ i18n
     debug: import.meta.env.DEV,
     backend: {
       loadPath: "/locales/{{lng}}/{{ns}}.json",
+      queryStringParams: { v: Date.now() },
     },
     detection: {
       order: ["localStorage", "htmlTag", "navigator"],
