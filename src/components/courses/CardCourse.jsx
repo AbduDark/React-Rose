@@ -135,7 +135,7 @@ function CardCourse() {
 
       setTimeout(() => {
         setRenewSuccess(null);
-        navigate("/subscriptions");
+        navigate("/student-dashboard/subscriptions");
       }, 2000);
     } catch (err) {
       setRenewError(err.message || t("common.error"));
