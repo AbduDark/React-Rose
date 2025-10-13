@@ -106,7 +106,7 @@ const MySubscriptions = () => {
 
       setTimeout(() => {
         setSuccess(null);
-        navigate("/student-dashboard/subscriptions");
+        navigate("/dashboard/subscriptions");
       }, 2000);
 
       const data = await getMySubscriptions(token, currentLang);

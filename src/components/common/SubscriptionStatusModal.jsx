@@ -16,7 +16,7 @@ const SubscriptionStatusModal = ({ isOpen, onClose, status, courseId }) => {
           title: "انتهى الاشتراك",
           message: "الاشتراك الشهري الخاص بك انتهى. يرجى التجديد للمتابعة.",
           actionText: "تجديد الاشتراك",
-          actionLink: `/courses/${courseId}`,
+          actionLink: `/courses/${courseId}/enroll`,
           contactInfo: true,
         };
       case "rejected":
@@ -25,7 +25,7 @@ const SubscriptionStatusModal = ({ isOpen, onClose, status, courseId }) => {
           title: "تم رفض الطلب",
           message: "تم رفض طلبك لأن إثبات الدفع غير صالح. يرجى رفع طلب جديد مع إثبات دفع صحيح.",
           actionText: "رفع طلب جديد",
-          actionLink: `/courses/${courseId}`,
+          actionLink: `/courses/${courseId}/enroll`,
           contactInfo: false,
         };
       case "pending":

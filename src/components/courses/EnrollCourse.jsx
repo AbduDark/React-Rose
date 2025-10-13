@@ -138,7 +138,7 @@ function EnrollCourse() {
 
       // التوجيه إلى صفحة الاشتراكات بعد 2 ثانية
       setTimeout(() => {
-        navigate("/student-dashboard/subscriptions");
+        navigate("/subscriptions");
       }, 2000);
     } catch (error) {
       console.error("Subscription error:", error);
