@@ -11,8 +11,9 @@ import ImageNotFound from "../../assets/images/ImageNotFound.png";
 import Pagination from "../common/Pagination";
 import { useAuth } from "../../context/AuthContext";
 import { addToFavorites, removeFromFavorites, getFavoriteSubscriptions } from "../../api/favorites";
-import { getMySubscriptions } from "../../api/subscriptions";
+import { getMySubscriptions, renewSubscription } from "../../api/subscriptions";
 import SubscriptionStatusModal from "../common/SubscriptionStatusModal";
+import RenewSubscriptionModal from "../user/RenewSubscriptionModal";
 
 function CardCourse() {
   const { t } = useTranslation();
@@ -25,6 +26,11 @@ function CardCourse() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalStatus, setModalStatus] = useState(null);
   const [selectedCourseId, setSelectedCourseId] = useState(null);
+  const [showRenewModal, setShowRenewModal] = useState(false);
+  const [selectedSubscription, setSelectedSubscription] = useState(null);
+  const [renewLoading, setRenewLoading] = useState(false);
+  const [renewSuccess, setRenewSuccess] = useState(null);
+  const [renewError, setRenewError] = useState(null);
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -88,6 +94,53 @@ function CardCourse() {
     } catch (error) {
       console.error("Error checking subscription status:", error);
       navigate(`/courses/${courseId}`);
+    }
+  };
+
+  const handleOpenRenewModal = async () => {
+    try {
+      const currentLang = i18next.language || 'ar';
+      const response = await getMySubscriptions(token, currentLang);
+      const subscriptions = response?.data?.subscriptions || response?.subscriptions || [];
+      const subscription = subscriptions.find(sub => sub.course_id === selectedCourseId);
+      
+      if (subscription) {
+        setSelectedSubscription(subscription);
+        setShowRenewModal(true);
+      }
+    } catch (error) {
+      console.error("Error fetching subscription:", error);
+    }
+  };
+
+  const handleRenewSubscription = async (formData) => {
+    setRenewLoading(true);
+    setRenewError(null);
+    setRenewSuccess(null);
+    
+    try {
+      const currentLang = i18next.language || 'ar';
+      const submitData = new FormData();
+      submitData.append('subscription_id', selectedSubscription.id);
+      submitData.append('vodafone_number', formData.vodafone_number);
+      submitData.append('parent_phone', formData.parent_phone);
+      if (formData.payment_proof instanceof File) {
+        submitData.append('payment_proof', formData.payment_proof);
+      }
+
+      await renewSubscription(token, submitData, currentLang);
+      setRenewSuccess(t("mySubscriptions.renewSuccess"));
+      setShowRenewModal(false);
+      setSelectedSubscription(null);
+
+      setTimeout(() => {
+        setRenewSuccess(null);
+        navigate("/subscriptions");
+      }, 2000);
+    } catch (err) {
+      setRenewError(err.message || t("common.error"));
+    } finally {
+      setRenewLoading(false);
     }
   };
 
@@ -176,7 +229,32 @@ function CardCourse() {
         onClose={() => setModalOpen(false)}
         status={modalStatus}
         courseId={selectedCourseId}
+        onRenew={handleOpenRenewModal}
       />
+      
+      <RenewSubscriptionModal
+        isOpen={showRenewModal}
+        onClose={() => {
+          setShowRenewModal(false);
+          setSelectedSubscription(null);
+        }}
+        onSubmit={handleRenewSubscription}
+        loading={renewLoading}
+        courseName={selectedSubscription?.course?.title}
+      />
+
+      {renewSuccess && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg">
+          {renewSuccess}
+        </div>
+      )}
+
+      {renewError && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg">
+          {renewError}
+        </div>
+      )}
+
       <div className="container mx-auto py-12 px-4">
         <motion.div
           className={`grid grid-cols-1 md:grid-cols-3 3xl:grid-cols-4 gap-6`}

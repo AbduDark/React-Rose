@@ -1,9 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { FaExclamationTriangle, FaClock, FaTimesCircle } from "react-icons/fa";
-import { Link } from "react-router-dom";
 
-const SubscriptionStatusModal = ({ isOpen, onClose, status, courseId }) => {
+const SubscriptionStatusModal = ({ isOpen, onClose, status, courseId, onRenew }) => {
   const { t } = useTranslation();
 
   if (!isOpen) return null;
@@ -87,13 +86,16 @@ const SubscriptionStatusModal = ({ isOpen, onClose, status, courseId }) => {
             )}
 
             <div className="flex flex-col w-full gap-3">
-              {content.actionLink && (
-                <Link
-                  to={content.actionLink}
+              {content.actionText && onRenew && (
+                <button
+                  onClick={() => {
+                    onClose();
+                    onRenew();
+                  }}
                   className="w-full bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300"
                 >
                   {content.actionText}
-                </Link>
+                </button>
               )}
               <button
                 onClick={onClose}
