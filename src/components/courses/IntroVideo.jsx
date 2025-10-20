@@ -1,14 +1,30 @@
 import React, { useState } from "react";
-import ReactPlayer from "react-player";
 import { FaPlay } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+import { getYouTubeEmbedUrl } from "../../utils/youtubeHelper";
 
 const IntroVideo = ({ introVideoUrl, courseTitle }) => {
   const { t } = useTranslation();
-  const [isPlaying, setIsPlaying] = useState(false);
   const [showPlayer, setShowPlayer] = useState(false);
 
   if (!introVideoUrl) return null;
+
+  const embedUrl = getYouTubeEmbedUrl(introVideoUrl);
+
+  if (!embedUrl) {
+    return (
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+          {t("courseDetailPage.introVideo", "مقدمة الكورس")}
+        </h2>
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 text-center">
+          <p className="text-red-800 dark:text-red-300">
+            رابط الفيديو غير صحيح. يرجى التواصل مع الإدارة.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mb-8">
@@ -32,24 +48,15 @@ const IntroVideo = ({ introVideoUrl, courseTitle }) => {
             </div>
           </div>
         ) : (
-          <ReactPlayer
-            url={introVideoUrl}
-            playing={isPlaying}
-            controls
+          <iframe
+            src={embedUrl}
+            title={courseTitle || "Intro Video"}
             width="100%"
             height="100%"
-            className="react-player"
-            onPlay={() => setIsPlaying(true)}
-            onPause={() => setIsPlaying(false)}
-            config={{
-              youtube: {
-                playerVars: {
-                  showinfo: 0,
-                  modestbranding: 1,
-                  rel: 0,
-                },
-              },
-            }}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="w-full h-full"
           />
         )}
       </div>
