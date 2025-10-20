@@ -16,9 +16,13 @@ The frontend is a Single-Page Application (SPA) built with React 19 and Vite, ut
 
 The backend is a RESTful API developed with Laravel, providing robust support for course management, user authentication (Laravel Sanctum), subscription workflows, and secure video content delivery. It features token-based authentication, resource-based API responses with localized messages, and dedicated endpoints for administrative CRUD operations on courses, lessons, and subscriptions, as well as user-specific actions. The API is designed for clear separation of concerns and extensibility.
 
+## Course Intro Videos
+
+Each course can optionally include an intro video (YouTube link) that appears in the course overview section. The intro video is displayed using ReactPlayer with a custom play button overlay, allowing prospective students to preview the course content before subscribing.
+
 ## Video Content Protection
 
-To prevent unauthorized access and sharing of video content, a multi-layered security approach is implemented. This includes AES-256 encryption of video URLs with embedded user and lesson metadata, temporary session-based tokens, and HLS/DASH streaming with software AES decryption. Client-side protections disable common piracy methods like right-click and keyboard shortcuts, and a DOM Mutation Observer detects attempts to tamper with the video player. Security configurations are centralized for easy management.
+Video content is protected through comprehensive client-side security measures. Videos are delivered as direct URLs from the Laravel backend (no frontend encryption). The VideoPlayer component includes multi-quality HLS streaming support with automatic quality selection. Client-side protections prevent common piracy methods including right-click blocking, keyboard shortcut disabling, drag-and-drop prevention, text selection blocking, and DOM mutation monitoring. A watermark with user information is overlaid on videos to deter screen recording. All security configurations are centralized for easy management.
 
 ## Subscription Workflow
 
@@ -44,9 +48,8 @@ A server-generated notification system keeps users informed about subscription s
 
 - **React 19.1.0**: UI development.
 - **React Router DOM 7.7.1**: Client-side routing.
-- **React Player 3.3.1**: Universal video player.
-- **hls.js 1.6.12**: HTTP Live Streaming playback.
-- **crypto-js 4.2.0**: Client-side encryption.
+- **React Player 3.3.1**: Universal video player for YouTube intro videos.
+- **hls.js 1.6.12**: HTTP Live Streaming playback with multi-quality support.
 
 ## Internationalization
 

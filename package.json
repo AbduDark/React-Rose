@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "crypto-js": "^4.2.0",
     "framer-motion": "^12.23.22",
     "hls.js": "^1.6.12",
     "i18next": "^25.3.6",

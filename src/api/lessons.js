@@ -419,118 +419,6 @@ export const deleteComment = async (commentId, token) => {
   }
 };
 
-// Video Security APIs (Enhanced)
-
-export const getSecureVideoUrl = async (lessonId, token) => {
-  try {
-    if (!lessonId) {
-      throw new Error("lessonId is required");
-    }
-
-    // Get lesson details first
-    const lessonDetails = await getLessonDetails(lessonId, token);
-    const lessonData = lessonDetails.data || lessonDetails;
-
-    if (!lessonData.has_video || !lessonData.video_url) {
-      throw new Error("No video available for this lesson");
-    }
-
-    // Use local video security service
-    const videoSecurityService = (
-      await import("../services/VideoSecurityService")
-    ).default;
-
-    const userInfo = await getUserInfoFromToken(token);
-    
-    const secureUrl = videoSecurityService.createSecureVideoUrl(
-      lessonData.video_url,
-      lessonId,
-      userInfo.id
-    );
-
-    const sessionToken = videoSecurityService.generateVideoToken(
-      lessonId,
-      userInfo.id,
-      Date.now().toString()
-    );
-
-    return {
-      data: {
-        secure_url: secureUrl,
-        session_token: sessionToken,
-        expires_at: Date.now() + 30 * 60 * 1000, // 30 minutes
-        original_url: lessonData.video_url,
-        lesson_title: lessonData.title,
-      },
-    };
-  } catch (error) {
-    console.error("Error getting secure video URL:", error);
-    throw error;
-  }
-};
-
-export const validateVideoAccess = async (lessonId, token, sessionToken) => {
-  try {
-    if (!lessonId || !sessionToken) {
-      throw new Error("lessonId and sessionToken are required");
-    }
-
-    const videoSecurityService = (
-      await import("../services/VideoSecurityService")
-    ).default;
-
-    const userInfo = await getUserInfoFromToken(token);
-    
-    const validation = videoSecurityService.validateVideoToken(
-      sessionToken,
-      lessonId,
-      userInfo.id
-    );
-
-    return {
-      data: {
-        valid: validation.valid,
-        error: validation.error,
-        remaining_views: validation.valid
-          ? Math.max(0, 5 - (validation.tokenData?.viewCount || 0))
-          : 0,
-        expires_at: validation.tokenData?.expiry || Date.now(),
-      },
-    };
-  } catch (error) {
-    console.error("Error validating video access:", error);
-    throw error;
-  }
-};
-
-// Helper function to extract user info from JWT token
-const getUserInfoFromToken = async (token) => {
-  try {
-    if (!token) {
-      return {
-        id: "anonymous",
-        email: "unknown@example.com",
-        name: "Anonymous User",
-      };
-    }
-
-    // Decode JWT token
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    return {
-      id: payload.user_id || payload.sub || payload.id || "anonymous",
-      email: payload.email || "unknown@example.com",
-      name: payload.name || payload.username || "Anonymous User",
-    };
-  } catch (error) {
-    console.warn("Failed to decode token:", error);
-    return {
-      id: "anonymous",
-      email: "unknown@example.com",
-      name: "Anonymous User",
-    };
-  }
-};
-
 // Security logging and reporting
 export const reportSuspiciousActivity = async (
   lessonId,
@@ -543,7 +431,11 @@ export const reportSuspiciousActivity = async (
       throw new Error("lessonId and activityType are required");
     }
 
-    const userInfo = await getUserInfoFromToken(token);
+    const userInfo = {
+      id: "user",
+      email: "unknown@example.com",
+      name: "User",
+    };
     
     const securityLog = {
       lessonId,

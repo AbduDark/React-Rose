@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ReactPlayer from "react-player/youtube";
+import ReactPlayer from "react-player";
 import { FaPlay } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 
