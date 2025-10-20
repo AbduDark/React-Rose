@@ -7,6 +7,7 @@ import { getLessonsByCourse } from "../../api/lessons";
 import { getSubscriptionStatus } from "../../api/subscriptions";
 import { useAuth } from "../../context/AuthContext";
 import { useParams } from "react-router-dom";
+import IntroVideo from "./IntroVideo";
 
 function OverviewCourse() {
   const { t } = useTranslation();
@@ -57,6 +58,14 @@ function OverviewCourse() {
 
   return (
     <div>
+      {/* Intro Video */}
+      {course.intro_video_url && (
+        <IntroVideo
+          introVideoUrl={course.intro_video_url}
+          courseTitle={course.title}
+        />
+      )}
+      
       <div className="mb-8">
         <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
           {t("overviewCourse.description")}
