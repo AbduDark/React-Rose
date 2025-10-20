@@ -1,0 +1,63 @@
+modules = ["nodejs-20", "php-8.2", "web"]
+[agent]
+expertMode = true
+
+[nix]
+channel = "stable-25_05"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Server"
+
+[[workflows.workflow]]
+name = "Server"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[ports]]
+localPort = 5000
+externalPort = 80
+
+[[ports]]
+localPort = 34945
+externalPort = 3000
+
+[[ports]]
+localPort = 35091
+externalPort = 5000
+
+[[ports]]
+localPort = 36251
+externalPort = 3003
+
+[[ports]]
+localPort = 38019
+externalPort = 3001
+
+[[ports]]
+localPort = 44555
+externalPort = 3002
+
+[[ports]]
+localPort = 45963
+externalPort = 4200
+
+[deployment]
+deploymentTarget = "autoscale"
+run = ["npx", "vite", "preview", "--host", "0.0.0.0"]
+build = ["npm", "run", "build"]
