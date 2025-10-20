@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { FaStar, FaStarHalfAlt, FaRegStar, FaClock } from "react-icons/fa";
-import { FiHeart } from "react-icons/fi";
+import { FiHeart, FiPlay } from "react-icons/fi";
 import { useCourse } from "../../context/CourseContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import Loader from "../common/Loader";
@@ -14,6 +14,7 @@ import { addToFavorites, removeFromFavorites, getFavoriteSubscriptions } from ".
 import { getMySubscriptions, renewSubscription } from "../../api/subscriptions";
 import SubscriptionStatusModal from "../common/SubscriptionStatusModal";
 import RenewSubscriptionModal from "../user/RenewSubscriptionModal";
+import IntroVideoModal from "../common/IntroVideoModal";
 
 function CardCourse() {
   const { t } = useTranslation();
@@ -31,6 +32,9 @@ function CardCourse() {
   const [renewLoading, setRenewLoading] = useState(false);
   const [renewSuccess, setRenewSuccess] = useState(null);
   const [renewError, setRenewError] = useState(null);
+  const [showIntroModal, setShowIntroModal] = useState(false);
+  const [selectedIntroVideo, setSelectedIntroVideo] = useState(null);
+  const [selectedCourseTitle, setSelectedCourseTitle] = useState("");
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -169,6 +173,13 @@ function CardCourse() {
     }
   };
 
+  const handleShowIntro = (e, introVideoUrl, courseTitle) => {
+    e.stopPropagation();
+    setSelectedIntroVideo(introVideoUrl);
+    setSelectedCourseTitle(courseTitle);
+    setShowIntroModal(true);
+  };
+
   const renderStars = (rating) => {
     if (!rating)
       return <span className="text-gray-400">{t("cardCourse.noRating")}</span>;
@@ -224,6 +235,13 @@ function CardCourse() {
 
   return (
     <>
+      <IntroVideoModal
+        isOpen={showIntroModal}
+        onClose={() => setShowIntroModal(false)}
+        videoUrl={selectedIntroVideo}
+        courseTitle={selectedCourseTitle}
+      />
+      
       <SubscriptionStatusModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
@@ -271,18 +289,31 @@ function CardCourse() {
               onClick={() => handleCourseClick(course.id)}
               className="bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow-md hover:shadow-xl dark:shadow-gray-900 cursor-pointer relative border border-transparent dark:border-gray-600"
             >
-              <motion.button
-                onClick={(e) => handleToggleFavorite(e, course.id)}
-                disabled={favoriteLoading[course.id]}
-                whileHover={{ scale: 1.15 }}
-                whileTap={{ scale: 0.9 }}
-                className={`absolute top-3 right-3 z-10 p-2 rounded-full bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-800 transition-all ${
-                  token && favoriteCourseIds.includes(course.id) ? "text-red-500" : "text-gray-400 dark:text-gray-300"
-                } ${favoriteLoading[course.id] ? "opacity-50" : ""}`}
-                title={token && favoriteCourseIds.includes(course.id) ? t("favorites.removeFromFavorites") || "إزالة من المفضلة" : t("favorites.addToFavorites") || "إضافة للمفضلة"}
-              >
-                <FiHeart className={`w-5 h-5 ${token && favoriteCourseIds.includes(course.id) ? "fill-current" : ""}`} />
-              </motion.button>
+              <div className="absolute top-3 right-3 z-10 flex gap-2">
+                {course.intro_video_url && course.intro_video_url.trim() !== '' && (
+                  <motion.button
+                    onClick={(e) => handleShowIntro(e, course.intro_video_url, course.title)}
+                    whileHover={{ scale: 1.15 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="p-2 rounded-full bg-blue-500/90 hover:bg-blue-600 text-white transition-all shadow-lg"
+                    title={t("introVideo.watchIntro") || "شاهد المقدمة"}
+                  >
+                    <FiPlay className="w-5 h-5" />
+                  </motion.button>
+                )}
+                <motion.button
+                  onClick={(e) => handleToggleFavorite(e, course.id)}
+                  disabled={favoriteLoading[course.id]}
+                  whileHover={{ scale: 1.15 }}
+                  whileTap={{ scale: 0.9 }}
+                  className={`p-2 rounded-full bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-800 transition-all ${
+                    token && favoriteCourseIds.includes(course.id) ? "text-red-500" : "text-gray-400 dark:text-gray-300"
+                  } ${favoriteLoading[course.id] ? "opacity-50" : ""}`}
+                  title={token && favoriteCourseIds.includes(course.id) ? t("favorites.removeFromFavorites") || "إزالة من المفضلة" : t("favorites.addToFavorites") || "إضافة للمفضلة"}
+                >
+                  <FiHeart className={`w-5 h-5 ${token && favoriteCourseIds.includes(course.id) ? "fill-current" : ""}`} />
+                </motion.button>
+              </div>
               <motion.img
                 src={course.image_url || ImageNotFound}
                 alt={course.title}

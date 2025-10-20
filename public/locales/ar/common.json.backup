@@ -59,7 +59,6 @@
     "quickLinks": "روابط سريعة",
     "home": "الرئيسية",
     "courses": "الدورات",
-    "about": "حول",
     "contact": "اتصل بنا",
     "contactInfo": "معلومات الاتصال",
     "email": "البريد الإلكتروني",
@@ -84,6 +83,16 @@
     "description": "الوصف",
     "viewCourse": "عرض الدورة",
     "favorites": "المفضلة",
+    "approvedStatus": "موافق عليه",
+    "pendingStatus": "قيد الانتظار",
+    "rejectedStatus": "مرفوض",
+    "expiredStatus": "منتهي",
+    "pendingApproval": "قيد المراجعة",
+    "renew": "تجديد الاشتراك",
+    "renewForm": "تجديد الاشتراك",
+    "confirmRenew": "تأكيد التجديد",
+    "renewSuccess": "تم إرسال طلبك إلى المسؤول وسيتم الموافقة عليه قريباً",
+    "cancelSuccess": "تم إلغاء الاشتراك بنجاح",
     "error": {
       "login": "يرجى تسجيل الدخول لعرض اشتراكاتك.",
       "fetchFailed": "فشل في جلب الاشتراكات. حاول مرة أخرى."
@@ -204,10 +213,11 @@
   },
   "enrollCourse": {
     "enrollError": "يرجى تسجيل الدخول للانضمام إلى هذه الدورة",
-    "enrollSuccess": "تم الانضمام إلى الدورة بنجاح!",
+    "enrollSuccess": "تم إرسال طلبك بنجاح، انتظر المسؤولون حتى يراجعون طلبك ويوافقون عليه",
     "subscriptionDetails": "تفاصيل الاشتراك",
     "vodafoneNumber": "رقم فودافون",
     "vodafonePlaceholder": "أدخل رقم فودافون",
+    "transferPhoneNumber": "الرقم الذي حولت منه",
     "amount": "المبلغ",
     "amountPlaceholder": "أدخل المبلغ",
     "parentPhone": "هاتف الوالد",
@@ -223,7 +233,15 @@
     "courseIncludes": "تتضمن هذه الدورة",
     "price": "السعر",
     "episodes": "الحلقات",
-    "date": "التاريخ"
+    "date": "التاريخ",
+    "fillAllFields": "الرجاء ملء جميع الحقول"
+  },
+  "validation": {
+    "phoneRequired": "رقم الهاتف مطلوب",
+    "parentPhoneRequired": "رقم ولي الأمر مطلوب",
+    "invalidPhone": "رقم الهاتف يجب أن يبدأ بـ 01 ويتكون من 11 رقم",
+    "validPhone": "رقم صحيح",
+    "paymentProofRequired": "إثبات الدفع مطلوب"
   },
   "overviewCourse": {
     "overview": "نظرة عامة",
@@ -337,7 +355,13 @@
         "description": "تم إنشاء حسابك. يرجى التحقق من بريدك الإلكتروني والنقر على رابط التفعيل للتحقق من حسابك.",
         "note": "ستتمكن من تسجيل الدخول بعد التحقق من بريدك الإلكتروني.",
         "goToLogin": "الذهاب لتسجيل الدخول"
-      }
+      },
+      "passwordRequirements": "متطلبات كلمة المرور:",
+      "minLength": "على الأقل 8 أحرف (حروف وأرقام فقط)",
+      "hasLowercase": "على الأقل حرف صغير واحد",
+      "hasUppercase": "على الأقل حرف كبير واحد",
+      "passwordsMatch": "كلمات المرور متطابقة",
+      "passwordsDoNotMatch": "كلمات المرور غير متطابقة"
     },
     "forgotPassword": {
       "title": "نسيت كلمة المرور",
@@ -830,7 +854,6 @@
       "approved": "موافق عليه",
       "progressOverview": "نظرة عامة على التقدم",
       "activeCourses": "الدورات النشطة",
-      "activeSubscriptions": "الاشتراكات النشطة",
       "approvedSubscriptions": "الاشتراكات الموافق عليها",
       "total": "إجمالي",
       "quickStatistics": "إحصائيات سريعة",
@@ -842,10 +865,8 @@
       "courseActivity": "نشاط الدورات",
       "subscriptionRate": "معدل الاشتراك",
       "monthlyGrowthRate": "معدل النمو الشهري",
-      "activeCourses": "الدورات النشطة",
       "userSubscriptionRate": "معدل اشتراك المستخدمين",
-      "subscriptionStatus": "حالة الاشتراك",
-      "courseActivity": "نشاط الدورات"
+      "subscriptionStatus": "حالة الاشتراك"
     },
     "coursesManager": {
       "title": "إدارة الدورات",

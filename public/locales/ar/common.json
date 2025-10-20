@@ -926,7 +926,10 @@
         "descriptionRequired": "وصف الدورة مطلوب",
         "priceRequired": "سعر صحيح مطلوب",
         "gradeRequired": "اختيار الصف مطلوب"
-      }
+      },
+      "introVideoUrl": "رابط فيديو المقدمة (YouTube)",
+      "introVideoUrlPlaceholder": "https://www.youtube.com/watch?v=...",
+      "introVideoUrlHint": "أضف رابط YouTube لفيديو المقدمة الخاص بالكورس"
     },
     "updateCourse": {
       "title": "تعديل الدورة",
@@ -957,7 +960,10 @@
         "descriptionRequired": "وصف الدورة مطلوب",
         "priceRequired": "سعر صحيح مطلوب",
         "gradeRequired": "اختيار الصف مطلوب"
-      }
+      },
+      "introVideoUrl": "رابط فيديو المقدمة (YouTube)",
+      "introVideoUrlPlaceholder": "https://www.youtube.com/watch?v=...",
+      "introVideoUrlHint": "أضف رابط YouTube لفيديو المقدمة الخاص بالكورس"
     },
     "deleteCourse": {
       "title": "حذف الدورة",
@@ -1122,5 +1128,9 @@
       "deleting": "جاري الحذف",
       "close": "إغلاق"
     }
+  },
+  "introVideo": {
+    "title": "مقدمة الكورس",
+    "watchIntro": "شاهد المقدمة"
   }
 }

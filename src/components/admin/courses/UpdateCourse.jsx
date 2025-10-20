@@ -18,6 +18,7 @@ function UpdateCourse({ course, onCourseUpdated, isOpen, onClose }) {
     is_active: "true",
     grade: "",
     image: null,
+    intro_video_url: "",
   });
 
   useEffect(() => {
@@ -29,9 +30,16 @@ function UpdateCourse({ course, onCourseUpdated, isOpen, onClose }) {
         is_active: course.is_active ? "true" : "false",
         grade: course.grade || "",
         image: null,
+        intro_video_url: course.intro_video_url || "",
       });
     }
   }, [course]);
+
+  const validateYouTubeUrl = (url) => {
+    if (!url || url.trim() === '') return true; // Empty is valid (optional field)
+    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
+    return youtubeRegex.test(url);
+  };
 
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
@@ -67,6 +75,10 @@ function UpdateCourse({ course, onCourseUpdated, isOpen, onClose }) {
       errors.push(t("adminDashboard.updateCourse.validation.gradeRequired"));
     }
     
+    if (formData.intro_video_url && !validateYouTubeUrl(formData.intro_video_url)) {
+      errors.push("رجاءً أدخل رابط YouTube صحيح للفيديو التعريفي");
+    }
+    
     return errors;
   };
 
@@ -99,6 +111,7 @@ function UpdateCourse({ course, onCourseUpdated, isOpen, onClose }) {
         grade: formData.grade,
         image: formData.image,
         is_active: formData.is_active === "true" ? 1 : 0,
+        intro_video_url: formData.intro_video_url.trim() || null,
       };
 
       const response = await updateAdminCourse(course.id, courseData, token, i18n.language);
@@ -275,6 +288,24 @@ function UpdateCourse({ course, onCourseUpdated, isOpen, onClose }) {
                   })}
                 </p>
               )}
+            </div>
+
+            {/* Intro Video URL */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium mb-2 text-gray-300">
+                {t("adminDashboard.updateCourse.introVideoUrl")}
+              </label>
+              <input
+                type="url"
+                name="intro_video_url"
+                className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                value={formData.intro_video_url}
+                onChange={handleInputChange}
+                placeholder={t("adminDashboard.updateCourse.introVideoUrlPlaceholder")}
+              />
+              <p className="mt-1 text-xs text-gray-400">
+                {t("adminDashboard.updateCourse.introVideoUrlHint")}
+              </p>
             </div>
           </div>
 

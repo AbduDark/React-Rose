@@ -10,9 +10,12 @@ import {
   FaSpinner,
   FaChevronDown,
   FaChevronUp,
+  FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
 import { getLessonsByCourse } from "../../api/lessons";
 import { useAuth } from "../../context/AuthContext";
+import i18next from "i18next";
 
 const VideoPlaylist = ({
   courseId,
@@ -230,22 +233,31 @@ const VideoPlaylist = ({
       </div>
 
       {/* Navigation Controls */}
-      <div className="p-4 border-b bg-gray-50">
-        <div className="flex items-center justify-between">
+      <div className="p-4 border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+        <div className="flex items-center justify-between gap-3">
           <button
             onClick={handlePlayPrevious}
             disabled={!previousLesson}
-            className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm ${
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
               previousLesson
-                ? "bg-blue-600 text-white hover:bg-blue-700"
-                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-md hover:shadow-lg"
+                : "bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed"
             }`}
           >
-            <FaPlay className="rotate-180" />
-            <span>{t("lessons.playlist.previous")}</span>
+            {i18next.language === "ar" ? (
+              <>
+                <FaChevronRight className="w-4 h-4" />
+                <span>{t("lessons.playlist.previous")}</span>
+              </>
+            ) : (
+              <>
+                <FaChevronLeft className="w-4 h-4" />
+                <span>{t("lessons.playlist.previous")}</span>
+              </>
+            )}
           </button>
 
-          <div className="flex items-center space-x-2 text-sm text-gray-600">
+          <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 font-medium bg-white dark:bg-gray-700 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-600">
             <span>
               {currentIndex + 1} / {lessons.length}
             </span>
@@ -254,14 +266,23 @@ const VideoPlaylist = ({
           <button
             onClick={handlePlayNext}
             disabled={!nextLesson}
-            className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm ${
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
               nextLesson
-                ? "bg-blue-600 text-white hover:bg-blue-700"
-                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-md hover:shadow-lg"
+                : "bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed"
             }`}
           >
-            <span>{t("lessons.playlist.next")}</span>
-            <FaPlay />
+            {i18next.language === "ar" ? (
+              <>
+                <span>{t("lessons.playlist.next")}</span>
+                <FaChevronLeft className="w-4 h-4" />
+              </>
+            ) : (
+              <>
+                <span>{t("lessons.playlist.next")}</span>
+                <FaChevronRight className="w-4 h-4" />
+              </>
+            )}
           </button>
         </div>
       </div>

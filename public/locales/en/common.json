@@ -906,7 +906,10 @@
         "descriptionRequired": "Course description is required",
         "priceRequired": "Valid price is required",
         "gradeRequired": "Grade selection is required"
-      }
+      },
+      "introVideoUrl": "Intro Video URL (YouTube)",
+      "introVideoUrlPlaceholder": "https://www.youtube.com/watch?v=...",
+      "introVideoUrlHint": "Add YouTube URL for the course introduction video"
     },
     "updateCourse": {
       "title": "Edit Course",
@@ -937,7 +940,10 @@
         "descriptionRequired": "Course description is required",
         "priceRequired": "Valid price is required",
         "gradeRequired": "Grade selection is required"
-      }
+      },
+      "introVideoUrl": "Intro Video URL (YouTube)",
+      "introVideoUrlPlaceholder": "https://www.youtube.com/watch?v=...",
+      "introVideoUrlHint": "Add YouTube URL for the course introduction video"
     },
     "deleteCourse": {
       "title": "Delete Course",
@@ -1102,5 +1108,9 @@
       "deleting": "Deleting",
       "close": "Close"
     }
+  },
+  "introVideo": {
+    "title": "Course Introduction",
+    "watchIntro": "Watch Intro"
   }
 }

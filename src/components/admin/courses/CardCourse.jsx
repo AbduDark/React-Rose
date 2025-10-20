@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FiBook, FiClock, FiEdit, FiTrash2, FiStar } from "react-icons/fi";
+import { FiBook, FiClock, FiEdit, FiTrash2, FiStar, FiPlay } from "react-icons/fi";
 import ImageNotFound from "../../../assets/images/ImageNotFound.png";
+import IntroVideoModal from "../../common/IntroVideoModal";
+
 function CardCourse({ course, onEdit, onDelete }) {
   const { t } = useTranslation();
+  const [showIntroModal, setShowIntroModal] = useState(false);
 
   const getLevelColor = (level) => {
     switch (level?.toLowerCase()) {
@@ -45,28 +48,45 @@ function CardCourse({ course, onEdit, onDelete }) {
     }
   };
   return (
-    <div className="bg-gray-800 rounded-xl shadow-lg border border-gray-700 hover:shadow-xl transition-all duration-300 overflow-hidden hover:border-gray-600">
-      <div className="relative h-48 overflow-hidden">
-        <img
-          src={course.image_url || ImageNotFound}
-          alt={course.title}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute top-4 right-4">
-          <span
-            className={`px-2 py-1 text-xs font-medium rounded-full ${getLevelColor(
-              course.level
-            )}`}
-          >
-            {getLevelText(course.level)}
-          </span>
+    <>
+      <IntroVideoModal
+        isOpen={showIntroModal}
+        onClose={() => setShowIntroModal(false)}
+        videoUrl={course.intro_video_url}
+        courseTitle={course.title}
+      />
+      
+      <div className="bg-gray-800 rounded-xl shadow-lg border border-gray-700 hover:shadow-xl transition-all duration-300 overflow-hidden hover:border-gray-600">
+        <div className="relative h-48 overflow-hidden">
+          <img
+            src={course.image_url || ImageNotFound}
+            alt={course.title}
+            className="w-full h-full object-cover"
+          />
+          {course.intro_video_url && course.intro_video_url.trim() !== '' && (
+            <button
+              onClick={() => setShowIntroModal(true)}
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-blue-500/90 hover:bg-blue-600 text-white p-4 rounded-full shadow-lg transition-all hover:scale-110 z-10"
+              title={t("introVideo.watchIntro") || "شاهد المقدمة"}
+            >
+              <FiPlay className="w-6 h-6" />
+            </button>
+          )}
+          <div className="absolute top-4 right-4">
+            <span
+              className={`px-2 py-1 text-xs font-medium rounded-full ${getLevelColor(
+                course.level
+              )}`}
+            >
+              {getLevelText(course.level)}
+            </span>
+          </div>
+          <div className="absolute top-4 left-4">
+            <span className="px-2 py-1 text-xs font-medium rounded-full bg-gray-900/80 text-white">
+              {getLanguageText(course.language)}
+            </span>
+          </div>
         </div>
-        <div className="absolute top-4 left-4">
-          <span className="px-2 py-1 text-xs font-medium rounded-full bg-gray-900/80 text-white">
-            {getLanguageText(course.language)}
-          </span>
-        </div>
-      </div>
 
       <div className="p-6">
         <div className="flex justify-between items-start mb-3">
@@ -150,6 +170,7 @@ function CardCourse({ course, onEdit, onDelete }) {
         </div>
       </div>
     </div>
+    </>
   );
 }
 
