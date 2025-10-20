@@ -154,9 +154,11 @@ export const createAdminCourse = async (courseData, token, lang = "en") => {
   if (courseData.image) formData.append("image", courseData.image);
   if (courseData.is_active != null)
     formData.append("is_active", String(toIsActiveInt(courseData.is_active)));
+  if (courseData.intro_video_url != null)
+    formData.append("intro_video_url", String(courseData.intro_video_url));
 
   console.log("Creating course with token:", token ? "Token exists" : "No token");
-  
+
   const res = await fetch(`${API_BASE}/admin/courses`, {
     method: "POST",
     headers: {
@@ -229,9 +231,11 @@ export const updateAdminCourse = async (id, courseData, token, lang = "en") => {
   if (courseData.image) formData.append("image", courseData.image);
   if (courseData.is_active != null)
     formData.append("is_active", String(toIsActiveInt(courseData.is_active)));
+  if (courseData.intro_video_url != null)
+    formData.append("intro_video_url", String(courseData.intro_video_url));
 
   console.log("Updating course with token:", token ? "Token exists" : "No token");
-  
+
   const res = await fetch(`${API_BASE}/admin/courses/${id}`, {
     method: "POST", // Laravel expects POST with _method=PUT for file uploads
     headers: {
@@ -278,7 +282,7 @@ export const deleteAdminCourse = async (id, token, lang = "en") => {
   }
 
   console.log("Deleting course with token:", token ? "Token exists" : "No token");
-  
+
   return fetchJson(
     `${API_BASE}/admin/courses/${id}`,
     {
