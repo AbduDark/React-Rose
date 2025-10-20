@@ -23,6 +23,7 @@ const ContactUsPage = lazy(() => import("../pages/ContactUsPage"));
 const AboutPage = lazy(() => import("../pages/AboutPage"));
 const NotificationsPage = lazy(() => import("../pages/NotificationsPage"));
 const TeamDeveloper = lazy(() => import("../pages/TeamDeveloperPage"));
+const VideoTestPage = lazy(() => import("../pages/VideoTestPage"));
 const PrivateRoute = lazy(() => import("../router/PrivateRoute"));
 
 function AnimatedRoutes() {
@@ -92,6 +93,16 @@ function AnimatedRoutes() {
             <Layout>
               <PageTransition>
                 <TeamDeveloper />
+              </PageTransition>
+            </Layout>
+          }
+        />
+        <Route
+          path="/video-test"
+          element={
+            <Layout>
+              <PageTransition>
+                <VideoTestPage />
               </PageTransition>
             </Layout>
           }
