@@ -33,7 +33,6 @@ const WatchCoursePage = () => {
       try {
         const response = await getLessonsByCourse(courseId, token);
         const lessonsData = response?.data?.lessons || [];
-        console.log("Loaded lessons:", lessonsData);
         setLessons(lessonsData);
 
         if (lessonsData.length === 0) {
@@ -93,14 +92,9 @@ const WatchCoursePage = () => {
   }, [lessons, user]);
 
   const currentLesson = useMemo(() => {
-    if (!currentLessonId) return null;
     const lesson = filteredLessons.find((l) => l.id === Number(currentLessonId));
-    if (!lesson) {
-      console.warn("Current lesson not found:", currentLessonId);
-      return null;
-    }
-    if (!lesson.has_video) {
-      console.warn("Lesson has no video:", lesson);
+    if (!lesson || !lesson.has_video) {
+      console.warn("Current lesson is invalid or has no video:", lesson);
       return null;
     }
     return lesson;
@@ -128,18 +122,19 @@ const WatchCoursePage = () => {
 
   // Handle lesson selection
   const handleLessonSelect = (lesson) => {
-    console.log("Selecting lesson:", lesson);
-    if (!lesson || !lesson.has_video) {
+    if (!lesson.has_video) {
       console.warn("Selected lesson has no video:", lesson);
       setError(t("lessons.videoPlayer.noVideo"));
       return;
     }
+    
     if (!lesson.video_url) {
-      console.warn("Selected lesson has no video URL:", lesson);
-      setError(t("lessons.videoPlayer.noVideo"));
+      console.error("Lesson has no video URL:", lesson);
+      setError("رابط الفيديو غير متوفر");
       return;
     }
-    console.log("Setting current lesson ID to:", lesson.id);
+    
+    console.log("Selected lesson:", lesson.id, "Video URL:", lesson.video_url);
     setCurrentLessonId(lesson.id);
     navigate(`/courses/${courseId}/lessons/${lesson.id}`, { replace: true });
     setIsVideoPlaying(false);
