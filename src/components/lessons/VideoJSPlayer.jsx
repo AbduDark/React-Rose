@@ -42,7 +42,7 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
       if (!videoRef.current) {
         if (retryCountRef.current < maxRetries) {
           retryCountRef.current++;
-          initTimeoutRef.current = setTimeout(tryInitializePlayer, 50);
+          initTimeoutRef.current = setTimeout(tryInitializePlayer, 100);
         } else {
           console.error("Max retries reached: video element ref not available");
           setError("فشل تهيئة مشغل الفيديو - العنصر غير متاح");
@@ -50,13 +50,14 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
         return;
       }
 
-      if (!videoRef.current.isConnected) {
+      if (!videoRef.current.isConnected || !document.body.contains(videoRef.current)) {
         if (retryCountRef.current < maxRetries) {
           retryCountRef.current++;
-          initTimeoutRef.current = setTimeout(tryInitializePlayer, 50);
+          initTimeoutRef.current = setTimeout(tryInitializePlayer, 100);
         } else {
           console.error("Max retries reached: video element not connected to DOM");
-          setError("فشل تهيئة مشغل الفيديو - العنصر غير متصل");
+          // Don't set error, just silently fail as component might be unmounting
+          return;
         }
         return;
       }

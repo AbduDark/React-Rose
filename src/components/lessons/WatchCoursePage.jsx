@@ -92,6 +92,11 @@ const WatchCoursePage = () => {
   }, [lessons, user]);
 
   const currentLesson = useMemo(() => {
+    // Return null if no lesson ID is set yet
+    if (!currentLessonId) {
+      return null;
+    }
+    
     const lesson = filteredLessons.find((l) => l.id === Number(currentLessonId));
     if (!lesson) {
       console.warn("Current lesson not found:", currentLessonId);
