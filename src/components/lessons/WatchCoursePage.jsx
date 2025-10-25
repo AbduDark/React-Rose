@@ -95,16 +95,11 @@ const WatchCoursePage = () => {
     const lesson = filteredLessons.find((l) => l.id === Number(currentLessonId));
     if (!lesson) {
       console.warn("Current lesson not found:", currentLessonId);
-      // Add null check for current lesson
-      if (!currentLesson) {
-        console.warn('Current lesson not found, using first available lesson');
-        // Fallback to first lesson if current lesson is not found
-        return lessons.length > 0 ? lessons[0] : null;
-      }
-      return null; // Should not reach here if the above fallback works
+      // Fallback to first lesson if current lesson is not found
+      return filteredLessons.length > 0 ? filteredLessons[0] : null;
     }
     return lesson;
-  }, [filteredLessons, currentLessonId, lessons]); // Added 'lessons' to dependency array
+  }, [filteredLessons, currentLessonId]);
 
   // Ensure current lesson is available after filtering
   useEffect(() => {
