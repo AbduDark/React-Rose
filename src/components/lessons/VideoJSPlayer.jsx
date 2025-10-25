@@ -14,7 +14,10 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    if (!videoRef.current || !videoUrl) return;
+    if (!videoRef.current || !videoUrl) {
+      console.warn("VideoJSPlayer: Missing video element or URL", { videoUrl });
+      return;
+    }
 
     const videoElement = videoRef.current;
 
@@ -94,10 +97,26 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
     });
 
     // تعيين مصدر الفيديو
-    player.src({
-      src: videoUrl,
-      type: "video/mp4",
-    });
+    if (videoUrl) {
+      console.log("Setting video source:", videoUrl);
+      player.src({
+        src: videoUrl,
+        type: "video/mp4",
+      });
+      
+      // إضافة معالج الأخطاء
+      player.on("error", () => {
+        const error = player.error();
+        console.error("Video playback error:", error);
+        if (error) {
+          console.error("Error details:", {
+            code: error.code,
+            message: error.message,
+            url: videoUrl
+          });
+        }
+      });
+    }
 
     playerRef.current = player;
 
