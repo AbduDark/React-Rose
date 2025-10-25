@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import videojs from "video.js";
@@ -13,141 +12,99 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
   const playerRef = useRef(null);
   const containerRef = useRef(null);
   const [isReady, setIsReady] = useState(false);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!videoRef.current || !videoUrl) {
-      setError("لا يوجد رابط فيديو صالح");
-      return;
-    }
+    if (!videoRef.current || !videoUrl) return;
 
     const videoElement = videoRef.current;
 
-    // تنظيف المشغل السابق إذا كان موجوداً
-    if (playerRef.current) {
-      playerRef.current.dispose();
-      playerRef.current = null;
-    }
+    const player = videojs(videoElement, {
+      controls: true,
+      responsive: true,
+      fluid: true,
+      preload: "auto",
+      playbackRates: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2],
+      controlBar: {
+        children: [
+          "playToggle",
+          "volumePanel",
+          "currentTimeDisplay",
+          "timeDivider",
+          "durationDisplay",
+          "progressControl",
+          "playbackRateMenuButton",
+          "fullscreenToggle",
+        ],
+      },
+      html5: {
+        vhs: {
+          overrideNative: true,
+        },
+        nativeAudioTracks: false,
+        nativeVideoTracks: false,
+      },
+      techOrder: ["html5"],
+      userActions: {
+        hotkeys: true,
+      },
+    });
 
-    try {
-      const player = videojs(videoElement, {
-        controls: true,
-        responsive: true,
-        fluid: true,
-        preload: "auto",
-        playbackRates: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2],
-        controlBar: {
-          children: [
-            "playToggle",
-            "volumePanel",
-            "currentTimeDisplay",
-            "timeDivider",
-            "durationDisplay",
-            "progressControl",
-            "playbackRateMenuButton",
-            "fullscreenToggle",
-          ],
-        },
-        html5: {
-          vhs: {
-            overrideNative: true,
-            enableLowInitialPlaylist: true,
-            smoothQualityChange: true,
-            useBandwidthFromLocalStorage: true,
-          },
-          nativeAudioTracks: false,
-          nativeVideoTracks: false,
-        },
-        techOrder: ["html5"],
-        userActions: {
-          hotkeys: true,
-        },
+    // إضافة الحماية من التحميل
+    player.ready(() => {
+      setIsReady(true);
+      
+      // منع النقر بالزر الأيمن
+      player.el().addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+        return false;
       });
 
-      player.ready(() => {
-        console.log("Video player is ready");
-        setIsReady(true);
-        setError(null);
-        
-        // منع النقر بالزر الأيمن
-        player.el().addEventListener("contextmenu", (e) => {
-          e.preventDefault();
-          return false;
-        });
-
-        // إضافة علامة مائية للمستخدم
-        if (user) {
-          const watermark = document.createElement("div");
-          watermark.className = "vjs-watermark";
-          watermark.textContent = `${user.name || user.email} • ID: ${user.id}`;
-          watermark.style.cssText = `
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-30deg);
-            color: rgba(255, 255, 255, 0.1);
-            font-size: 24px;
-            font-weight: bold;
-            pointer-events: none;
-            user-select: none;
-            z-index: 10;
-            white-space: nowrap;
-          `;
-          player.el().appendChild(watermark);
-        }
-
-        // منع Picture-in-Picture والتحميل
-        if (videoElement) {
-          videoElement.disablePictureInPicture = true;
-          videoElement.setAttribute("disablePictureInPicture", "");
-          videoElement.setAttribute("controlsList", "nodownload noremoteplayback");
-        }
-
-        // عند انتهاء الفيديو
-        player.on("ended", () => {
-          console.log("Video ended");
-          onVideoEnd?.();
-        });
-
-        // معالجة الأخطاء
-        player.on("error", (e) => {
-          const error = player.error();
-          console.error("Video error:", error);
-          if (error) {
-            setError(`خطأ في تشغيل الفيديو: ${error.message || "غير معروف"}`);
-          }
-        });
-      });
-
-      // تحديد نوع الفيديو بناءً على الرابط
-      let sourceType = "video/mp4";
-      if (videoUrl.includes(".m3u8")) {
-        sourceType = "application/x-mpegURL";
-      } else if (videoUrl.includes(".webm")) {
-        sourceType = "video/webm";
+      // إضافة علامة مائية للمستخدم
+      if (user) {
+        const watermark = document.createElement("div");
+        watermark.className = "vjs-watermark";
+        watermark.textContent = `${user.name || user.email} • ID: ${user.id}`;
+        watermark.style.cssText = `
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%) rotate(-30deg);
+          color: rgba(255, 255, 255, 0.1);
+          font-size: 24px;
+          font-weight: bold;
+          pointer-events: none;
+          user-select: none;
+          z-index: 10;
+          white-space: nowrap;
+        `;
+        player.el().appendChild(watermark);
       }
 
-      // تعيين مصدر الفيديو
-      player.src({
-        src: videoUrl,
-        type: sourceType,
+      // منع Picture-in-Picture والتحميل
+      if (videoElement) {
+        videoElement.disablePictureInPicture = true;
+        videoElement.setAttribute("disablePictureInPicture", "");
+        videoElement.setAttribute("controlsList", "nodownload noremoteplayback");
+      }
+
+      // عند انتهاء الفيديو
+      player.on("ended", () => {
+        onVideoEnd?.();
       });
+    });
 
-      playerRef.current = player;
+    // تعيين مصدر الفيديو
+    player.src({
+      src: videoUrl,
+      type: "video/mp4",
+    });
 
-    } catch (err) {
-      console.error("Error initializing video player:", err);
-      setError("فشل تهيئة مشغل الفيديو");
-    }
+    playerRef.current = player;
 
     return () => {
       if (playerRef.current) {
-        try {
-          playerRef.current.dispose();
-          playerRef.current = null;
-        } catch (err) {
-          console.error("Error disposing player:", err);
-        }
+        playerRef.current.dispose();
+        playerRef.current = null;
       }
     };
   }, [videoUrl, lessonId, onVideoEnd, user]);
@@ -157,19 +114,6 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
       <div className="relative w-full bg-gray-900 rounded-lg" style={{ paddingTop: "56.25%" }}>
         <div className="absolute inset-0 flex items-center justify-center">
           <p className="text-white text-lg">{t("lessons.videoPlayer.noVideo")}</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="relative w-full bg-gray-900 rounded-lg" style={{ paddingTop: "56.25%" }}>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center text-white px-4">
-            <p className="text-red-400 text-lg mb-2">⚠️ {error}</p>
-            <p className="text-sm text-gray-400">الرجاء المحاولة مرة أخرى أو الاتصال بالدعم</p>
-          </div>
         </div>
       </div>
     );

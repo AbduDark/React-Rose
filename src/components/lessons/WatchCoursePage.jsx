@@ -127,14 +127,6 @@ const WatchCoursePage = () => {
       setError(t("lessons.videoPlayer.noVideo"));
       return;
     }
-    
-    if (!lesson.video_url) {
-      console.error("Lesson has no video URL:", lesson);
-      setError("رابط الفيديو غير متوفر");
-      return;
-    }
-    
-    console.log("Selected lesson:", lesson.id, "Video URL:", lesson.video_url);
     setCurrentLessonId(lesson.id);
     navigate(`/courses/${courseId}/lessons/${lesson.id}`, { replace: true });
     setIsVideoPlaying(false);
