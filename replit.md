@@ -22,7 +22,17 @@ Each course can optionally include an intro video (YouTube link) that appears in
 
 ## Video Content Protection
 
-Video content is protected through comprehensive client-side security measures. Videos are delivered as direct MP4 URLs from the Laravel backend (no frontend encryption). The VideoJSPlayer component (using Video.js library) provides professional video playback with multiple playback speeds (0.5x to 2x) while maintaining robust security features. Client-side protections prevent common piracy methods including right-click blocking, keyboard shortcut disabling, drag-and-drop prevention, download prevention (controlsList="nodownload"), Picture-in-Picture blocking, and text selection blocking. A watermark overlay with user information (username and email) is displayed on videos to deter screen recording. The player supports fullscreen mode while maintaining all protection measures. All security configurations are centralized for easy management.
+Video content is protected through comprehensive client-side security measures. Videos are delivered as **direct unencrypted URLs** (MP4, WebM, etc.) from the Laravel backend with no HLS streaming. The VideoJSPlayer component uses the Video.js library for native HTML5 video playback with multiple playback speeds (0.5x to 2x) while maintaining robust security features:
+
+- **Watermark Overlay**: Displays user information (name/email and ID) rotated at -30° with low opacity to deter screen recording
+- **Right-Click Protection**: Context menu disabled on video player
+- **Download Prevention**: `controlsList="nodownload noremoteplayback"` attribute blocks native download buttons
+- **Picture-in-Picture Blocking**: `disablePictureInPicture` attribute prevents PiP mode
+- **Text Selection Blocking**: All player elements have `user-select: none` to prevent text copying
+- **Fullscreen Support**: Maintains all protection measures in fullscreen mode
+- **Direct Video Playback**: Uses native HTML5 video (`techOrder: ["html5"]`) without HLS/DASH streaming - videos must be direct MP4/WebM URLs
+
+**Note**: HLS streaming has been completely removed as of October 25, 2025. The backend must provide direct video file URLs.
 
 ## Subscription Workflow
 
