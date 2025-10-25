@@ -1,0 +1,46 @@
+i18next.js?v=b3fb379b:207 i18next::backendConnector: loaded namespace translation for language ar Object
+notifications.js:56 Unread notifications response: Object
+notifications.js:56 Unread notifications response: Object
+i18next.js?v=b3fb379b:207 i18next::backendConnector: loaded namespace common for language ar Object
+i18next.js?v=b3fb379b:207 i18next: languageChanged ar
+i18next.js?v=b3fb379b:207 i18next: initialized Object
+lessons.js:306 Fetching lessons for course: 4
+lessons.js:306 Fetching lessons for course: 4
+hook.js:608 Current lesson not found: null
+overrideMethod @ hook.js:608
+hook.js:600 Current lesson not found: null
+overrideMethod @ hook.js:600
+lessons.js:306 Fetching lessons for course: 4
+hook.js:377 Fetching lessons for course: 4
+i18next.js?v=b3fb379b:207 i18next::translator: missingKey ar common lessons.videoPlayer.loadError حدث خطأ أثناء تحميل الفيديو
+i18next.js?v=b3fb379b:207 i18next::translator: missingKey ar common lessons.videoPlayer.videoNotAvailable الفيديو غير متوفر حالياً
+i18next.js?v=b3fb379b:207 i18next::translator: missingKey ar common lessons.videoPlayer.formatNotSupported صيغة الفيديو غير مدعومة
+lessons.js:352 Fetching comments for lesson: 4
+hook.js:377 i18next::translator: missingKey ar common lessons.videoPlayer.loadError حدث خطأ أثناء تحميل الفيديو
+hook.js:377 i18next::translator: missingKey ar common lessons.videoPlayer.videoNotAvailable الفيديو غير متوفر حالياً
+hook.js:377 i18next::translator: missingKey ar common lessons.videoPlayer.formatNotSupported صيغة الفيديو غير مدعومة
+hook.js:377 Fetching comments for lesson: 4
+i18next.js?v=b3fb379b:207 i18next::translator: missingKey ar common lessons.videoPlayer.loadError حدث خطأ أثناء تحميل الفيديو
+i18next.js?v=b3fb379b:207 i18next::translator: missingKey ar common lessons.videoPlayer.videoNotAvailable الفيديو غير متوفر حالياً
+i18next.js?v=b3fb379b:207 i18next::translator: missingKey ar common lessons.videoPlayer.formatNotSupported صيغة الفيديو غير مدعومة
+hook.js:608 Max retries reached: video element not connected to DOM
+overrideMethod @ hook.js:608
+i18next.js?v=b3fb379b:207 i18next::translator: missingKey ar common lessons.videoPlayer.noVideoDescription يرجى التحقق لاحقاً أو التواصل مع المدرس
+hook.js:377 i18next::translator: missingKey ar common lessons.videoPlayer.noVideoDescription يرجى التحقق لاحقاً أو التواصل مع المدرس
+react-dom_client.js?v=b3fb379b:15918 Uncaught NotFoundError: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.
+    at removeChild (react-dom_client.js?v=b3fb379b:15918:24)
+    at runWithFiberInDEV (react-dom_client.js?v=b3fb379b:997:72)
+    at commitDeletionEffectsOnFiber (react-dom_client.js?v=b3fb379b:10190:19)
+    at recursivelyTraverseMutationEffects (react-dom_client.js?v=b3fb379b:10379:13)
+    at commitMutationEffectsOnFiber (react-dom_client.js?v=b3fb379b:10547:13)
+    at recursivelyTraverseMutationEffects (react-dom_client.js?v=b3fb379b:10396:13)
+    at commitMutationEffectsOnFiber (react-dom_client.js?v=b3fb379b:10405:13)
+    at recursivelyTraverseMutationEffects (react-dom_client.js?v=b3fb379b:10396:13)
+    at commitMutationEffectsOnFiber (react-dom_client.js?v=b3fb379b:10746:13)
+    at recursivelyTraverseMutationEffects (react-dom_client.js?v=b3fb379b:10396:13)
+hook.js:608 An error occurred in the <div> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+overrideMethod @ hook.js:608
