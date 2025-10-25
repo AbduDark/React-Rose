@@ -21,12 +21,32 @@
     "uploadSuccess": "تم رفع الفيديو بنجاح",
     "deleteCurrentVideo": "حذف الفيديو الحالي",
     "deleteVideo": "حذف الفيديو",
-    "deleteWarning": "سيتم حذف الفيديو نهائياً",
+    "deleteWarning": "سيتم حذف الفيديو نهائياً ولا يمكن التراجع عن هذا الإجراء",
     "deleteSuccess": "تم حذف الفيديو بنجاح",
+    "deleteConfirm": "هل أنت متأكد من حذف الفيديو؟",
     "deleting": "جاري الحذف",
     "close": "إغلاق",
     "invalidFileType": "يرجى اختيار ملف فيديو صالح",
-    "fileTooLarge": "حجم الملف كبير جداً (الحد الأقصى 500 ميجابايت)"
+    "fileTooLarge": "حجم الملف كبير جداً (الحد الأقصى 500 ميجابايت)",
+    "dragDropText": "اسحب وأفلت الفيديو هنا",
+    "orClickText": "أو انقر لاختيار ملف",
+    "uploadSpeed": "سرعة الرفع",
+    "timeRemaining": "الوقت المتبقي",
+    "videoPreview": "معاينة الفيديو"
+  },
+  "lessons": {
+    "videoPlayer": {
+      "quality": "الجودة",
+      "loadError": "حدث خطأ أثناء تحميل الفيديو",
+      "videoNotAvailable": "الفيديو غير متوفر حالياً",
+      "formatNotSupported": "صيغة الفيديو غير مدعومة",
+      "noVideo": "لم يتم رفع الفيديو الخاص بهذا الدرس بعد",
+      "videoComingSoon": "فيديو هذا الدرس سيتم رفعه قريباً",
+      "checkBackLater": "يرجى المتابعة في وقت لاحق",
+      "error": "حدث خطأ",
+      "noVideoDescription": "يرجى التحقق لاحقاً أو التواصل مع المدرس",
+      "protected": "محمي"
+    }
   },
   "unknownLevel": "مستوى غير معروف",
   "price": "السعر",

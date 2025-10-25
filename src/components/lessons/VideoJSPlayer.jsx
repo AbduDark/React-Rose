@@ -5,7 +5,8 @@ import "video.js/dist/video-js.css";
 import { FaShieldAlt } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
 
-const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
+
+const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd, qualitySources }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const videoRef = useRef(null);
@@ -13,6 +14,7 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
   const containerRef = useRef(null);
   const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState(null);
+  const [currentQuality, setCurrentQuality] = useState(null);
   const initTimeoutRef = useRef(null);
   const retryCountRef = useRef(0);
   const maxRetries = 10;
@@ -90,6 +92,7 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
               "durationDisplay",
               "progressControl",
               "playbackRateMenuButton",
+              "qualitySelector",
               "fullscreenToggle",
             ],
           },
@@ -113,30 +116,11 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
             return false;
           });
 
-          if (user) {
-            const watermark = document.createElement("div");
-            watermark.className = "vjs-watermark";
-            watermark.textContent = `${user.name || user.email} • ID: ${user.id}`;
-            watermark.style.cssText = `
-              position: absolute;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%) rotate(-30deg);
-              color: rgba(255, 255, 255, 0.1);
-              font-size: 24px;
-              font-weight: bold;
-              pointer-events: none;
-              user-select: none;
-              z-index: 10;
-              white-space: nowrap;
-            `;
-            player.el().appendChild(watermark);
-          }
-
           if (videoElement) {
             videoElement.disablePictureInPicture = true;
             videoElement.setAttribute("disablePictureInPicture", "");
             videoElement.setAttribute("controlsList", "nodownload noremoteplayback");
+            videoElement.oncontextmenu = () => false;
           }
 
           player.on("ended", () => {
@@ -181,6 +165,71 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
           player.on("loadedmetadata", () => {
             console.log("Video metadata loaded. Duration:", player.duration());
           });
+
+          if (qualitySources && qualitySources.length > 1) {
+            const qualities = qualitySources;
+            const QualityButton = videojs.getComponent("MenuButton");
+            const QualityOption = videojs.getComponent("MenuItem");
+
+            class QualitySelectorButton extends QualityButton {
+              constructor(player, options) {
+                super(player, options);
+                this.controlText(currentQuality || qualities[0]?.label || "Auto");
+              }
+
+              createEl() {
+                const el = super.createEl("div", {
+                  className: "vjs-quality-selector vjs-menu-button vjs-menu-button-popup vjs-control vjs-button",
+                });
+                el.setAttribute("aria-label", t("lessons.videoPlayer.quality", "الجودة"));
+                return el;
+              }
+
+              buildCSSClass() {
+                return `vjs-quality-selector ${super.buildCSSClass()}`;
+              }
+
+              createItems() {
+                return qualities.map((quality) => {
+                  const item = new QualityOption(this.player_, {
+                    label: quality.label,
+                    selected: currentQuality === quality.label,
+                  });
+
+                  item.handleClick = () => {
+                    const currentTime = this.player_.currentTime();
+                    const wasPaused = this.player_.paused();
+                    
+                    this.player_.src({
+                      src: quality.src,
+                      type: quality.type || "video/mp4",
+                    });
+                    
+                    this.player_.one("loadedmetadata", () => {
+                      this.player_.currentTime(currentTime);
+                      if (!wasPaused) {
+                        this.player_.play();
+                      }
+                    });
+
+                    setCurrentQuality(quality.label);
+                    this.controlText(quality.label);
+                    
+                    console.log("Quality changed to:", quality.label);
+                  };
+
+                  return item;
+                });
+              }
+            }
+
+            videojs.registerComponent("QualitySelector", QualitySelectorButton);
+            player.getChild("controlBar").addChild("QualitySelector", {}, 
+              player.getChild("controlBar").children().length - 1
+            );
+
+            setCurrentQuality(qualities[0]?.label);
+          }
         });
 
         let sourceType = "video/mp4";
@@ -196,6 +245,12 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
           src: videoUrl,
           type: sourceType,
         });
+        
+        if (qualitySources && qualitySources.length > 0) {
+          setCurrentQuality(qualitySources[0].label);
+        } else {
+          setCurrentQuality("Auto");
+        }
 
         playerRef.current = player;
 
@@ -229,7 +284,7 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
         }
       }
     };
-  }, [videoUrl, lessonId, onVideoEnd, user, t]);
+  }, [videoUrl, lessonId, onVideoEnd, user, t, qualitySources]);
 
   if (!videoUrl) {
     return (

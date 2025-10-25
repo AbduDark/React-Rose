@@ -21,12 +21,32 @@
     "uploadSuccess": "Video uploaded successfully",
     "deleteCurrentVideo": "Delete Current Video",
     "deleteVideo": "Delete Video",
-    "deleteWarning": "This will permanently delete the video",
+    "deleteWarning": "This will permanently delete the video and cannot be undone",
     "deleteSuccess": "Video deleted successfully",
+    "deleteConfirm": "Are you sure you want to delete the video?",
     "deleting": "Deleting",
     "close": "Close",
     "invalidFileType": "Please select a valid video file",
-    "fileTooLarge": "File size too large (max 500MB)"
+    "fileTooLarge": "File size too large (max 500MB)",
+    "dragDropText": "Drag and drop video here",
+    "orClickText": "Or click to select a file",
+    "uploadSpeed": "Upload Speed",
+    "timeRemaining": "Time Remaining",
+    "videoPreview": "Video Preview"
+  },
+  "lessons": {
+    "videoPlayer": {
+      "quality": "Quality",
+      "loadError": "An error occurred while loading the video",
+      "videoNotAvailable": "Video is currently unavailable",
+      "formatNotSupported": "Video format not supported",
+      "noVideo": "Video for this lesson has not been uploaded yet",
+      "videoComingSoon": "Video for this lesson will be uploaded soon",
+      "checkBackLater": "Please check back later",
+      "error": "Error",
+      "noVideoDescription": "Please check later or contact the instructor",
+      "protected": "Protected"
+    }
   },
   "unknownLevel": "Unknown Level",
   "price": "Price",
