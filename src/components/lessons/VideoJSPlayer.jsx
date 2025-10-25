@@ -33,7 +33,6 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
           "durationDisplay",
           "progressControl",
           "playbackRateMenuButton",
-          "qualitySelector",
           "fullscreenToggle",
         ],
       },
@@ -44,7 +43,6 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
         nativeAudioTracks: false,
         nativeVideoTracks: false,
       },
-      // منع التحميل
       techOrder: ["html5"],
       userActions: {
         hotkeys: true,
@@ -82,11 +80,11 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
         player.el().appendChild(watermark);
       }
 
-      // منع Picture-in-Picture
+      // منع Picture-in-Picture والتحميل
       if (videoElement) {
         videoElement.disablePictureInPicture = true;
         videoElement.setAttribute("disablePictureInPicture", "");
-        videoElement.setAttribute("controlsList", "nodownload nofullscreen noremoteplayback");
+        videoElement.setAttribute("controlsList", "nodownload noremoteplayback");
       }
 
       // عند انتهاء الفيديو
