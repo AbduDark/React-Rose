@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { FaChevronLeft } from "react-icons/fa";
 import CommentLesson from "./CommentLesson";
 import Sidebar from "./Sidebar";
-import VideoPlayer from "./VideoPlayer";
+import VideoJSPlayer from "./VideoJSPlayer";
 import { useParams, useNavigate } from "react-router-dom";
 import { getLessonsByCourse } from "../../api/lessons";
 import { useAuth } from "../../context/AuthContext";
@@ -242,11 +242,11 @@ const WatchCoursePage = () => {
           {/* Video Player */}
           {currentLesson ? (
             <>
-              <VideoPlayer
-                key={currentLessonId} // Force re-render on lesson change
+              <VideoJSPlayer
+                key={currentLessonId}
+                videoUrl={currentLesson.video_url}
                 lessonId={currentLessonId}
-                lessonData={currentLesson}
-                onLessonChange={handleLessonSelect}
+                lessonTitle={currentLesson.title}
                 onVideoEnd={handleVideoEnd}
               />
               
