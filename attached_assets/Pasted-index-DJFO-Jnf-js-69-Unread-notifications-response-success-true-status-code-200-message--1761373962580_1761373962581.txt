@@ -1,0 +1,111 @@
+index-DJFO-Jnf.js:69 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+LessonPage-CSiRgbBI.js:40 Current lesson is invalid or has no video: undefined
+overrideMethod @ hook.js:608
+(anonymous) @ LessonPage-CSiRgbBI.js:40
+useMemo @ index-DJFO-Jnf.js:49
+rt.useMemo @ index-DJFO-Jnf.js:18
+xu @ LessonPage-CSiRgbBI.js:40
+du @ index-DJFO-Jnf.js:49
+Lu @ index-DJFO-Jnf.js:49
+$m @ index-DJFO-Jnf.js:49
+w0 @ index-DJFO-Jnf.js:49
+Ev @ index-DJFO-Jnf.js:49
+wv @ index-DJFO-Jnf.js:49
+y0 @ index-DJFO-Jnf.js:49
+_0 @ index-DJFO-Jnf.js:49
+Lt @ index-DJFO-Jnf.js:26
+lessons-CAVLBbWA.js:1 Fetching lessons for course: 4
+lessons-CAVLBbWA.js:1 Fetching comments for lesson: 4
+LessonPage-CSiRgbBI.js:40 Current lesson is invalid or has no video: undefined
+overrideMethod @ hook.js:608
+(anonymous) @ LessonPage-CSiRgbBI.js:40
+useMemo @ index-DJFO-Jnf.js:49
+rt.useMemo @ index-DJFO-Jnf.js:18
+xu @ LessonPage-CSiRgbBI.js:40
+du @ index-DJFO-Jnf.js:49
+Lu @ index-DJFO-Jnf.js:49
+$m @ index-DJFO-Jnf.js:49
+w0 @ index-DJFO-Jnf.js:49
+Tv @ index-DJFO-Jnf.js:49
+ec @ index-DJFO-Jnf.js:49
+y0 @ index-DJFO-Jnf.js:49
+_0 @ index-DJFO-Jnf.js:49
+Lt @ index-DJFO-Jnf.js:26
+lessons-CAVLBbWA.js:1 Fetching lessons for course: 4
+lessons-CAVLBbWA.js:1 Fetching comments for lesson: 7
+LessonPage-CSiRgbBI.js:40 Current lesson is invalid or has no video: undefined
+overrideMethod @ hook.js:608
+(anonymous) @ LessonPage-CSiRgbBI.js:40
+useMemo @ index-DJFO-Jnf.js:49
+rt.useMemo @ index-DJFO-Jnf.js:18
+xu @ LessonPage-CSiRgbBI.js:40
+du @ index-DJFO-Jnf.js:49
+Lu @ index-DJFO-Jnf.js:49
+$m @ index-DJFO-Jnf.js:49
+w0 @ index-DJFO-Jnf.js:49
+Tv @ index-DJFO-Jnf.js:49
+ec @ index-DJFO-Jnf.js:49
+y0 @ index-DJFO-Jnf.js:49
+_0 @ index-DJFO-Jnf.js:49
+Lt @ index-DJFO-Jnf.js:26
+lessons-CAVLBbWA.js:1 Fetching lessons for course: 4
+lessons-CAVLBbWA.js:1 Fetching comments for lesson: 4
+LessonPage-CSiRgbBI.js:40 Play failed: AbortError: The play() request was interrupted because the media was removed from the document. https://goo.gl/LdLk22
+overrideMethod @ hook.js:608
+(anonymous) @ LessonPage-CSiRgbBI.js:40
+Promise.catch
+ee @ LessonPage-CSiRgbBI.js:40
+k0 @ index-DJFO-Jnf.js:49
+(anonymous) @ index-DJFO-Jnf.js:49
+Kh @ index-DJFO-Jnf.js:49
+cc @ index-DJFO-Jnf.js:49
+Ec @ index-DJFO-Jnf.js:50
+o3 @ index-DJFO-Jnf.js:50
+LessonPage-CSiRgbBI.js:40 Play failed: AbortError: The play() request was interrupted because the media was removed from the document. https://goo.gl/LdLk22
+overrideMethod @ hook.js:608
+(anonymous) @ LessonPage-CSiRgbBI.js:40
+Promise.catch
+ee @ LessonPage-CSiRgbBI.js:40
+k0 @ index-DJFO-Jnf.js:49
+(anonymous) @ index-DJFO-Jnf.js:49
+Kh @ index-DJFO-Jnf.js:49
+cc @ index-DJFO-Jnf.js:49
+Ec @ index-DJFO-Jnf.js:50
+o3 @ index-DJFO-Jnf.js:50
+lessons-CAVLBbWA.js:1 Fetching lessons for course: 4
+lessons-CAVLBbWA.js:1 Fetching lessons for course: 6
+LessonPage-CSiRgbBI.js:40 Current lesson is invalid or has no video: undefined
+overrideMethod @ hook.js:608
+(anonymous) @ LessonPage-CSiRgbBI.js:40
+useMemo @ index-DJFO-Jnf.js:49
+rt.useMemo @ index-DJFO-Jnf.js:18
+xu @ LessonPage-CSiRgbBI.js:40
+du @ index-DJFO-Jnf.js:49
+Lu @ index-DJFO-Jnf.js:49
+$m @ index-DJFO-Jnf.js:49
+w0 @ index-DJFO-Jnf.js:49
+Tv @ index-DJFO-Jnf.js:49
+ec @ index-DJFO-Jnf.js:49
+y0 @ index-DJFO-Jnf.js:49
+_0 @ index-DJFO-Jnf.js:49
+Lt @ index-DJFO-Jnf.js:26
+lessons-CAVLBbWA.js:1 Fetching lessons for course: 6
+lessons-CAVLBbWA.js:1 Fetching comments for lesson: 5
+LessonPage-CSiRgbBI.js:40 Current lesson is invalid or has no video: undefined
+overrideMethod @ hook.js:608
+(anonymous) @ LessonPage-CSiRgbBI.js:40
+useMemo @ index-DJFO-Jnf.js:49
+rt.useMemo @ index-DJFO-Jnf.js:18
+xu @ LessonPage-CSiRgbBI.js:40
+du @ index-DJFO-Jnf.js:49
+Lu @ index-DJFO-Jnf.js:49
+$m @ index-DJFO-Jnf.js:49
+w0 @ index-DJFO-Jnf.js:49
+Tv @ index-DJFO-Jnf.js:49
+ec @ index-DJFO-Jnf.js:49
+y0 @ index-DJFO-Jnf.js:49
+_0 @ index-DJFO-Jnf.js:49
+Lt @ index-DJFO-Jnf.js:26
+lessons-CAVLBbWA.js:1 Fetching lessons for course: 6
+index-DJFO-Jnf.js:69 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+lessons-CAVLBbWA.js:1 Fetching comments for lesson: 6

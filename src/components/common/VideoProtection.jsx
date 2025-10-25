@@ -101,11 +101,11 @@ const VideoProtection = ({
         mutation.addedNodes.forEach((node) => {
           if (node.nodeType === Node.ELEMENT_NODE) {
             const element = node;
-            // منع إضافة روابط تحميل
-            if (element.tagName === "A" && element.href) {
+            // فقط منع إضافة روابط التحميل المباشرة خارج نطاق الحماية
+            if (element.tagName === "A" && element.href && !protectionElement.contains(element)) {
               if (
                 element.href.includes("download") ||
-                element.href.includes("video")
+                element.download
               ) {
                 element.remove();
                 violationCountRef.current++;
@@ -114,8 +114,8 @@ const VideoProtection = ({
                 }
               }
             }
-            // منع إضافة عناصر مشبوهة
-            if (element.tagName === "SCRIPT" || element.tagName === "IFRAME") {
+            // منع إضافة عناصر مشبوهة خارج نطاق الحماية فقط
+            if ((element.tagName === "SCRIPT" || element.tagName === "IFRAME") && !protectionElement.contains(element)) {
               element.remove();
               violationCountRef.current++;
               if (violationCountRef.current >= maxViolations) {
@@ -127,18 +127,19 @@ const VideoProtection = ({
       });
     });
 
-    // مراقبة محاولات فتح أدوات المطور
+    // مراقبة محاولات فتح أدوات المطور (مع تسامح أكبر للمتصفحات المختلفة)
     const devToolsCheck = setInterval(() => {
+      // زيادة الحد الأدنى لتجنب False Positives في المتصفحات المختلفة
       if (
-        window.outerHeight - window.innerHeight > 200 ||
-        window.outerWidth - window.innerWidth > 200
+        window.outerHeight - window.innerHeight > 300 ||
+        window.outerWidth - window.innerWidth > 300
       ) {
         violationCountRef.current++;
         if (violationCountRef.current >= maxViolations) {
           onSecurityViolation?.("dev_tools_opened");
         }
       }
-    }, 1000);
+    }, 2000);
 
     // إضافة مستمعي الأحداث
     protectionElement.addEventListener("contextmenu", handleContextMenu);
@@ -148,8 +149,8 @@ const VideoProtection = ({
     protectionElement.addEventListener("copy", handleCopy);
     protectionElement.addEventListener("beforeprint", handlePrint);
 
-    // بدء مراقبة DOM
-    observer.observe(document.body, {
+    // بدء مراقبة DOM فقط على عنصر الحماية لتجنب التداخل
+    observer.observe(protectionElement, {
       childList: true,
       subtree: true,
     });
