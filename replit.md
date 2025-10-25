@@ -22,7 +22,7 @@ Each course can optionally include an intro video (YouTube link) that appears in
 
 ## Video Content Protection
 
-Video content is protected through comprehensive client-side security measures. Videos are delivered as direct URLs from the Laravel backend (no frontend encryption). The VideoPlayer component includes multi-quality HLS streaming support with automatic quality selection. Client-side protections prevent common piracy methods including right-click blocking, keyboard shortcut disabling, drag-and-drop prevention, text selection blocking, and DOM mutation monitoring. A watermark with user information is overlaid on videos to deter screen recording. All security configurations are centralized for easy management.
+Video content is protected through comprehensive client-side security measures. Videos are delivered as direct MP4 URLs from the Laravel backend (no frontend encryption). The VideoJSPlayer component (using Video.js library) provides professional video playback with multiple playback speeds (0.5x to 2x) while maintaining robust security features. Client-side protections prevent common piracy methods including right-click blocking, keyboard shortcut disabling, drag-and-drop prevention, download prevention (controlsList="nodownload"), Picture-in-Picture blocking, and text selection blocking. A watermark overlay with user information (username and email) is displayed on videos to deter screen recording. The player supports fullscreen mode while maintaining all protection measures. All security configurations are centralized for easy management.
 
 ## Subscription Workflow
 
@@ -49,7 +49,7 @@ A server-generated notification system keeps users informed about subscription s
 - **React 19.1.0**: UI development.
 - **React Router DOM 7.7.1**: Client-side routing.
 - **React Player 3.3.1**: Universal video player for YouTube intro videos.
-- **hls.js 1.6.12**: HTTP Live Streaming playback with multi-quality support.
+- **Video.js 8.23.3**: Professional HTML5 video player for protected lesson videos with playback rate control.
 
 ## Internationalization
 
@@ -73,4 +73,4 @@ A server-generated notification system keeps users informed about subscription s
 ## Third-Party Integrations
 
 - **Payment Method**: Manual verification via Vodafone Cash/mobile money (users upload payment proof screenshots).
-- **Video Hosting**: Self-hosted video files delivered via Laravel backend with HLS streaming.
+- **Video Hosting**: Self-hosted MP4 video files delivered directly via Laravel backend.
