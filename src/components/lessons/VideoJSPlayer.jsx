@@ -14,12 +14,16 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
   const containerRef = useRef(null);
   const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState(null);
+  const retryCountRef = useRef(0);
+  const retryTimeoutRef = useRef(null);
+  const maxRetries = 3;
 
   useEffect(() => {
     if (!videoRef.current || !videoUrl) {
       if (!videoUrl) {
         console.warn("No video URL provided for lesson:", lessonId);
       }
+      retryCountRef.current = 0;
       return;
     }
 
@@ -63,6 +67,14 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
             enableLowInitialPlaylist: true,
             smoothQualityChange: true,
             useBandwidthFromLocalStorage: true,
+            withCredentials: false,
+            handleManifestRedirects: true,
+            limitRenditionByPlayerDimensions: true,
+            useDevicePixelRatio: true,
+            maxPlaylistRetries: 3,
+            playlistRetryInterval: 2000,
+            maxSegmentRetries: 3,
+            segmentRetryInterval: 1000,
           },
           nativeAudioTracks: false,
           nativeVideoTracks: false,
@@ -110,6 +122,7 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
           videoElement.disablePictureInPicture = true;
           videoElement.setAttribute("disablePictureInPicture", "");
           videoElement.setAttribute("controlsList", "nodownload noremoteplayback");
+          videoElement.setAttribute("crossorigin", "anonymous");
         }
 
         // عند انتهاء الفيديو
@@ -118,20 +131,62 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
           onVideoEnd?.();
         });
 
-        // معالجة الأخطاء
+        // معالجة الأخطاء مع إعادة المحاولة
         player.on("error", (e) => {
           const error = player.error();
           console.error("Video error:", error);
           if (error) {
             let errorMessage = errorMessages.loadError;
+            let shouldRetry = false;
             
             if (error.code === 2) {
               errorMessage = errorMessages.videoNotAvailable;
+              shouldRetry = true;
             } else if (error.code === 4) {
               errorMessage = errorMessages.hlsNotSupported;
+            } else if (error.code === 3) {
+              errorMessage = "فشل فك تشفير الفيديو. يرجى تحديث المتصفح أو استخدام متصفح آخر.";
+            } else if (error.message && (error.message.includes("CORS") || error.message.includes("network"))) {
+              errorMessage = "خطأ في تحميل الفيديو. جاري إعادة المحاولة...";
+              shouldRetry = true;
             }
             
-            setError(errorMessage);
+            if (shouldRetry && retryCountRef.current < maxRetries) {
+              retryCountRef.current++;
+              const retryDelay = 2000 * retryCountRef.current;
+              console.log(`Retrying video load... Attempt ${retryCountRef.current}/${maxRetries} after ${retryDelay}ms`);
+              setError(`جاري إعادة المحاولة (${retryCountRef.current}/${maxRetries})...`);
+              
+              if (retryTimeoutRef.current) {
+                clearTimeout(retryTimeoutRef.current);
+              }
+              
+              const currentPlayer = player;
+              retryTimeoutRef.current = setTimeout(() => {
+                if (currentPlayer && !currentPlayer.isDisposed()) {
+                  currentPlayer.src({ src: videoUrl, type: videoUrl.includes(".m3u8") ? "application/x-mpegURL" : "video/mp4" });
+                  currentPlayer.load();
+                  currentPlayer.play().catch(err => console.error("Play failed after retry:", err));
+                }
+                retryTimeoutRef.current = null;
+              }, retryDelay);
+            } else {
+              const finalMessage = retryCountRef.current >= maxRetries 
+                ? `${errorMessage} - فشلت جميع المحاولات (${maxRetries}/${maxRetries}). يرجى التحقق من اتصال الإنترنت وتحديث الصفحة.`
+                : errorMessage;
+              setError(finalMessage);
+            }
+          }
+        });
+        
+        // مراقبة نجاح التشغيل لإخفاء رسائل الخطأ
+        player.on("playing", () => {
+          console.log("Video is now playing successfully");
+          setError(null);
+          retryCountRef.current = 0;
+          if (retryTimeoutRef.current) {
+            clearTimeout(retryTimeoutRef.current);
+            retryTimeoutRef.current = null;
           }
         });
       });
@@ -158,6 +213,12 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
     }
 
     return () => {
+      if (retryTimeoutRef.current) {
+        clearTimeout(retryTimeoutRef.current);
+        retryTimeoutRef.current = null;
+      }
+      retryCountRef.current = 0;
+      
       if (playerRef.current) {
         try {
           playerRef.current.dispose();
@@ -236,6 +297,7 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
           ref={videoRef}
           className="video-js vjs-big-play-centered vjs-theme-rose"
           playsInline
+          crossOrigin="anonymous"
           onContextMenu={(e) => e.preventDefault()}
         />
       </div>

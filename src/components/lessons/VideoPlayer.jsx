@@ -39,6 +39,9 @@ const VideoPlayer = ({ lessonId, lessonData, onLessonChange, onVideoEnd }) => {
   const [availableQualities, setAvailableQualities] = useState([]);
   const [currentQuality, setCurrentQuality] = useState('auto');
   const [showQualityMenu, setShowQualityMenu] = useState(false);
+  const retryCountRef = useRef(0);
+  const maxRetries = 3;
+  const retryTimeoutRef = useRef(null);
 
   // Reset video player states
   const resetPlayerStates = useCallback(() => {
@@ -97,6 +100,11 @@ const VideoPlayer = ({ lessonId, lessonData, onLessonChange, onVideoEnd }) => {
       if (controlsTimeout) {
         clearTimeout(controlsTimeout);
       }
+      if (retryTimeoutRef.current) {
+        clearTimeout(retryTimeoutRef.current);
+        retryTimeoutRef.current = null;
+      }
+      retryCountRef.current = 0;
     };
   }, [lessonId, lessonData, token, t, resetPlayerStates]);
 
@@ -120,6 +128,15 @@ const VideoPlayer = ({ lessonId, lessonData, onLessonChange, onVideoEnd }) => {
             backBufferLength: 90,
             maxBufferLength: 30,
             maxMaxBufferLength: 60,
+            xhrSetup: function(xhr, url) {
+              xhr.withCredentials = false;
+            },
+            manifestLoadingRetryDelay: 1000,
+            manifestLoadingMaxRetry: 4,
+            levelLoadingRetryDelay: 1000,
+            levelLoadingMaxRetry: 4,
+            fragLoadingRetryDelay: 1000,
+            fragLoadingMaxRetry: 6,
           });
 
           hls.loadSource(videoUrl);
@@ -159,19 +176,69 @@ const VideoPlayer = ({ lessonId, lessonData, onLessonChange, onVideoEnd }) => {
             if (data.fatal) {
               switch (data.type) {
                 case Hls.ErrorTypes.NETWORK_ERROR:
-                  console.error("Network error");
-                  hls.startLoad();
+                  console.error("Network error, trying to recover...");
+                  if (retryCountRef.current < maxRetries) {
+                    retryCountRef.current++;
+                    const retryDelay = 2000 * retryCountRef.current;
+                    setError(`فشل تحميل الفيديو. جاري إعادة المحاولة (${retryCountRef.current}/${maxRetries})...`);
+                    
+                    if (retryTimeoutRef.current) {
+                      clearTimeout(retryTimeoutRef.current);
+                    }
+                    
+                    retryTimeoutRef.current = setTimeout(() => {
+                      console.log(`Retry attempt ${retryCountRef.current}/${maxRetries} after ${retryDelay}ms`);
+                      hls.startLoad();
+                      retryTimeoutRef.current = null;
+                    }, retryDelay);
+                  } else {
+                    hls.destroy();
+                    hlsRef.current = null;
+                    setError(t("lessons.videoPlayer.networkError", "فشل تحميل الفيديو بعد عدة محاولات (${max}/${max}). يرجى التحقق من اتصال الإنترنت وتحديث الصفحة.", { max: maxRetries }));
+                  }
                   break;
                 case Hls.ErrorTypes.MEDIA_ERROR:
-                  console.error("Media error");
-                  hls.recoverMediaError();
+                  console.error("Media error, trying to recover...");
+                  if (retryCountRef.current < maxRetries) {
+                    retryCountRef.current++;
+                    const retryDelay = 2000 * retryCountRef.current;
+                    setError(`خطأ في تشغيل الفيديو. جاري إعادة المحاولة (${retryCountRef.current}/${maxRetries})...`);
+                    
+                    if (retryTimeoutRef.current) {
+                      clearTimeout(retryTimeoutRef.current);
+                    }
+                    
+                    retryTimeoutRef.current = setTimeout(() => {
+                      console.log(`Recovering from media error, attempt ${retryCountRef.current}/${maxRetries} after ${retryDelay}ms`);
+                      hls.recoverMediaError();
+                      retryTimeoutRef.current = null;
+                    }, retryDelay);
+                  } else {
+                    hls.destroy();
+                    hlsRef.current = null;
+                    setError(t("lessons.videoPlayer.mediaError", "خطأ في فك تشفير الفيديو بعد ${max} محاولات. يرجى تحديث الصفحة أو استخدام متصفح آخر.", { max: maxRetries }));
+                  }
                   break;
                 default:
+                  console.error("Fatal error, cannot recover", data);
                   hls.destroy();
                   hlsRef.current = null;
-                  setError(t("lessons.videoPlayer.hlsError", "خطأ في تشغيل الفيديو"));
+                  setError(t("lessons.videoPlayer.fatalError", "حدث خطأ فادح في تشغيل الفيديو. يرجى تحديث الصفحة والمحاولة مرة أخرى."));
                   break;
               }
+            } else if (data.details === 'bufferStalledError') {
+              console.warn("Buffer stalled, attempting recovery...");
+            }
+          });
+          
+          // مراقبة نجاح التشغيل لإخفاء رسائل الخطأ
+          videoRef.current.addEventListener('playing', () => {
+            console.log("Video is now playing successfully");
+            setError(null);
+            retryCountRef.current = 0;
+            if (retryTimeoutRef.current) {
+              clearTimeout(retryTimeoutRef.current);
+              retryTimeoutRef.current = null;
             }
           });
 
@@ -190,16 +257,65 @@ const VideoPlayer = ({ lessonId, lessonData, onLessonChange, onVideoEnd }) => {
       }
 
       videoRef.current.src = videoUrl;
+      
+      if (videoRef.current) {
+        videoRef.current.setAttribute('crossorigin', 'anonymous');
+      }
+      
       videoRef.current.load();
 
       videoRef.current.onerror = (e) => {
         console.error("Video load error:", e);
-        setError(t("lessons.videoPlayer.loadError", "خطأ في تحميل الفيديو"));
+        const mediaError = videoRef.current?.error;
+        let errorMsg = t("lessons.videoPlayer.loadError", "خطأ في تحميل الفيديو");
+        let shouldRetry = false;
+        
+        if (mediaError) {
+          switch(mediaError.code) {
+            case mediaError.MEDIA_ERR_ABORTED:
+              errorMsg = "تم إلغاء تحميل الفيديو. يرجى المحاولة مرة أخرى.";
+              break;
+            case mediaError.MEDIA_ERR_NETWORK:
+              errorMsg = "خطأ في الشبكة أثناء تحميل الفيديو. جاري إعادة المحاولة...";
+              shouldRetry = true;
+              break;
+            case mediaError.MEDIA_ERR_DECODE:
+              errorMsg = "فشل فك تشفير الفيديو. قد يكون الملف تالفاً.";
+              break;
+            case mediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
+              errorMsg = "تنسيق الفيديو غير مدعوم أو الرابط غير صحيح.";
+              break;
+          }
+        }
+        
+        if (shouldRetry && retryCountRef.current < maxRetries) {
+          retryCountRef.current++;
+          setError(`${errorMsg} (${retryCountRef.current}/${maxRetries})`);
+          
+          if (retryTimeoutRef.current) {
+            clearTimeout(retryTimeoutRef.current);
+          }
+          
+          retryTimeoutRef.current = setTimeout(() => {
+            if (videoRef.current) {
+              videoRef.current.src = videoUrl;
+              videoRef.current.load();
+              videoRef.current.play().catch(err => console.error("Play failed after retry:", err));
+            }
+          }, 2000 * retryCountRef.current);
+        } else {
+          setError(errorMsg);
+        }
       };
 
       videoRef.current.onloadeddata = () => {
         console.log("Video loaded successfully");
         setError(null);
+        retryCountRef.current = 0;
+        if (retryTimeoutRef.current) {
+          clearTimeout(retryTimeoutRef.current);
+          retryTimeoutRef.current = null;
+        }
         videoRef.current.play().catch((err) => {
           console.error("Auto-play failed:", err);
           setIsPlaying(false);
@@ -436,6 +552,7 @@ const VideoPlayer = ({ lessonId, lessonData, onLessonChange, onVideoEnd }) => {
             preload="metadata"
             disablePictureInPicture
             controlsList="nodownload nofullscreen noremoteplayback"
+            crossOrigin="anonymous"
             onContextMenu={(e) => e.preventDefault()}
           />
 
