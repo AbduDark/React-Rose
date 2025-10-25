@@ -506,7 +506,11 @@
       "accessDenied": "Access denied. Please refresh and try again.",
       "sessionExpired": "Session expired. Please refresh the page.",
       "maxViewsExceeded": "Maximum views exceeded for this video.",
-      "unauthorizedAccess": "Unauthorized access attempt detected."
+      "unauthorizedAccess": "Unauthorized access attempt detected.",
+      "loadError": "An error occurred while loading the video",
+      "videoNotAvailable": "Video is currently unavailable",
+      "formatNotSupported": "Video format is not supported",
+      "noVideoDescription": "Please check back later or contact the instructor"
     },
     "playlist": {
       "title": "Playlist",

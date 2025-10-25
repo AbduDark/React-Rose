@@ -232,7 +232,8 @@
       "noLesson": "لم يتم اختيار درس",
       "comingSoon": "قريباً",
       "videoComingSoon": "فيديو هذا الدرس سيتم رفعه قريباً",
-      "checkBackLater": "يرجى المتابعة في وقت لاحق"
+      "checkBackLater": "يرجى المتابعة في وقت لاحق",
+      "formatNotSupported": "صيغة الفيديو غير مدعومة"
     },
     "sidebar": {
       "noEpisodes": "لا توجد دروس متاحة",
@@ -560,7 +561,11 @@
       "auto": "تلقائي",
       "quality": "الجودة",
       "speed": "السرعة",
-      "playbackRate": "سرعة التشغيل"
+      "playbackRate": "سرعة التشغيل",
+      "loadError": "حدث خطأ أثناء تحميل الفيديو",
+      "videoNotAvailable": "الفيديو غير متوفر حالياً",
+      "formatNotSupported": "صيغة الفيديو غير مدعومة",
+      "noVideoDescription": "يرجى التحقق لاحقاً أو التواصل مع المدرس"
     },
     "playlist": {
       "title": "قائمة التشغيل",

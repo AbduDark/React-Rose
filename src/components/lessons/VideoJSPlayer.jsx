@@ -97,7 +97,7 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
           console.log("Video player is ready for lesson:", lessonId);
           setIsReady(true);
           setError(null);
-          
+
           player.el().addEventListener("contextmenu", (e) => {
             e.preventDefault();
             return false;
@@ -140,7 +140,7 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
             console.error("Video playback error:", error);
             if (error) {
               let errorMessage = errorMessages.loadError;
-              
+
               switch (error.code) {
                 case 1:
                   errorMessage = "تم إلغاء تحميل الفيديو";
@@ -159,11 +159,11 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
                     errorMessage = error.message;
                   }
               }
-              
+
               setError(errorMessage);
             }
           });
-          
+
           player.on("playing", () => {
             console.log("Video is now playing successfully");
             setError(null);
@@ -200,7 +200,7 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
 
     return () => {
       retryCountRef.current = 0;
-      
+
       if (initTimeoutRef.current) {
         clearTimeout(initTimeoutRef.current);
         initTimeoutRef.current = null;
@@ -208,10 +208,14 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
 
       if (playerRef.current) {
         try {
-          playerRef.current.dispose();
+          const player = playerRef.current;
+          if (player && !player.isDisposed()) {
+            player.dispose();
+          }
+        } catch (error) {
+          console.error('Error disposing player:', error);
+        } finally {
           playerRef.current = null;
-        } catch (err) {
-          console.error("Error disposing player:", err);
         }
       }
     };

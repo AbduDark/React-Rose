@@ -95,10 +95,16 @@ const WatchCoursePage = () => {
     const lesson = filteredLessons.find((l) => l.id === Number(currentLessonId));
     if (!lesson) {
       console.warn("Current lesson not found:", currentLessonId);
-      return null;
+      // Add null check for current lesson
+      if (!currentLesson) {
+        console.warn('Current lesson not found, using first available lesson');
+        // Fallback to first lesson if current lesson is not found
+        return lessons.length > 0 ? lessons[0] : null;
+      }
+      return null; // Should not reach here if the above fallback works
     }
     return lesson;
-  }, [filteredLessons, currentLessonId]);
+  }, [filteredLessons, currentLessonId, lessons]); // Added 'lessons' to dependency array
 
   // Ensure current lesson is available after filtering
   useEffect(() => {
@@ -106,7 +112,7 @@ const WatchCoursePage = () => {
       const isCurrentLessonAvailable = filteredLessons.some(
         (l) => l.id === currentLessonId
       );
-      
+
       if (!isCurrentLessonAvailable) {
         // If current lesson is filtered out, select the first available lesson
         const firstAvailableLesson = filteredLessons[0];
@@ -128,14 +134,14 @@ const WatchCoursePage = () => {
       navigate(`/courses/${courseId}/lessons/${lesson.id}`, { replace: true });
       return;
     }
-    
+
     if (!lesson.video_url) {
       console.warn("Lesson marked as has_video but no video URL:", lesson);
       setCurrentLessonId(lesson.id);
       navigate(`/courses/${courseId}/lessons/${lesson.id}`, { replace: true });
       return;
     }
-    
+
     console.log("Selected lesson:", lesson.id, "Video URL:", lesson.video_url);
     setCurrentLessonId(lesson.id);
     navigate(`/courses/${courseId}/lessons/${lesson.id}`, { replace: true });
@@ -256,7 +262,7 @@ const WatchCoursePage = () => {
                 lessonTitle={currentLesson.title}
                 onVideoEnd={handleVideoEnd}
               />
-              
+
               {/* Navigation Buttons */}
               <div className="flex items-center justify-between gap-4 px-2">
                 <button
@@ -267,7 +273,7 @@ const WatchCoursePage = () => {
                   <FaChevronLeft />
                   <span className="font-medium">{t("lessons.previous") || "الدرس السابق"}</span>
                 </button>
-                
+
                 <button
                   onClick={handlePlayNext}
                   disabled={filteredLessons.findIndex(l => l.id === currentLessonId) === filteredLessons.length - 1}
