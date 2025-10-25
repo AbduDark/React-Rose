@@ -31,6 +31,7 @@ Video content is protected through comprehensive client-side security measures. 
 - **Text Selection Blocking**: All player elements have `user-select: none` to prevent text copying
 - **Fullscreen Support**: Maintains all protection measures in fullscreen mode
 - **Direct Video Playback**: Uses native HTML5 video (`techOrder: ["html5"]`) without HLS/DASH streaming - videos must be direct MP4/WebM URLs
+- **Robust Initialization**: Retry mechanism (10 attempts, 50ms intervals) ensures Video.js initializes only after the video element is fully mounted in the DOM, preventing race conditions
 
 **Note**: HLS streaming has been completely removed as of October 25, 2025. The backend must provide direct video file URLs.
 
