@@ -14,14 +14,21 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    if (!videoRef.current || !videoUrl) {
-      console.warn("VideoJSPlayer: Missing video element or URL", { videoUrl });
+    if (!videoUrl) {
+      console.warn("VideoJSPlayer: Missing video URL", { videoUrl });
       return;
     }
 
-    const videoElement = videoRef.current;
+    // Wait for the next tick to ensure the element is in the DOM
+    const initTimeout = setTimeout(() => {
+      if (!videoRef.current) {
+        console.warn("VideoJSPlayer: Video element not found in DOM");
+        return;
+      }
 
-    const player = videojs(videoElement, {
+      const videoElement = videoRef.current;
+
+      const player = videojs(videoElement, {
       controls: true,
       responsive: true,
       fluid: true,
@@ -119,10 +126,16 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
     }
 
     playerRef.current = player;
+    }, 0);
 
     return () => {
+      clearTimeout(initTimeout);
       if (playerRef.current) {
-        playerRef.current.dispose();
+        try {
+          playerRef.current.dispose();
+        } catch (e) {
+          console.warn("Error disposing player:", e);
+        }
         playerRef.current = null;
       }
     };
