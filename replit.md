@@ -24,7 +24,6 @@ Each course can optionally include an intro video (YouTube link) that appears in
 
 Video content is protected through comprehensive client-side security measures. Videos are delivered as **direct unencrypted URLs** (MP4, WebM, etc.) from the Laravel backend with no HLS streaming. The VideoJSPlayer component uses the Video.js library for native HTML5 video playback with multiple playback speeds (0.5x to 2x) while maintaining robust security features:
 
-- **Watermark Overlay**: Displays user information (name/email and ID) rotated at -30° with low opacity to deter screen recording
 - **Right-Click Protection**: Context menu disabled on video player
 - **Download Prevention**: `controlsList="nodownload noremoteplayback"` attribute blocks native download buttons
 - **Picture-in-Picture Blocking**: `disablePictureInPicture` attribute prevents PiP mode
@@ -32,8 +31,9 @@ Video content is protected through comprehensive client-side security measures. 
 - **Fullscreen Support**: Maintains all protection measures in fullscreen mode
 - **Direct Video Playback**: Uses native HTML5 video (`techOrder: ["html5"]`) without HLS/DASH streaming - videos must be direct MP4/WebM URLs
 - **Robust Initialization**: Retry mechanism (10 attempts, 50ms intervals) ensures Video.js initializes only after the video element is fully mounted in the DOM, preventing race conditions
+- **Multi-Quality Support**: Optional quality selector appears when backend provides multiple quality sources via `qualitySources` array (e.g., 1080p, 720p, 480p). Quality selector only uses server-provided sources and never auto-generates URLs from signed links.
 
-**Note**: HLS streaming has been completely removed as of October 25, 2025. The backend must provide direct video file URLs.
+**Note**: HLS streaming has been completely removed as of October 25, 2025. The backend must provide direct video file URLs. Watermark overlay feature was removed as of October 25, 2025.
 
 ## Subscription Workflow
 
@@ -52,6 +52,17 @@ Expired or rejected subscriptions can be renewed through an elegant modal-based 
 ## Notification System
 
 A server-generated notification system keeps users informed about subscription status updates, new courses, and system announcements. Notifications are stored in a database, with real-time unread counts displayed in the header. A dedicated notification center allows users to view and manage all their alerts, which are marked as read upon viewing.
+
+## Admin Video Management
+
+The admin VideoUpload component (`src/components/admin/lessons/VideoUpload.jsx`) provides an enhanced video upload experience:
+- **Drag & Drop Support**: Admins can drag video files directly onto the upload zone or click to browse
+- **Video Preview**: Live preview of selected video before upload with play controls
+- **Upload Progress Tracking**: Real-time progress bar with percentage display
+- **Upload Speed Monitoring**: Shows current upload speed (MB/s) with elapsed time
+- **Time Remaining Estimate**: Calculates and displays estimated time remaining for upload completion
+- **Smooth Animations**: Uses Framer Motion for intuitive UI transitions
+- **Error Handling**: Guards against NaN/Infinity values in speed and time calculations
 
 # External Dependencies
 
