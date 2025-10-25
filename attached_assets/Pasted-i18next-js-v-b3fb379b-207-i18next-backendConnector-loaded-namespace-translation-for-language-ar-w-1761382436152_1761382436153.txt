@@ -1,0 +1,131 @@
+i18next.js?v=b3fb379b:207 i18next::backendConnector: loaded namespace translation for language ar {welcome: 'مرحباً', deleteLesson: {…}, videoUpload: {…}, unknownLevel: 'مستوى غير معروف', price: 'السعر', …}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+i18next.js?v=b3fb379b:207 i18next::backendConnector: loaded namespace common for language ar {introSection: {…}, header: {…}, features: {…}, popularCourses: {…}, recentCourses: {…}, …}
+i18next.js?v=b3fb379b:207 i18next: languageChanged ar
+i18next.js?v=b3fb379b:207 i18next: initialized {debug: true, initAsync: true, ns: Array(2), defaultNS: 'common', fallbackLng: Array(1), …}
+lessons.js:306 Fetching lessons for course: 4
+lessons.js:306 Fetching lessons for course: 4
+lessons.js:352 Fetching comments for lesson: 4
+lessons.js:352 Fetching comments for lesson: 4
+VideoJSPlayer.jsx:75 Initializing VideoJS player for lesson: 4
+VideoJSPlayer.jsx:107 Video player is ready for lesson: 4
+hook.js:608 VIDEOJS: ERROR: (CODE:4 MEDIA_ERR_SRC_NOT_SUPPORTED) The media could not be loaded, either because the server or network failed or because the format is not supported. MediaError {code: 4, message: 'The media could not be loaded, either because the …rk failed or because the format is not supported.'}
+overrideMethod @ hook.js:608
+(anonymous) @ video__js.js?v=b3fb379b:10836
+log2.error @ video__js.js?v=b3fb379b:10894
+error @ video__js.js?v=b3fb379b:28739
+handleTechError_ @ video__js.js?v=b3fb379b:27133
+(anonymous) @ video__js.js?v=b3fb379b:26457
+data.dispatcher @ video__js.js?v=b3fb379b:11676
+VideoJSPlayer.jsx:150 Video playback error: MediaError {code: 4, message: 'The media could not be loaded, either because the …rk failed or because the format is not supported.'}
+overrideMethod @ hook.js:608
+(anonymous) @ VideoJSPlayer.jsx:150
+data.dispatcher @ video__js.js?v=b3fb379b:11676
+trigger @ video__js.js?v=b3fb379b:11752
+trigger @ video__js.js?v=b3fb379b:12240
+error @ video__js.js?v=b3fb379b:28740
+handleTechError_ @ video__js.js?v=b3fb379b:27133
+(anonymous) @ video__js.js?v=b3fb379b:26457
+data.dispatcher @ video__js.js?v=b3fb379b:11676
+VideoJSPlayer.jsx:75 Initializing VideoJS player for lesson: 7
+VideoJSPlayer.jsx:107 Video player is ready for lesson: 7
+lessons.js:306 Fetching lessons for course: 4
+lessons.js:306 Fetching lessons for course: 4
+lessons.js:352 Fetching comments for lesson: 7
+lessons.js:352 Fetching comments for lesson: 7
+VideoJSPlayer.jsx:75 Initializing VideoJS player for lesson: 7
+VideoJSPlayer.jsx:107 Video player is ready for lesson: 7
+hook.js:608 VIDEOJS: ERROR: (CODE:4 MEDIA_ERR_SRC_NOT_SUPPORTED) The media could not be loaded, either because the server or network failed or because the format is not supported. MediaError {code: 4, message: 'The media could not be loaded, either because the …rk failed or because the format is not supported.'}
+overrideMethod @ hook.js:608
+(anonymous) @ video__js.js?v=b3fb379b:10836
+log2.error @ video__js.js?v=b3fb379b:10894
+error @ video__js.js?v=b3fb379b:28739
+handleTechError_ @ video__js.js?v=b3fb379b:27133
+(anonymous) @ video__js.js?v=b3fb379b:26457
+data.dispatcher @ video__js.js?v=b3fb379b:11676
+VideoJSPlayer.jsx:150 Video playback error: MediaError {code: 4, message: 'The media could not be loaded, either because the …rk failed or because the format is not supported.'}
+overrideMethod @ hook.js:608
+(anonymous) @ VideoJSPlayer.jsx:150
+data.dispatcher @ video__js.js?v=b3fb379b:11676
+trigger @ video__js.js?v=b3fb379b:11752
+trigger @ video__js.js?v=b3fb379b:12240
+error @ video__js.js?v=b3fb379b:28740
+handleTechError_ @ video__js.js?v=b3fb379b:27133
+(anonymous) @ video__js.js?v=b3fb379b:26457
+data.dispatcher @ video__js.js?v=b3fb379b:11676
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+VideoJSPlayer.jsx:75 Initializing VideoJS player for lesson: 4
+VideoJSPlayer.jsx:107 Video player is ready for lesson: 4
+hook.js:608 VIDEOJS: ERROR: (CODE:4 MEDIA_ERR_SRC_NOT_SUPPORTED) The media could not be loaded, either because the server or network failed or because the format is not supported. MediaError {code: 4, message: 'The media could not be loaded, either because the …rk failed or because the format is not supported.'}
+overrideMethod @ hook.js:608
+(anonymous) @ video__js.js?v=b3fb379b:10836
+log2.error @ video__js.js?v=b3fb379b:10894
+error @ video__js.js?v=b3fb379b:28739
+handleTechError_ @ video__js.js?v=b3fb379b:27133
+(anonymous) @ video__js.js?v=b3fb379b:26457
+data.dispatcher @ video__js.js?v=b3fb379b:11676
+VideoJSPlayer.jsx:150 Video playback error: MediaError {code: 4, message: 'The media could not be loaded, either because the …rk failed or because the format is not supported.'}
+overrideMethod @ hook.js:608
+(anonymous) @ VideoJSPlayer.jsx:150
+data.dispatcher @ video__js.js?v=b3fb379b:11676
+trigger @ video__js.js?v=b3fb379b:11752
+trigger @ video__js.js?v=b3fb379b:12240
+error @ video__js.js?v=b3fb379b:28740
+handleTechError_ @ video__js.js?v=b3fb379b:27133
+(anonymous) @ video__js.js?v=b3fb379b:26457
+data.dispatcher @ video__js.js?v=b3fb379b:11676
+lessons.js:306 Fetching lessons for course: 4
+lessons.js:306 Fetching lessons for course: 4
+lessons.js:352 Fetching comments for lesson: 4
+lessons.js:352 Fetching comments for lesson: 4
+VideoJSPlayer.jsx:75 Initializing VideoJS player for lesson: 4
+VideoJSPlayer.jsx:107 Video player is ready for lesson: 4
+hook.js:608 VIDEOJS: ERROR: (CODE:4 MEDIA_ERR_SRC_NOT_SUPPORTED) The media could not be loaded, either because the server or network failed or because the format is not supported. MediaError {code: 4, message: 'The media could not be loaded, either because the …rk failed or because the format is not supported.'}code: 4message: "The media could not be loaded, either because the server or network failed or because the format is not supported."[[Prototype]]: Object
+overrideMethod @ hook.js:608
+(anonymous) @ video__js.js?v=b3fb379b:10836
+log2.error @ video__js.js?v=b3fb379b:10894
+error @ video__js.js?v=b3fb379b:28739
+handleTechError_ @ video__js.js?v=b3fb379b:27133
+(anonymous) @ video__js.js?v=b3fb379b:26457
+data.dispatcher @ video__js.js?v=b3fb379b:11676
+VideoJSPlayer.jsx:150 Video playback error: MediaError {code: 4, message: 'The media could not be loaded, either because the …rk failed or because the format is not supported.'}code: 4message: "The media could not be loaded, either because the server or network failed or because the format is not supported."[[Prototype]]: Object
+overrideMethod @ hook.js:608
+(anonymous) @ VideoJSPlayer.jsx:150
+data.dispatcher @ video__js.js?v=b3fb379b:11676
+trigger @ video__js.js?v=b3fb379b:11752
+trigger @ video__js.js?v=b3fb379b:12240
+error @ video__js.js?v=b3fb379b:28740
+handleTechError_ @ video__js.js?v=b3fb379b:27133
+(anonymous) @ video__js.js?v=b3fb379b:26457
+data.dispatcher @ video__js.js?v=b3fb379b:11676
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
+notifications.js:56 Unread notifications response: {success: true, status_code: 200, message: {…}, data: {…}}
