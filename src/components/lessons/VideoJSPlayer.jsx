@@ -137,7 +137,6 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
             videoElement.disablePictureInPicture = true;
             videoElement.setAttribute("disablePictureInPicture", "");
             videoElement.setAttribute("controlsList", "nodownload noremoteplayback");
-            videoElement.setAttribute("crossorigin", "anonymous");
           }
 
           player.on("ended", () => {
@@ -297,7 +296,6 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
           ref={videoRef}
           className="video-js vjs-big-play-centered vjs-theme-rose"
           playsInline
-          crossOrigin="anonymous"
           onContextMenu={(e) => e.preventDefault()}
         />
       </div>
