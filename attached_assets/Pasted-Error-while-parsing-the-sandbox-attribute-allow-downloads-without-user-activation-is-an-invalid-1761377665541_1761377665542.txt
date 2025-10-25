@@ -1,0 +1,74 @@
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'ambient-light-sensor'.
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'battery'.
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'execution-while-not-rendered'.
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'execution-while-out-of-viewport'.
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'layout-animations'.
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'legacy-image-formats'.
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'navigation-override'.
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'oversized-images'.
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'publickey-credentials'.
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'speaker-selection'.
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'unoptimized-images'.
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'unsized-media'.
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Allow attribute will take precedence over 'allowfullscreen'.
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Allow attribute will take precedence over 'allowpaymentrequest'.
+replit.com/public/js/beacon.js:1  Failed to load resource: net::ERR_BLOCKED_BY_CLIENT
+9e6ca00e-b822-42ad-8e6b-97bf503ef79f-00-3g256g73dlhyc.riker.replit.dev/:1 Access to fetch at 'https://api.rose-academy.com/api/courses?page=1&per_page=6' from origin 'https://9e6ca00e-b822-42ad-8e6b-97bf503ef79f-00-3g256g73dlhyc.riker.replit.dev' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+api.rose-academy.com/api/courses?page=1&per_page=6:1  Failed to load resource: net::ERR_FAILED
+9e6ca00e-b822-42ad-8e6b-97bf503ef79f-00-3g256g73dlhyc.riker.replit.dev/:1 Access to fetch at 'https://api.rose-academy.com/api/courses?page=1&per_page=6' from origin 'https://9e6ca00e-b822-42ad-8e6b-97bf503ef79f-00-3g256g73dlhyc.riker.replit.dev' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+api.rose-academy.com/api/courses?page=1&per_page=6:1  Failed to load resource: net::ERR_FAILED
+replit.com/public/js/beacon.js:1  Failed to load resource: net::ERR_BLOCKED_BY_CLIENT
+replit.com/public/js/beacon.js:1  Failed to load resource: net::ERR_BLOCKED_BY_CLIENT
+injected.js:27 i18next::backendConnector: loaded namespace common for language ar Object
+injected.js:27 i18next::backendConnector: loaded namespace translation for language ar Object
+injected.js:27 i18next: languageChanged ar
+injected.js:27 i18next: initialized Object
+injected.js:27 Unread notifications response: Object
+injected.js:27 Unread notifications response: Object
+injected.js:27 Fetching lessons for course: 4
+injected.js:27 i18next::translator: missingKey ar common courseDetailPage.introVideo مقدمة الكورس
+injected.js:27 i18next::translator: missingKey ar common courseDetailPage.watchIntro شاهد المقدمة
+injected.js:27 i18next::translator: missingKey ar common courseDetailPage.introVideo مقدمة الكورس
+injected.js:27 i18next::translator: missingKey ar common courseDetailPage.watchIntro شاهد المقدمة
+injected.js:27 i18next::translator: missingKey ar common courseDetailPage.introVideo مقدمة الكورس
+injected.js:27 i18next::translator: missingKey ar common courseDetailPage.watchIntro شاهد المقدمة
+injected.js:27 i18next::translator: missingKey ar common courseDetailPage.introVideo مقدمة الكورس
+injected.js:27 i18next::translator: missingKey ar common courseDetailPage.watchIntro شاهد المقدمة
+injected.js:27 Fetching lessons for course: 4
+injected.js:27 i18next::translator: missingKey ar common courseDetailPage.introVideo مقدمة الكورس
+injected.js:27 i18next::translator: missingKey ar common courseDetailPage.watchIntro شاهد المقدمة
+injected.js:27 i18next::translator: missingKey ar common courseDetailPage.introVideo مقدمة الكورس
+injected.js:27 i18next::translator: missingKey ar common courseDetailPage.watchIntro شاهد المقدمة
+injected.js:27 i18next::translator: missingKey ar common courseDetailPage.introVideo مقدمة الكورس
+injected.js:27 i18next::translator: missingKey ar common courseDetailPage.watchIntro شاهد المقدمة
+injected.js:27 i18next::translator: missingKey ar common courseDetailPage.introVideo مقدمة الكورس
+injected.js:27 i18next::translator: missingKey ar common courseDetailPage.watchIntro شاهد المقدمة
+injected.js:27 i18next::translator: missingKey ar common courseDetailPage.introVideo مقدمة الكورس
+injected.js:27 i18next::translator: missingKey ar common courseDetailPage.watchIntro شاهد المقدمة
+injected.js:27 i18next::translator: missingKey ar common courseDetailPage.introVideo مقدمة الكورس
+injected.js:27 i18next::translator: missingKey ar common courseDetailPage.watchIntro شاهد المقدمة
+injected.js:27 Current lesson is invalid or has no video: undefined
+(anonymous) @ injected.js:27
+injected.js:27 Current lesson is invalid or has no video: undefined
+(anonymous) @ injected.js:27
+injected.js:27 Fetching lessons for course: 4
+injected.js:27 Fetching lessons for course: 4
+injected.js:27 Received `true` for a non-boolean attribute `jsx`.
+
+If you want to write it to the DOM, pass a string instead: jsx="true" or jsx={value.toString()}.
+(anonymous) @ injected.js:27
+injected.js:27 Fetching comments for lesson: 4
+injected.js:27 VIDEOJS: WARN: The element supplied is not included in the DOM
+(anonymous) @ injected.js:27
+injected.js:27 Fetching comments for lesson: 4
+injected.js:27 Video player is ready
+injected.js:27 VIDEOJS: WARN: The element supplied is not included in the DOM
+(anonymous) @ injected.js:27
+injected.js:27 Video player is ready
+injected.js:27 Unread notifications response: Object

@@ -194,7 +194,9 @@
     "courseNotFound": "لم يتم العثور على الدورة",
     "overview": "نظرة عامة",
     "instructor": "المدرب",
-    "reviews": "التقييمات"
+    "reviews": "التقييمات",
+    "introVideo": "مقدمة الكورس",
+    "watchIntro": "شاهد المقدمة"
   },
   "coursesPage": {
     "pageTitle": "جميع الدورات",
@@ -210,6 +212,35 @@
     "lessons": "دروس",
     "instructor": "المدرب",
     "error": "خطأ"
+  },
+  "lessons": {
+    "title": "الدروس",
+    "previous": "الدرس السابق",
+    "next": "الدرس التالي",
+    "videoPlayer": {
+      "noVideo": "لم يتم رفع الفيديو الخاص بهذا الدرس بعد",
+      "noVideoDescription": "يرجى التحقق لاحقاً أو التواصل مع المدرس",
+      "videoNotAvailable": "الفيديو غير متوفر حالياً",
+      "loading": "جاري تحميل الفيديو...",
+      "loadError": "حدث خطأ أثناء تحميل الفيديو",
+      "playError": "حدث خطأ أثناء تشغيل الفيديو",
+      "hlsError": "خطأ في تشغيل الفيديو",
+      "hlsNotSupported": "المتصفح لا يدعم تشغيل هذا النوع من الفيديو",
+      "error": "حدث خطأ",
+      "protected": "محمي",
+      "auto": "تلقائي",
+      "noLesson": "لم يتم اختيار درس",
+      "comingSoon": "قريباً",
+      "videoComingSoon": "فيديو هذا الدرس سيتم رفعه قريباً",
+      "checkBackLater": "يرجى المتابعة في وقت لاحق"
+    },
+    "sidebar": {
+      "noEpisodes": "لا توجد دروس متاحة",
+      "episodes": "الدروس"
+    },
+    "courseInfo": {
+      "title": "معلومات الدورة"
+    }
   },
   "enrollCourse": {
     "enrollError": "يرجى تسجيل الدخول للانضمام إلى هذه الدورة",

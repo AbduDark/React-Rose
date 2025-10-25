@@ -44,21 +44,21 @@ const WatchCoursePage = () => {
         // Set current lesson ID
         let initialLessonId = lessonId ? Number(lessonId) : null;
         const validLesson = lessonsData.find(
-          (l) => l.id === initialLessonId && l.has_video
+          (l) => l.id === initialLessonId
         );
 
         if (validLesson) {
           setCurrentLessonId(initialLessonId);
         } else {
-          // Fallback to the first lesson with a video
-          const firstValidLesson = lessonsData.find((l) => l.has_video);
-          if (firstValidLesson) {
-            setCurrentLessonId(firstValidLesson.id);
-            navigate(`/courses/${courseId}/lessons/${firstValidLesson.id}`, {
+          // Fallback to the first lesson (with or without video)
+          const firstLesson = lessonsData[0];
+          if (firstLesson) {
+            setCurrentLessonId(firstLesson.id);
+            navigate(`/courses/${courseId}/lessons/${firstLesson.id}`, {
               replace: true,
             });
           } else {
-            setError(t("lessons.videoPlayer.noVideo"));
+            setError(t("lessons.sidebar.noEpisodes"));
           }
         }
       } catch (e) {
@@ -93,8 +93,8 @@ const WatchCoursePage = () => {
 
   const currentLesson = useMemo(() => {
     const lesson = filteredLessons.find((l) => l.id === Number(currentLessonId));
-    if (!lesson || !lesson.has_video) {
-      console.warn("Current lesson is invalid or has no video:", lesson);
+    if (!lesson) {
+      console.warn("Current lesson not found:", currentLessonId);
       return null;
     }
     return lesson;
@@ -108,8 +108,8 @@ const WatchCoursePage = () => {
       );
       
       if (!isCurrentLessonAvailable) {
-        // If current lesson is filtered out, select the first available lesson with video
-        const firstAvailableLesson = filteredLessons.find((l) => l.has_video);
+        // If current lesson is filtered out, select the first available lesson
+        const firstAvailableLesson = filteredLessons[0];
         if (firstAvailableLesson) {
           setCurrentLessonId(firstAvailableLesson.id);
           navigate(`/courses/${courseId}/lessons/${firstAvailableLesson.id}`, {
@@ -124,13 +124,15 @@ const WatchCoursePage = () => {
   const handleLessonSelect = (lesson) => {
     if (!lesson.has_video) {
       console.warn("Selected lesson has no video:", lesson);
-      setError(t("lessons.videoPlayer.noVideo"));
+      setCurrentLessonId(lesson.id);
+      navigate(`/courses/${courseId}/lessons/${lesson.id}`, { replace: true });
       return;
     }
     
     if (!lesson.video_url) {
-      console.error("Lesson has no video URL:", lesson);
-      setError("رابط الفيديو غير متوفر");
+      console.warn("Lesson marked as has_video but no video URL:", lesson);
+      setCurrentLessonId(lesson.id);
+      navigate(`/courses/${courseId}/lessons/${lesson.id}`, { replace: true });
       return;
     }
     
@@ -143,30 +145,27 @@ const WatchCoursePage = () => {
   // Handle video end
   const handleVideoEnd = () => {
     setIsVideoPlaying(false);
-    const allLessons = filteredLessons.filter((l) => l.has_video);
-    const currentIndex = allLessons.findIndex((l) => l.id === currentLessonId);
-    if (currentIndex < allLessons.length - 1) {
-      const nextLesson = allLessons[currentIndex + 1];
+    const currentIndex = filteredLessons.findIndex((l) => l.id === currentLessonId);
+    if (currentIndex < filteredLessons.length - 1) {
+      const nextLesson = filteredLessons[currentIndex + 1];
       handleLessonSelect(nextLesson);
     }
   };
 
   // Handle play next
   const handlePlayNext = () => {
-    const allLessons = filteredLessons.filter((l) => l.has_video);
-    const currentIndex = allLessons.findIndex((l) => l.id === currentLessonId);
-    if (currentIndex < allLessons.length - 1) {
-      const nextLesson = allLessons[currentIndex + 1];
+    const currentIndex = filteredLessons.findIndex((l) => l.id === currentLessonId);
+    if (currentIndex < filteredLessons.length - 1) {
+      const nextLesson = filteredLessons[currentIndex + 1];
       handleLessonSelect(nextLesson);
     }
   };
 
   // Handle play previous
   const handlePlayPrevious = () => {
-    const allLessons = filteredLessons.filter((l) => l.has_video);
-    const currentIndex = allLessons.findIndex((l) => l.id === currentLessonId);
+    const currentIndex = filteredLessons.findIndex((l) => l.id === currentLessonId);
     if (currentIndex > 0) {
-      const previousLesson = allLessons[currentIndex - 1];
+      const previousLesson = filteredLessons[currentIndex - 1];
       handleLessonSelect(previousLesson);
     }
   };
@@ -271,7 +270,7 @@ const WatchCoursePage = () => {
                 
                 <button
                   onClick={handlePlayNext}
-                  disabled={filteredLessons.findIndex(l => l.id === currentLessonId) === filteredLessons.filter(l => l.has_video).length - 1}
+                  disabled={filteredLessons.findIndex(l => l.id === currentLessonId) === filteredLessons.length - 1}
                   className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-blue-600 disabled:hover:to-blue-700"
                 >
                   <span className="font-medium">{t("lessons.next") || "الدرس التالي"}</span>
@@ -280,10 +279,20 @@ const WatchCoursePage = () => {
               </div>
             </>
           ) : (
-            <div className="w-full flex-1 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center transition-colors">
-              <p className="text-gray-500 dark:text-gray-400 text-lg font-medium">
-                {t("lessons.videoPlayer.noLesson")}
-              </p>
+            <div className="w-full flex-1 bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg flex items-center justify-center transition-colors shadow-xl" style={{ minHeight: "400px" }}>
+              <div className="text-center p-8">
+                <div className="mb-6">
+                  <svg className="w-24 h-24 mx-auto text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-3">
+                  {t("lessons.videoPlayer.noLesson", "لم يتم اختيار درس")}
+                </h3>
+                <p className="text-gray-300 text-base">
+                  الرجاء اختيار درس من القائمة الجانبية
+                </p>
+              </div>
             </div>
           )}
 
