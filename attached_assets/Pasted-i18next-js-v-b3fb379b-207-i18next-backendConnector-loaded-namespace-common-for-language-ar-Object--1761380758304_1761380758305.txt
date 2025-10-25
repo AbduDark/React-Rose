@@ -1,0 +1,347 @@
+i18next.js?v=b3fb379b:207 i18next::backendConnector: loaded namespace common for language ar Object
+i18next.js?v=b3fb379b:207 i18next::backendConnector: loaded namespace translation for language ar Object
+i18next.js?v=b3fb379b:207 i18next: languageChanged ar
+i18next.js?v=b3fb379b:207 i18next: initialized Object
+notifications.js:56 Unread notifications response: Object
+auth.js:239 Making dashboard stats request with token: 74|1f4rUwFojVryHOObd...
+hook.js:377 Making dashboard stats request with token: 74|1f4rUwFojVryHOObd...
+auth.js:251 Dashboard stats response: Object
+DashboardOverview.jsx:40 Dashboard stats API response: Object
+DashboardOverview.jsx:59 Processed stats data: Object
+DashboardOverview.jsx:80 Normalized stats: Object
+hook.js:608 Each child in a list should have a unique "key" prop.
+
+Check the render method of `ChartComponent`. See https://react.dev/link/warning-keys for more information.
+overrideMethod @ hook.js:608
+auth.js:251 Dashboard stats response: Object
+DashboardOverview.jsx:40 Dashboard stats API response: Object
+DashboardOverview.jsx:59 Processed stats data: Object
+DashboardOverview.jsx:80 Normalized stats: Object
+lessons.js:306 Fetching lessons for course: 4
+lessons.js:306 Fetching lessons for course: 4
+hook.js:608 Current lesson not found: null
+overrideMethod @ hook.js:608
+hook.js:600 Current lesson not found: null
+overrideMethod @ hook.js:600
+lessons.js:306 Fetching lessons for course: 4
+hook.js:377 Fetching lessons for course: 4
+VideoJSPlayer.jsx:28 i18next::translator: missingKey ar common lessons.videoPlayer.loadError حدث خطأ أثناء تحميل الفيديو
+VideoJSPlayer.jsx:29 i18next::translator: missingKey ar common lessons.videoPlayer.videoNotAvailable الفيديو غير متوفر حالياً
+VideoJSPlayer.jsx:30 i18next::translator: missingKey ar common lessons.videoPlayer.formatNotSupported صيغة الفيديو غير مدعومة
+lessons.js:352 Fetching comments for lesson: 4
+VideoJSPlayer.jsx:28 i18next::translator: missingKey ar common lessons.videoPlayer.loadError حدث خطأ أثناء تحميل الفيديو
+VideoJSPlayer.jsx:29 i18next::translator: missingKey ar common lessons.videoPlayer.videoNotAvailable الفيديو غير متوفر حالياً
+VideoJSPlayer.jsx:30 i18next::translator: missingKey ar common lessons.videoPlayer.formatNotSupported صيغة الفيديو غير مدعومة
+VideoJSPlayer.jsx:39 VIDEOJS: WARN: The element supplied is not included in the DOM
+overrideMethod @ hook.js:600
+(anonymous) @ video__js.js?v=b3fb379b:10836
+log2.warn @ video__js.js?v=b3fb379b:10895
+videojs @ video__js.js?v=b3fb379b:29985
+(anonymous) @ VideoJSPlayer.jsx:39
+react_stack_bottom_frame @ react-dom_client.js?v=b3fb379b:18567
+runWithFiberInDEV @ react-dom_client.js?v=b3fb379b:997
+commitHookEffectListMount @ react-dom_client.js?v=b3fb379b:9411
+commitHookPassiveMountEffects @ react-dom_client.js?v=b3fb379b:9465
+reconnectPassiveEffects @ react-dom_client.js?v=b3fb379b:11273
+recursivelyTraverseReconnectPassiveEffects @ react-dom_client.js?v=b3fb379b:11240
+reconnectPassiveEffects @ react-dom_client.js?v=b3fb379b:11317
+recursivelyTraverseReconnectPassiveEffects @ react-dom_client.js?v=b3fb379b:11240
+reconnectPassiveEffects @ react-dom_client.js?v=b3fb379b:11317
+recursivelyTraverseReconnectPassiveEffects @ react-dom_client.js?v=b3fb379b:11240
+reconnectPassiveEffects @ react-dom_client.js?v=b3fb379b:11317
+doubleInvokeEffectsOnFiber @ react-dom_client.js?v=b3fb379b:13339
+runWithFiberInDEV @ react-dom_client.js?v=b3fb379b:997
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13312
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+runWithFiberInDEV @ react-dom_client.js?v=b3fb379b:999
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13326
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13317
+commitDoubleInvokeEffectsInDEV @ react-dom_client.js?v=b3fb379b:13347
+flushPassiveEffects @ react-dom_client.js?v=b3fb379b:13157
+(anonymous) @ react-dom_client.js?v=b3fb379b:12776
+performWorkUntilDeadline @ react-dom_client.js?v=b3fb379b:36
+lessons.js:352 Fetching comments for lesson: 4
+VideoJSPlayer.jsx:68 Video player is ready for lesson: 4
+VideoJSPlayer.jsx:28 i18next::translator: missingKey ar common lessons.videoPlayer.loadError حدث خطأ أثناء تحميل الفيديو
+VideoJSPlayer.jsx:29 i18next::translator: missingKey ar common lessons.videoPlayer.videoNotAvailable الفيديو غير متوفر حالياً
+VideoJSPlayer.jsx:30 i18next::translator: missingKey ar common lessons.videoPlayer.formatNotSupported صيغة الفيديو غير مدعومة
+VideoJSPlayer.jsx:39 VIDEOJS: WARN: The element supplied is not included in the DOM
+overrideMethod @ hook.js:608
+(anonymous) @ video__js.js?v=b3fb379b:10836
+log2.warn @ video__js.js?v=b3fb379b:10895
+videojs @ video__js.js?v=b3fb379b:29985
+(anonymous) @ VideoJSPlayer.jsx:39
+react_stack_bottom_frame @ react-dom_client.js?v=b3fb379b:18567
+runWithFiberInDEV @ react-dom_client.js?v=b3fb379b:997
+commitHookEffectListMount @ react-dom_client.js?v=b3fb379b:9411
+commitHookPassiveMountEffects @ react-dom_client.js?v=b3fb379b:9465
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11040
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11201
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11201
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11201
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11201
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11033
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11033
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11201
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11201
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11033
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11033
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11201
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11201
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11033
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11033
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11201
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11033
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11201
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11033
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11201
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11033
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11033
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11033
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11167
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11141
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11201
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11033
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11201
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11033
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11201
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11033
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11201
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11201
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11033
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11033
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11033
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11033
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11201
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11033
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11201
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=b3fb379b:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=b3fb379b:11066
+flushPassiveEffects @ react-dom_client.js?v=b3fb379b:13150
+(anonymous) @ react-dom_client.js?v=b3fb379b:12776
+performWorkUntilDeadline @ react-dom_client.js?v=b3fb379b:36
+Node cannot be found in the current page.
+VideoJSPlayer.jsx:68 Video player is ready for lesson: 4
+lesson_4_1760700721.mp4:1  GET https://api.rose-academy.com/storage/videos/lesson_4_1760700721.mp4 404 (Not Found)
+hook.js:608 VIDEOJS: ERROR: (CODE:4 MEDIA_ERR_SRC_NOT_SUPPORTED) The media could not be loaded, either because the server or network failed or because the format is not supported. MediaError {code: 4, message: 'The media could not be loaded, either because the …rk failed or because the format is not supported.'}
+overrideMethod @ hook.js:608
+(anonymous) @ video__js.js?v=b3fb379b:10836
+log2.error @ video__js.js?v=b3fb379b:10894
+error @ video__js.js?v=b3fb379b:28739
+handleTechError_ @ video__js.js?v=b3fb379b:27133
+(anonymous) @ video__js.js?v=b3fb379b:26457
+data.dispatcher @ video__js.js?v=b3fb379b:11676
+VideoJSPlayer.jsx:111 Video playback error: MediaError {code: 4, message: 'The media could not be loaded, either because the …rk failed or because the format is not supported.'}
+overrideMethod @ hook.js:608
+(anonymous) @ VideoJSPlayer.jsx:111
+data.dispatcher @ video__js.js?v=b3fb379b:11676
+trigger @ video__js.js?v=b3fb379b:11752
+trigger @ video__js.js?v=b3fb379b:12240
+error @ video__js.js?v=b3fb379b:28740
+handleTechError_ @ video__js.js?v=b3fb379b:27133
+(anonymous) @ video__js.js?v=b3fb379b:26457
+data.dispatcher @ video__js.js?v=b3fb379b:11676
+VideoJSPlayer.jsx:226 i18next::translator: missingKey ar common lessons.videoPlayer.noVideoDescription يرجى التحقق لاحقاً أو التواصل مع المدرس
+VideoJSPlayer.jsx:226 i18next::translator: missingKey ar common lessons.videoPlayer.noVideoDescription يرجى التحقق لاحقاً أو التواصل مع المدرس
+react-dom_client.js?v=b3fb379b:15918 Uncaught NotFoundError: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.
+    at removeChild (react-dom_client.js?v=b3fb379b:15918:24)
+    at runWithFiberInDEV (react-dom_client.js?v=b3fb379b:997:72)
+    at commitDeletionEffectsOnFiber (react-dom_client.js?v=b3fb379b:10190:19)
+    at recursivelyTraverseMutationEffects (react-dom_client.js?v=b3fb379b:10379:13)
+    at commitMutationEffectsOnFiber (react-dom_client.js?v=b3fb379b:10547:13)
+    at recursivelyTraverseMutationEffects (react-dom_client.js?v=b3fb379b:10396:13)
+    at commitMutationEffectsOnFiber (react-dom_client.js?v=b3fb379b:10405:13)
+    at recursivelyTraverseMutationEffects (react-dom_client.js?v=b3fb379b:10396:13)
+    at commitMutationEffectsOnFiber (react-dom_client.js?v=b3fb379b:10746:13)
+    at recursivelyTraverseMutationEffects (react-dom_client.js?v=b3fb379b:10396:13)
+removeChild @ react-dom_client.js?v=b3fb379b:15918
+runWithFiberInDEV @ react-dom_client.js?v=b3fb379b:997
+commitDeletionEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10190
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10379
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10547
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10405
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10746
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10547
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10547
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10547
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10405
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10405
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10547
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10746
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10405
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10405
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10547
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10547
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10405
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10405
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10746
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10405
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10746
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10405
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10746
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10405
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10405
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10405
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10649
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10639
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10746
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10405
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10746
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10405
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10746
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10405
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10746
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10746
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10405
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10405
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10405
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10405
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10746
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10405
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10746
+recursivelyTraverseMutationEffects @ react-dom_client.js?v=b3fb379b:10396
+commitMutationEffectsOnFiber @ react-dom_client.js?v=b3fb379b:10600
+flushMutationEffects @ react-dom_client.js?v=b3fb379b:12822
+commitRoot @ react-dom_client.js?v=b3fb379b:12802
+commitRootWhenReady @ react-dom_client.js?v=b3fb379b:12016
+performWorkOnRoot @ react-dom_client.js?v=b3fb379b:11950
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=b3fb379b:13505
+performWorkUntilDeadline @ react-dom_client.js?v=b3fb379b:36
+hook.js:608 An error occurred in the <div> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+overrideMethod @ hook.js:608
+defaultOnUncaughtError @ react-dom_client.js?v=b3fb379b:6966
+logUncaughtError @ react-dom_client.js?v=b3fb379b:7020
+runWithFiberInDEV @ react-dom_client.js?v=b3fb379b:997
+lane.callback @ react-dom_client.js?v=b3fb379b:7048
+callCallback @ react-dom_client.js?v=b3fb379b:5491
+commitCallbacks @ react-dom_client.js?v=b3fb379b:5503
+runWithFiberInDEV @ react-dom_client.js?v=b3fb379b:999
+commitLayoutEffectOnFiber @ react-dom_client.js?v=b3fb379b:9976
+flushLayoutEffects @ react-dom_client.js?v=b3fb379b:12924
+commitRoot @ react-dom_client.js?v=b3fb379b:12803
+commitRootWhenReady @ react-dom_client.js?v=b3fb379b:12016
+performWorkOnRoot @ react-dom_client.js?v=b3fb379b:11950
+performSyncWorkOnRoot @ react-dom_client.js?v=b3fb379b:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b3fb379b:13414
+flushSpawnedWork @ react-dom_client.js?v=b3fb379b:13067
+commitRoot @ react-dom_client.js?v=b3fb379b:12804
+commitRootWhenReady @ react-dom_client.js?v=b3fb379b:12016
+performWorkOnRoot @ react-dom_client.js?v=b3fb379b:11950
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=b3fb379b:13505
+performWorkUntilDeadline @ react-dom_client.js?v=b3fb379b:36

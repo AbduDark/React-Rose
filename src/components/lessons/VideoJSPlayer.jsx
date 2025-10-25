@@ -13,16 +13,15 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
   const containerRef = useRef(null);
   const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState(null);
+  const initTimeoutRef = useRef(null);
+  const retryCountRef = useRef(0);
+  const maxRetries = 10;
 
   useEffect(() => {
-    if (!videoRef.current || !videoUrl) {
-      if (!videoUrl) {
-        console.warn("No video URL provided for lesson:", lessonId);
-      }
+    if (!videoUrl) {
+      console.warn("No video URL provided for lesson:", lessonId);
       return;
     }
-
-    const videoElement = videoRef.current;
 
     const errorMessages = {
       loadError: t("lessons.videoPlayer.loadError", "حدث خطأ أثناء تحميل الفيديو"),
@@ -31,142 +30,182 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
     };
 
     if (playerRef.current) {
-      playerRef.current.dispose();
+      try {
+        playerRef.current.dispose();
+      } catch (err) {
+        console.warn("Error disposing previous player:", err);
+      }
       playerRef.current = null;
     }
 
-    try {
-      const player = videojs(videoElement, {
-        controls: true,
-        responsive: true,
-        fluid: true,
-        preload: "auto",
-        playbackRates: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2],
-        controlBar: {
-          children: [
-            "playToggle",
-            "volumePanel",
-            "currentTimeDisplay",
-            "timeDivider",
-            "durationDisplay",
-            "progressControl",
-            "playbackRateMenuButton",
-            "fullscreenToggle",
-          ],
-        },
-        html5: {
-          nativeAudioTracks: true,
-          nativeVideoTracks: true,
-        },
-        techOrder: ["html5"],
-        userActions: {
-          hotkeys: true,
-        },
-      });
-
-      player.ready(() => {
-        console.log("Video player is ready for lesson:", lessonId);
-        setIsReady(true);
-        setError(null);
-        
-        player.el().addEventListener("contextmenu", (e) => {
-          e.preventDefault();
-          return false;
-        });
-
-        if (user) {
-          const watermark = document.createElement("div");
-          watermark.className = "vjs-watermark";
-          watermark.textContent = `${user.name || user.email} • ID: ${user.id}`;
-          watermark.style.cssText = `
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-30deg);
-            color: rgba(255, 255, 255, 0.1);
-            font-size: 24px;
-            font-weight: bold;
-            pointer-events: none;
-            user-select: none;
-            z-index: 10;
-            white-space: nowrap;
-          `;
-          player.el().appendChild(watermark);
+    const tryInitializePlayer = () => {
+      if (!videoRef.current) {
+        if (retryCountRef.current < maxRetries) {
+          retryCountRef.current++;
+          initTimeoutRef.current = setTimeout(tryInitializePlayer, 50);
+        } else {
+          console.error("Max retries reached: video element ref not available");
+          setError("فشل تهيئة مشغل الفيديو - العنصر غير متاح");
         }
-
-        if (videoElement) {
-          videoElement.disablePictureInPicture = true;
-          videoElement.setAttribute("disablePictureInPicture", "");
-          videoElement.setAttribute("controlsList", "nodownload noremoteplayback");
-          videoElement.setAttribute("crossorigin", "anonymous");
-        }
-
-        player.on("ended", () => {
-          console.log("Video ended for lesson:", lessonId);
-          onVideoEnd?.();
-        });
-
-        player.on("error", (e) => {
-          const error = player.error();
-          console.error("Video playback error:", error);
-          if (error) {
-            let errorMessage = errorMessages.loadError;
-            
-            switch (error.code) {
-              case 1:
-                errorMessage = "تم إلغاء تحميل الفيديو";
-                break;
-              case 2:
-                errorMessage = errorMessages.videoNotAvailable;
-                break;
-              case 3:
-                errorMessage = "فشل فك تشفير الفيديو. يرجى تحديث المتصفح";
-                break;
-              case 4:
-                errorMessage = errorMessages.formatNotSupported;
-                break;
-              default:
-                if (error.message) {
-                  errorMessage = error.message;
-                }
-            }
-            
-            setError(errorMessage);
-          }
-        });
-        
-        player.on("playing", () => {
-          console.log("Video is now playing successfully");
-          setError(null);
-        });
-
-        player.on("loadedmetadata", () => {
-          console.log("Video metadata loaded. Duration:", player.duration());
-        });
-      });
-
-      let sourceType = "video/mp4";
-      if (videoUrl.includes(".webm")) {
-        sourceType = "video/webm";
-      } else if (videoUrl.includes(".ogg") || videoUrl.includes(".ogv")) {
-        sourceType = "video/ogg";
-      } else if (videoUrl.includes(".mov")) {
-        sourceType = "video/quicktime";
+        return;
       }
 
-      player.src({
-        src: videoUrl,
-        type: sourceType,
-      });
+      if (!videoRef.current.isConnected) {
+        if (retryCountRef.current < maxRetries) {
+          retryCountRef.current++;
+          initTimeoutRef.current = setTimeout(tryInitializePlayer, 50);
+        } else {
+          console.error("Max retries reached: video element not connected to DOM");
+          setError("فشل تهيئة مشغل الفيديو - العنصر غير متصل");
+        }
+        return;
+      }
 
-      playerRef.current = player;
+      const videoElement = videoRef.current;
+      retryCountRef.current = 0;
 
-    } catch (err) {
-      console.error("Error initializing video player:", err);
-      setError("فشل تهيئة مشغل الفيديو");
-    }
+      try {
+        const player = videojs(videoElement, {
+          controls: true,
+          responsive: true,
+          fluid: true,
+          preload: "auto",
+          playbackRates: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2],
+          controlBar: {
+            children: [
+              "playToggle",
+              "volumePanel",
+              "currentTimeDisplay",
+              "timeDivider",
+              "durationDisplay",
+              "progressControl",
+              "playbackRateMenuButton",
+              "fullscreenToggle",
+            ],
+          },
+          html5: {
+            nativeAudioTracks: true,
+            nativeVideoTracks: true,
+          },
+          techOrder: ["html5"],
+          userActions: {
+            hotkeys: true,
+          },
+        });
+
+        player.ready(() => {
+          console.log("Video player is ready for lesson:", lessonId);
+          setIsReady(true);
+          setError(null);
+          
+          player.el().addEventListener("contextmenu", (e) => {
+            e.preventDefault();
+            return false;
+          });
+
+          if (user) {
+            const watermark = document.createElement("div");
+            watermark.className = "vjs-watermark";
+            watermark.textContent = `${user.name || user.email} • ID: ${user.id}`;
+            watermark.style.cssText = `
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%) rotate(-30deg);
+              color: rgba(255, 255, 255, 0.1);
+              font-size: 24px;
+              font-weight: bold;
+              pointer-events: none;
+              user-select: none;
+              z-index: 10;
+              white-space: nowrap;
+            `;
+            player.el().appendChild(watermark);
+          }
+
+          if (videoElement) {
+            videoElement.disablePictureInPicture = true;
+            videoElement.setAttribute("disablePictureInPicture", "");
+            videoElement.setAttribute("controlsList", "nodownload noremoteplayback");
+            videoElement.setAttribute("crossorigin", "anonymous");
+          }
+
+          player.on("ended", () => {
+            console.log("Video ended for lesson:", lessonId);
+            onVideoEnd?.();
+          });
+
+          player.on("error", (e) => {
+            const error = player.error();
+            console.error("Video playback error:", error);
+            if (error) {
+              let errorMessage = errorMessages.loadError;
+              
+              switch (error.code) {
+                case 1:
+                  errorMessage = "تم إلغاء تحميل الفيديو";
+                  break;
+                case 2:
+                  errorMessage = errorMessages.videoNotAvailable;
+                  break;
+                case 3:
+                  errorMessage = "فشل فك تشفير الفيديو. يرجى تحديث المتصفح";
+                  break;
+                case 4:
+                  errorMessage = errorMessages.formatNotSupported;
+                  break;
+                default:
+                  if (error.message) {
+                    errorMessage = error.message;
+                  }
+              }
+              
+              setError(errorMessage);
+            }
+          });
+          
+          player.on("playing", () => {
+            console.log("Video is now playing successfully");
+            setError(null);
+          });
+
+          player.on("loadedmetadata", () => {
+            console.log("Video metadata loaded. Duration:", player.duration());
+          });
+        });
+
+        let sourceType = "video/mp4";
+        if (videoUrl.includes(".webm")) {
+          sourceType = "video/webm";
+        } else if (videoUrl.includes(".ogg") || videoUrl.includes(".ogv")) {
+          sourceType = "video/ogg";
+        } else if (videoUrl.includes(".mov")) {
+          sourceType = "video/quicktime";
+        }
+
+        player.src({
+          src: videoUrl,
+          type: sourceType,
+        });
+
+        playerRef.current = player;
+
+      } catch (err) {
+        console.error("Error initializing video player:", err);
+        setError("فشل تهيئة مشغل الفيديو");
+      }
+    };
+
+    tryInitializePlayer();
 
     return () => {
+      retryCountRef.current = 0;
+      
+      if (initTimeoutRef.current) {
+        clearTimeout(initTimeoutRef.current);
+        initTimeoutRef.current = null;
+      }
+
       if (playerRef.current) {
         try {
           playerRef.current.dispose();
