@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import videojs from "video.js";
@@ -14,29 +13,23 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
   const containerRef = useRef(null);
   const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState(null);
-  const retryCountRef = useRef(0);
-  const retryTimeoutRef = useRef(null);
-  const maxRetries = 3;
 
   useEffect(() => {
     if (!videoRef.current || !videoUrl) {
       if (!videoUrl) {
         console.warn("No video URL provided for lesson:", lessonId);
       }
-      retryCountRef.current = 0;
       return;
     }
 
     const videoElement = videoRef.current;
 
-    // تحديد رسائل الخطأ قبل إنشاء المشغل (خارج callbacks)
     const errorMessages = {
       loadError: t("lessons.videoPlayer.loadError", "حدث خطأ أثناء تحميل الفيديو"),
       videoNotAvailable: t("lessons.videoPlayer.videoNotAvailable", "الفيديو غير متوفر حالياً"),
-      hlsNotSupported: t("lessons.videoPlayer.hlsNotSupported", "المتصفح لا يدعم تشغيل هذا النوع من الفيديو")
+      formatNotSupported: t("lessons.videoPlayer.formatNotSupported", "صيغة الفيديو غير مدعومة")
     };
 
-    // تنظيف المشغل السابق إذا كان موجوداً
     if (playerRef.current) {
       playerRef.current.dispose();
       playerRef.current = null;
@@ -62,22 +55,8 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
           ],
         },
         html5: {
-          vhs: {
-            overrideNative: true,
-            enableLowInitialPlaylist: true,
-            smoothQualityChange: true,
-            useBandwidthFromLocalStorage: true,
-            withCredentials: false,
-            handleManifestRedirects: true,
-            limitRenditionByPlayerDimensions: true,
-            useDevicePixelRatio: true,
-            maxPlaylistRetries: 3,
-            playlistRetryInterval: 2000,
-            maxSegmentRetries: 3,
-            segmentRetryInterval: 1000,
-          },
-          nativeAudioTracks: false,
-          nativeVideoTracks: false,
+          nativeAudioTracks: true,
+          nativeVideoTracks: true,
         },
         techOrder: ["html5"],
         userActions: {
@@ -86,17 +65,15 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
       });
 
       player.ready(() => {
-        console.log("Video player is ready");
+        console.log("Video player is ready for lesson:", lessonId);
         setIsReady(true);
         setError(null);
         
-        // منع النقر بالزر الأيمن
         player.el().addEventListener("contextmenu", (e) => {
           e.preventDefault();
           return false;
         });
 
-        // إضافة علامة مائية للمستخدم
         if (user) {
           const watermark = document.createElement("div");
           watermark.className = "vjs-watermark";
@@ -117,7 +94,6 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
           player.el().appendChild(watermark);
         }
 
-        // منع Picture-in-Picture والتحميل
         if (videoElement) {
           videoElement.disablePictureInPicture = true;
           videoElement.setAttribute("disablePictureInPicture", "");
@@ -125,81 +101,59 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
           videoElement.setAttribute("crossorigin", "anonymous");
         }
 
-        // عند انتهاء الفيديو
         player.on("ended", () => {
-          console.log("Video ended");
+          console.log("Video ended for lesson:", lessonId);
           onVideoEnd?.();
         });
 
-        // معالجة الأخطاء مع إعادة المحاولة
         player.on("error", (e) => {
           const error = player.error();
-          console.error("Video error:", error);
+          console.error("Video playback error:", error);
           if (error) {
             let errorMessage = errorMessages.loadError;
-            let shouldRetry = false;
             
-            if (error.code === 2) {
-              errorMessage = errorMessages.videoNotAvailable;
-              shouldRetry = true;
-            } else if (error.code === 4) {
-              errorMessage = errorMessages.hlsNotSupported;
-            } else if (error.code === 3) {
-              errorMessage = "فشل فك تشفير الفيديو. يرجى تحديث المتصفح أو استخدام متصفح آخر.";
-            } else if (error.message && (error.message.includes("CORS") || error.message.includes("network"))) {
-              errorMessage = "خطأ في تحميل الفيديو. جاري إعادة المحاولة...";
-              shouldRetry = true;
-            }
-            
-            if (shouldRetry && retryCountRef.current < maxRetries) {
-              retryCountRef.current++;
-              const retryDelay = 2000 * retryCountRef.current;
-              console.log(`Retrying video load... Attempt ${retryCountRef.current}/${maxRetries} after ${retryDelay}ms`);
-              setError(`جاري إعادة المحاولة (${retryCountRef.current}/${maxRetries})...`);
-              
-              if (retryTimeoutRef.current) {
-                clearTimeout(retryTimeoutRef.current);
-              }
-              
-              const currentPlayer = player;
-              retryTimeoutRef.current = setTimeout(() => {
-                if (currentPlayer && !currentPlayer.isDisposed()) {
-                  currentPlayer.src({ src: videoUrl, type: videoUrl.includes(".m3u8") ? "application/x-mpegURL" : "video/mp4" });
-                  currentPlayer.load();
-                  currentPlayer.play().catch(err => console.error("Play failed after retry:", err));
+            switch (error.code) {
+              case 1:
+                errorMessage = "تم إلغاء تحميل الفيديو";
+                break;
+              case 2:
+                errorMessage = errorMessages.videoNotAvailable;
+                break;
+              case 3:
+                errorMessage = "فشل فك تشفير الفيديو. يرجى تحديث المتصفح";
+                break;
+              case 4:
+                errorMessage = errorMessages.formatNotSupported;
+                break;
+              default:
+                if (error.message) {
+                  errorMessage = error.message;
                 }
-                retryTimeoutRef.current = null;
-              }, retryDelay);
-            } else {
-              const finalMessage = retryCountRef.current >= maxRetries 
-                ? `${errorMessage} - فشلت جميع المحاولات (${maxRetries}/${maxRetries}). يرجى التحقق من اتصال الإنترنت وتحديث الصفحة.`
-                : errorMessage;
-              setError(finalMessage);
             }
+            
+            setError(errorMessage);
           }
         });
         
-        // مراقبة نجاح التشغيل لإخفاء رسائل الخطأ
         player.on("playing", () => {
           console.log("Video is now playing successfully");
           setError(null);
-          retryCountRef.current = 0;
-          if (retryTimeoutRef.current) {
-            clearTimeout(retryTimeoutRef.current);
-            retryTimeoutRef.current = null;
-          }
+        });
+
+        player.on("loadedmetadata", () => {
+          console.log("Video metadata loaded. Duration:", player.duration());
         });
       });
 
-      // تحديد نوع الفيديو بناءً على الرابط
       let sourceType = "video/mp4";
-      if (videoUrl.includes(".m3u8")) {
-        sourceType = "application/x-mpegURL";
-      } else if (videoUrl.includes(".webm")) {
+      if (videoUrl.includes(".webm")) {
         sourceType = "video/webm";
+      } else if (videoUrl.includes(".ogg") || videoUrl.includes(".ogv")) {
+        sourceType = "video/ogg";
+      } else if (videoUrl.includes(".mov")) {
+        sourceType = "video/quicktime";
       }
 
-      // تعيين مصدر الفيديو
       player.src({
         src: videoUrl,
         type: sourceType,
@@ -213,12 +167,6 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
     }
 
     return () => {
-      if (retryTimeoutRef.current) {
-        clearTimeout(retryTimeoutRef.current);
-        retryTimeoutRef.current = null;
-      }
-      retryCountRef.current = 0;
-      
       if (playerRef.current) {
         try {
           playerRef.current.dispose();
@@ -285,13 +233,11 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
 
   return (
     <div ref={containerRef} className="relative w-full video-container">
-      {/* شارة الحماية */}
       <div className="absolute top-4 right-4 z-50 flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-medium bg-green-500/90 text-white pointer-events-none">
         <FaShieldAlt />
-        <span>{t("lessons.videoPlayer.protected")}</span>
+        <span>{t("lessons.videoPlayer.protected", "محمي")}</span>
       </div>
 
-      {/* مشغل الفيديو */}
       <div data-vjs-player>
         <video
           ref={videoRef}
@@ -302,7 +248,6 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
         />
       </div>
 
-      {/* نمط مخصص للمشغل */}
       <style>{`
         .video-container {
           position: relative;
@@ -311,7 +256,6 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
           overflow: hidden;
         }
 
-        /* منع التحديد والسحب */
         .video-container * {
           user-select: none !important;
           -webkit-user-select: none !important;
@@ -319,7 +263,6 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
           -ms-user-select: none !important;
         }
 
-        /* تخصيص ألوان المشغل */
         :global(.vjs-theme-rose .vjs-big-play-button) {
           background-color: rgba(59, 130, 246, 0.9);
           border: none;
@@ -342,12 +285,10 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
           background-color: #3b82f6;
         }
 
-        /* إخفاء زر التحميل */
         :global(.vjs-theme-rose .vjs-download-button) {
           display: none !important;
         }
 
-        /* تحسين مظهر RTL */
         :global([dir="rtl"] .vjs-control-bar) {
           direction: ltr;
         }
