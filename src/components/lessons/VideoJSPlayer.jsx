@@ -39,10 +39,11 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
     }
 
     const tryInitializePlayer = () => {
+      // Check if ref exists
       if (!videoRef.current) {
         if (retryCountRef.current < maxRetries) {
           retryCountRef.current++;
-          initTimeoutRef.current = setTimeout(tryInitializePlayer, 100);
+          initTimeoutRef.current = setTimeout(tryInitializePlayer, 150);
         } else {
           console.error("Max retries reached: video element ref not available");
           setError("فشل تهيئة مشغل الفيديو - العنصر غير متاح");
@@ -50,13 +51,19 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
         return;
       }
 
-      if (!videoRef.current.isConnected || !document.body.contains(videoRef.current)) {
+      // Check if element is connected to DOM and visible
+      const isConnected = videoRef.current.isConnected;
+      const isInDocument = document.body.contains(videoRef.current);
+      const hasParent = videoRef.current.parentElement !== null;
+      
+      if (!isConnected || !isInDocument || !hasParent) {
         if (retryCountRef.current < maxRetries) {
           retryCountRef.current++;
-          initTimeoutRef.current = setTimeout(tryInitializePlayer, 100);
+          console.log(`Retry ${retryCountRef.current}/${maxRetries}: Waiting for DOM connection...`);
+          initTimeoutRef.current = setTimeout(tryInitializePlayer, 150);
         } else {
           console.error("Max retries reached: video element not connected to DOM");
-          // Don't set error, just silently fail as component might be unmounting
+          // Component might be unmounting, don't show error
           return;
         }
         return;
@@ -64,6 +71,8 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
 
       const videoElement = videoRef.current;
       retryCountRef.current = 0;
+
+      console.log("Initializing VideoJS player for lesson:", lessonId);
 
       try {
         const player = videojs(videoElement, {
@@ -197,7 +206,8 @@ const VideoJSPlayer = ({ videoUrl, lessonId, lessonTitle, onVideoEnd }) => {
       }
     };
 
-    tryInitializePlayer();
+    // Add a small initial delay to ensure DOM is fully ready
+    initTimeoutRef.current = setTimeout(tryInitializePlayer, 100);
 
     return () => {
       retryCountRef.current = 0;
